@@ -23,6 +23,8 @@
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+
 defined('MOODLE_INTERNAL') || die();
 
 
@@ -38,8 +40,8 @@ function assignprogram_add_instance(stdClass $data, mod_assignprogram_mod_form $
     global $CFG;
     require_once($CFG->dirroot . '/mod/assignprogram/locallib.php');
 
-    $assignment = new assignprogram(context_module::instance($data->coursemodule), null, null);
-    return $assignment->add_instance($data, true);
+    $assignment = new assign_ctrl(context_module::instance($data->coursemodule), null, null);
+    return $assignment->add_instance($data);
 }
 
 /**
@@ -53,7 +55,7 @@ function assignprogram_delete_instance($id) {
     $cm = get_coursemodule_from_instance('assignprogram', $id, 0, false, MUST_EXIST);
     $context = context_module::instance($cm->id);
 
-    $assignment = new assignprogram($context, null, null);
+    $assignment = new assign_ctrl($context, null, null);
     return $assignment->delete_instance();
 }
 
@@ -65,10 +67,10 @@ function assignprogram_delete_instance($id) {
  * @param stdClass $form - unused
  * @return object
  */
-function assignprog_update_instance(stdClass $data, $form) {
+function assignprogram_update_instance(stdClass $data, $form) {
     global $CFG;
     require_once($CFG->dirroot . '/mod/assignprogram/locallib.php');
     $context = context_module::instance($data->coursemodule);
-    $assignment = new assignprogram($context, null, null);
+    $assignment = new assign_ctrl($context, null, null);
     return $assignment->update_instance($data);
 }
