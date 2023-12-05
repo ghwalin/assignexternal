@@ -13,36 +13,39 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+namespace mod_assignprogram\output;
+
+use plugin_renderer_base;
 
 /**
- * Activity view page for the mod_assignprogram plugin.
+ * Renders the HTML
  *
  * @package   mod_assignprogram
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class renderer extends plugin_renderer_base {
+    /**
+     * Defer to template.
+     *
+     * @param $page the page to render
+     *
+     * @return string html for the page
+     */
+    public function render_view_page($page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('assignprogram/view_page', $data);
+    }
 
-use mod_assignprogram\output\view_link;
-use mod_assignprogram\output\view_page;
-use mod_assignprogram\output\renderer;
-
-require_once('../../config.php');
-$cmid = required_param('id', PARAM_INT);
-list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'assignprogram');
-require_login($course, true, $cm);
-$context = context_module::instance($cm->id);
-$output = $PAGE->get_renderer('mod_assignprogram');
-
-$PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cm->id));
-$PAGE->set_title('My modules page title');
-$PAGE->set_heading('My modules page heading');
-$PAGE->set_pagelayout('standard');
-
-echo $output->header();
-
-$renderable = new view_link($cm);
-echo $output->render($renderable);
-
-$renderable = new view_page('Some text');
-echo $output->render($renderable);
-echo $output->footer();
+    /**
+     * Defer to template.
+     *
+     * @param $page the page to render
+     *
+     * @return string html for the page
+     */
+    public function render_view_link($page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('assignprogram/view_link', $data);
+    }
+}

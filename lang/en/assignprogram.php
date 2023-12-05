@@ -58,8 +58,8 @@ $string['grading'] = 'Grade';
 $string['modulename'] = 'Programming assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
 
-$string['passingpercent'] = 'Percentage to pass';
-$string['passingpercent_help'] = 'What percentage of the maximum grade must be achieved to pass';
+$string['passingpercentage'] = 'Percentage to pass';
+$string['passingpercentage_help'] = 'What percentage of the maximum grade must be achieved to pass';
 
 $string['key'] = 'value';
 $string['key'] = 'value';

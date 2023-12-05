@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
-require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
 /**
  * Assignment program settings form.
@@ -79,9 +78,9 @@ class mod_assignprogram_mod_form extends moodleform_mod
 
         $mform->addElement('float', 'grade', get_string('grade', 'assignprogram'));
 
-        $mform->addElement('float', 'passingpercent', get_string('passingpercent', 'assignprogram'));
+        $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignprogram'));
 
-        $mform->addHelpButton('passingpercent', 'passingpercent', 'assignprogram');
+        $mform->addHelpButton('passingpercentage', 'passingpercentage', 'assignprogram');
 
         $this->standard_coursemodule_elements();
 
