@@ -33,7 +33,7 @@ require_once(__DIR__.'/upgradelib.php');
  * @param int $oldversion
  * @return bool
  */
-function xmldb_mod_assignprogram_upgrade($oldversion) {
+function xmldb_assignprogram_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();

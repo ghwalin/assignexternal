@@ -25,8 +25,9 @@
  */
 
 
-defined('MOODLE_INTERNAL') || die();
+use mod_assignprogram\controller\assign_control;
 
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Adds an assignment instance
@@ -38,9 +39,9 @@ defined('MOODLE_INTERNAL') || die();
  */
 function assignprogram_add_instance(stdClass $data, mod_assignprogram_mod_form $form = null) {
     global $CFG;
-    require_once($CFG->dirroot . '/mod/assignprogram/locallib.php');
+    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/assign_control.php');
 
-    $assignment = new assign_ctrl(context_module::instance($data->coursemodule), null, null);
+    $assignment = new assign_control(context_module::instance($data->coursemodule), null, null);
     return $assignment->add_instance($data);
 }
 
@@ -51,11 +52,11 @@ function assignprogram_add_instance(stdClass $data, mod_assignprogram_mod_form $
  */
 function assignprogram_delete_instance($id) {
     global $CFG;
-    require_once($CFG->dirroot . '/mod/assignprogram/locallib.php');
+    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/assign_control.php');
     $cm = get_coursemodule_from_instance('assignprogram', $id, 0, false, MUST_EXIST);
     $context = context_module::instance($cm->id);
 
-    $assignment = new assign_ctrl($context, null, null);
+    $assignment = new assign_control($context, null, null);
     return $assignment->delete_instance();
 }
 
@@ -69,8 +70,8 @@ function assignprogram_delete_instance($id) {
  */
 function assignprogram_update_instance(stdClass $data, $form) {
     global $CFG;
-    require_once($CFG->dirroot . '/mod/assignprogram/locallib.php');
+    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/assign_control.php');
     $context = context_module::instance($data->coursemodule);
-    $assignment = new assign_ctrl($context, null, null);
+    $assignment = new assign_control($context, null, null);
     return $assignment->update_instance($data);
 }

@@ -15,15 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity view page for the plugintype_pluginname plugin.
+ * Activity view page for the mod_assignprogram plugin.
  *
- * @package   plugintype_pluginname
- * @copyright Year, You Name <your@email.address>
+ * @package   mod_assignprogram
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require('../../config.php');
+use mod_assignprogram\output\view_link;
+use mod_assignprogram\output\view_page;
+use mod_assignprogram\output\renderer;
 
-$id = required_param('id', PARAM_INT);
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'assignprogram');
-$instance = $DB->get_record('assignprogram', ['id'=> $cm->instance], '*', MUST_EXIST);
+require_once('../../config.php');
+$cmid = required_param('id', PARAM_INT);
+list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'assignprogram');
+require_login($course, true, $cm);
+$context = context_module::instance($cm->id);
+$output = $PAGE->get_renderer('mod_assignprogram');
+
+$PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cm->id));
+$PAGE->set_title('My modules page title');
+$PAGE->set_heading('My modules page heading');
+$PAGE->set_pagelayout('standard');
+
+echo $output->header();
+
+$renderable = new view_link($cm);
+echo $output->render($renderable);
+
+$renderable = new view_page('TODO table with summary');
+echo $output->render($renderable);
+echo $output->footer();

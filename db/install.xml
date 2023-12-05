@@ -36,8 +36,10 @@
                 <FIELD NAME="assignment" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="grader" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-                <FIELD NAME="grade" TYPE="number" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" DECIMALS="5" COMMENT="The numerical grade for this assignment submission."/>
-                <FIELD NAME="feedback" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The feedback in html-form."/>
+                <FIELD NAME="gradeexternal" TYPE="number" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" DECIMALS="5" COMMENT="The numerical grade from the external system for this assignment submission."/>
+                <FIELD NAME="feedbackexternal" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The feedback from the external system in html-form."/>
+                <FIELD NAME="grademanual" TYPE="number" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" DECIMALS="5" COMMENT="The manual numerical grade for this assignment submission."/>
+                <FIELD NAME="feedbackmanual" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The manual feedback."/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this grade."/>
