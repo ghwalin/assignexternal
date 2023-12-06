@@ -5,11 +5,11 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-class view_page  implements renderable, templatable
+class view_summary  implements renderable, templatable
 {
-    private $sometext = null;
-    public function __construct($sometext) {
-        $this->sometext = $sometext;
+    private $cmid = null;
+    public function __construct($cmid) {
+        $this->cmid = $cmid;
     }
 
     /**
@@ -19,10 +19,9 @@ class view_page  implements renderable, templatable
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->sometext = $this->sometext;
+        $data->link_grading = "view.php?id=$this->cmid&action=grading";
+        $data->link_grader = "view.php?id=$this->cmid&action=grader";
         return $data;
     }
-
-
 
 }

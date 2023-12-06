@@ -23,26 +23,56 @@
  */
 
 use mod_assignprogram\output\view_link;
-use mod_assignprogram\output\view_page;
+use mod_assignprogram\output\view_summary;
 use mod_assignprogram\output\renderer;
 
 require_once('../../config.php');
+global $PAGE;
+
 $cmid = required_param('id', PARAM_INT);
+
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'assignprogram');
 require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
+require_capability('mod/assign:view', $context);
+
+/*
+mod/assign:grade
+mod/assign:reviewgrades
+ */
+$urlparams = array('cmid' => $cmid,
+    'action' => optional_param('action', '', PARAM_ALPHA),
+    'rownum' => optional_param('rownum', 0, PARAM_INT));
+
 $output = $PAGE->get_renderer('mod_assignprogram');
 
-$PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cm->id));
-$PAGE->set_title('My modules page title');
-$PAGE->set_heading('My modules page heading');
-$PAGE->set_pagelayout('standard');
-
-echo $output->header();
-
-$renderable = new view_link($cm);
-echo $output->render($renderable);
-
-$renderable = new view_page('TODO table with summary');
-echo $output->render($renderable);
+if ($urlparams['action'] == '') {
+    show_details($output, $context, $cmid);
+} elseif ($urlparams['action'] == '') {
+    show_grading($output, $context);
+}
 echo $output->footer();
+
+function show_details($output, $context, $cmid)
+{
+    global $PAGE;
+    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cm->id));
+    $PAGE->set_title('My title');
+    $PAGE->set_heading('My modules page heading');
+    $PAGE->set_pagelayout('standard');
+
+    echo $output->header();
+
+    $renderable = new view_link($cm);
+    echo $output->render($renderable);
+
+    if (has_capability('mod/assign:reviewgrades', $context)) {
+        $renderable = new view_summary($cmid);
+        echo $output->render($renderable);
+    }
+
+}
+
+function show_grading($output, $context) {
+
+}

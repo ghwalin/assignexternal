@@ -34,7 +34,7 @@ class renderer extends plugin_renderer_base {
      */
     public function render_view_page($page): string {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('assignprogram/view_page', $data);
+        return parent::render_from_template('assignprogram/view_summary', $data);
     }
 
     /**
