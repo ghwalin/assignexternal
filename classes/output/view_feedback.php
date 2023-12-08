@@ -5,6 +5,10 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
+
+/**
+ * renderer for feedback
+ */
 class view_feedback  implements renderable, templatable
 {
     private $feedback_external = null;

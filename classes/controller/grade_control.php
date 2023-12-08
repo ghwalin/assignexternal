@@ -9,7 +9,7 @@ use stdClass;
 
 class grade_control
 {
-    /** @var int  the coursemodule-id  */
+    /** @var int  the coursemodule-id */
     private $cmid = null;
     /** @var context the context of the course module for this assign instance
      *               (or just the course if we are creating a new one)
@@ -25,30 +25,35 @@ class grade_control
     public function __construct($cmid, $context)
     {
         global $CFG;
-        require_once ($CFG->libdir . '/modinfolib.php');
+        require_once($CFG->libdir . '/modinfolib.php');
         $this->cmid = $cmid;
         $this->context = $context;
         $this->userlist = $this->read_cm_students($context);
     }
 
-    public function list_grades() {
+    /**
+     * creates a list of all users and grades/feedback
+     * @return array list of users and grades/feedback
+     */
+    public function list_grades()
+    {
         $grades = $this->read_grades();
         $users = $this->read_cm_students();
         $gradelist = array();
-        foreach ($users as $userid=>$user) {
+        foreach ($users as $userid => $user) {
             $grade = new \stdClass();
 
             $grade->firstname = $user->firstname;
             $grade->lastname = $user->lastname;
             if (array_key_exists($userid, $grades)) {
-                $foo = $grades[$userid];
-                $grade->status = 'FIXME';
-                $grade->gradeexternal = $foo->gradeexternal;
-                $grade->grademanual = $foo->grademanual;
-                $grade->feedback = $foo->feedbackexternal . $foo->feedbackmanual;
-                $grade->gradefinal = $foo->gradeexternal + $foo->grademanual;
+                $gradedata = $grades[$userid];
+                $grade->status = $this->get_status($gradedata->gradeexternal);
+                $grade->gradeexternal = $gradedata->gradeexternal;
+                $grade->grademanual = $gradedata->grademanual;
+                $grade->feedback = $gradedata->feedbackexternal . $gradedata->feedbackmanual;
+                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->grademanual;
             } else {
-                $grade->status = 'pendent';
+                $grade->status = 'pending';
             }
             $gradelist[] = $grade;
         }
@@ -56,7 +61,12 @@ class grade_control
         return $gradelist;
     }
 
-    private function read_grades() {
+    /**
+     * reads all grades for the current coursemodule
+     * @return array list of grades
+     */
+    private function read_grades()
+    {
         global $DB;
         $grades = $DB->get_records_list(
             'assignprogram_grades',
@@ -69,11 +79,13 @@ class grade_control
         }
         return $gradelist;
     }
+
     /**
-     * list all students for the coursemodule
+     * reads all students for the coursemodule
      * @return array of students
      */
-    private function read_cm_students() {
+    private function read_cm_students()
+    {
         global $DB;
         $userlist = array();
         $users = get_enrolled_users(
@@ -86,5 +98,18 @@ class grade_control
             $userlist[$user->id] = $user;
         }
         return $userlist;
+    }
+
+    /**
+     * get the status of the students assignment
+     * @param $grade
+     * @return string
+     */
+    private function get_status($grade) {
+        if (!$grade) {
+            return 'pending';
+        } else {
+            return 'done';
+        }
     }
 }
