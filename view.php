@@ -22,6 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_assignprogram\data\grade;
+use mod_assignprogram\output\view_feedback;
+use mod_assignprogram\output\view_grading;
 use mod_assignprogram\output\view_link;
 use mod_assignprogram\output\view_summary;
 use mod_assignprogram\output\renderer;
@@ -48,31 +51,70 @@ $output = $PAGE->get_renderer('mod_assignprogram');
 
 if ($urlparams['action'] == '') {
     show_details($output, $context, $cmid);
-} elseif ($urlparams['action'] == '') {
-    show_grading($output, $context);
+} elseif ($urlparams['action'] == 'grading') {
+    show_grading($output, $context, $cmid);
 }
 echo $output->footer();
 
 function show_details($output, $context, $cmid)
 {
     global $PAGE;
-    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cm->id));
-    $PAGE->set_title('My title');
+    global $DB;
+    global $CFG;
+    global $USER;
+
+    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cmid));
+    $PAGE->set_title('My title');  // FIXME
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('standard');
 
     echo $output->header();
 
-    $renderable = new view_link($cm);
+    $renderable = new view_link($cmid);
     echo $output->render($renderable);
 
     if (has_capability('mod/assign:reviewgrades', $context)) {
         $renderable = new view_summary($cmid);
         echo $output->render($renderable);
+    } else {
+        require_once($CFG->dirroot . '/mod/assignprogram/classes/data/grade.php');
+        error_log("cmid=$cmid / userid=$USER->id");
+        $gradedata = $DB->get_record(
+            'assignprogram_grades',
+            array('assignment'=>$cmid, 'userid'=>$USER->id),
+            '*'
+        );
+        $grade = new grade();
+        if ($gradedata) {
+            error_log('data found');
+            $grade->init($gradedata);
+        }
+        $renderable = new view_feedback(
+            $grade->feedbackexternal,
+            $grade->gradeexternal,
+            $grade->feedbackmanual,
+            $grade->grademanual,
+            100 // FIXME
+        );
+        echo $output->render($renderable);
     }
 
 }
 
-function show_grading($output, $context) {
+function show_grading($output, $context, $cmid) {
+    global $PAGE;
+    global $DB;
+    global $CFG;
+    global $USER;
+    require_capability('mod/assign:reviewgrades', $context);
+    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $cmid));
+    $PAGE->set_title('My title');  // FIXME
+    $PAGE->set_heading('My modules page heading');
+    $PAGE->set_pagelayout('base');
+
+    echo $output->header();
+
+    $renderable = new view_grading($cmid,$context);
+    echo $output->render($renderable);
 
 }

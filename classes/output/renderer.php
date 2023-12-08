@@ -32,7 +32,7 @@ class renderer extends plugin_renderer_base {
      *
      * @return string html for the page
      */
-    public function render_view_page($page): string {
+    public function render_view_summary($page): string {
         $data = $page->export_for_template($this);
         return parent::render_from_template('assignprogram/view_summary', $data);
     }
@@ -47,5 +47,17 @@ class renderer extends plugin_renderer_base {
     public function render_view_link($page): string {
         $data = $page->export_for_template($this);
         return parent::render_from_template('assignprogram/view_link', $data);
+    }
+
+    /**
+     * Defer to template.
+     *
+     * @param $page the page to render
+     *
+     * @return string html for the page
+     */
+    public function render_view_grading($page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('assignprogram/view_grading', $data);
     }
 }

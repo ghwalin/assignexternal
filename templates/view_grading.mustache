@@ -1,0 +1,38 @@
+<div class="no-overflow">
+  <table class="flexible table table-striped table-hover generaltable generalbox">
+    <thead>
+    <tr>
+      <th class="header c1" scope="col">
+        Vorname / Nachname
+      </th>
+      <th class="header c2" scope="col">
+        Status
+      </th>
+      <th class="header c3" scope="col">
+        Externe Bewertung
+      </th>
+      <th class="header c4" scope="col">
+        Manuelle Bewertung
+      </th>
+      <th class="header c5" scope="col">
+        Feedback als Kommentar
+      </th>
+      <th class="header c6" scope="col">
+        Endbewertung
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#grades}}
+      <tr>
+        <td>{{ firstname }} {{ lastname }}</td>
+        <td>{{ status }}</td>
+        <td>{{ gradeexternal}} </td>
+        <td>{{ grademanual}} </td>
+        <td>{{ feedback }} </td>
+        <td>{{ gradefinal }} </td>
+      </tr>
+    {{/grades}}
+    </tbody>
+  </table>
+</div>

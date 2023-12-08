@@ -2,7 +2,9 @@
 
 namespace mod_assignprogram\controller;
 use cm_info;
+use core\context;
 use mod_assignprogram\data\Assign;
+use stdClass;
 class assign_control
 {
     /** @var stdClass the assignment record that contains the global settings for this assign instance */
@@ -51,7 +53,7 @@ class assign_control
      * @param stdClass $formdata The data submitted from the form
      * @return mixed false if an error occurs or the int id of the new instance
      */
-    public function add_instance($formdata)
+    public function add_instance(\stdClass $formdata)
     {
         global $DB;
         global $CFG;
@@ -71,16 +73,14 @@ class assign_control
      * @param stdClass $formdata - the data submitted from the form
      * @return bool false if an error occurs
      */
-    public function update_instance($formdata): bool
+    public function update_instance(\stdClass $formdata): bool
     {
-        error_log("instance: " . $formdata->instance);
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
         $assign = new Assign($formdata);
-        error_log("assignmentID: " . $assign->getId());
         $result = $DB->update_record('assignprogram', $assign);
-        $this->setInstance( $DB->get_record('assignprogram', array('id'=>$assign->getId()), '*', MUST_EXIST));
+        $this->set_instance( $DB->get_record('assignprogram', array('id'=>$assign->id), '*', MUST_EXIST));
         return $result;
     }
 
@@ -99,43 +99,43 @@ class assign_control
         return $result;
     }
 
-    public function getInstance(): mixed
+    public function get_instance(): mixed
     {
         return $this->instance;
     }
 
-    public function setInstance(mixed $instance): void
+    public function set_instance(mixed $instance): void
     {
         $this->instance = $instance;
     }
 
 
-    public function getContext(): context
+    public function get_context(): context
     {
         return $this->context;
     }
 
-    public function setContext(context $context): void
+    public function set_context(context $context): void
     {
         $this->context = $context;
     }
 
-    public function getCourse(): stdClass
+    public function get_course(): stdClass
     {
         return $this->course;
     }
 
-    public function setCourse(stdClass $course): void
+    public function set_course(stdClass $course): void
     {
         $this->course = $course;
     }
 
-    public function getCoursemodule(): cm_info
+    public function get_coursemodule(): cm_info
     {
         return $this->coursemodule;
     }
 
-    public function setCoursemodule(cm_info $coursemodule): void
+    public function set_coursemodule(cm_info $coursemodule): void
     {
         $this->coursemodule = $coursemodule;
     }
@@ -145,17 +145,17 @@ class assign_control
         return $this->cache;
     }
 
-    public function setCache(array $cache): void
+    public function set_cache(array $cache): void
     {
         $this->cache = $cache;
     }
 
-    public function getUseridlistid(): ?string
+    public function get_useridlistid(): ?string
     {
         return $this->useridlistid;
     }
 
-    public function setUseridlistid(?string $useridlistid): void
+    public function set_useridlistid(?string $useridlistid): void
     {
         $this->useridlistid = $useridlistid;
     }
