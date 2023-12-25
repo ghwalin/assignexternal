@@ -14,10 +14,11 @@ class grade
     public $feedbackmanual;
 
     public function __construct() {
+        global  $USER;
         $this->id = null;
         $this->assignment = null;
         $this->userid = null;
-        $this->grader = null;
+        $this->grader = $USER->id;
         $this->feedbackexternal = '';
         $this->gradeexternal = 0;
         $this->feedbackmanual = '';
@@ -25,13 +26,13 @@ class grade
     }
     public function init($formdata)
     {
-        $this->id = $formdata->id;
-        $this->assignment = $formdata->assignment;
+        $this->id = $formdata->gradeid;
+        $this->assignment = $formdata->id;
         $this->userid = $formdata->userid;
-        $this->grader = $formdata->grader;
+        //$this->grader = $formdata->grader;
         $this->gradeexternal = $formdata->gradeexternal;
-        $this->feedbackexternal = $formdata->feedbackexternal;
+        $this->feedbackexternal = $formdata->feedbackexternal['text'];
         $this->grademanual = $formdata->grademanual;
-        $this->feedbackmanual = $formdata->feedbackmanual;
+        $this->feedbackmanual = $formdata->feedbackmanual['text'];
     }
 }

@@ -2,23 +2,28 @@
   <table class="flexible table table-striped table-hover generaltable generalbox">
     <thead>
     <tr>
-      <th class="header c1" scope="col">
+      <th class="header c1" scope="col" rowspan="2">
         Vorname / Nachname
       </th>
-      <th class="header c2" scope="col">
+      <th class="header c2" scope="col" rowspan="2">
         Status
       </th>
-      <th class="header c3" scope="col">
-        Externe Bewertung
+      <th class="header c2" scope="col" colspan="2">
+        Bewertung
       </th>
-      <th class="header c4" scope="col">
-        Manuelle Bewertung
-      </th>
-      <th class="header c5" scope="col">
+      <th class="header c5" scope="col" rowspan="2">
         Feedback als Kommentar
       </th>
-      <th class="header c6" scope="col">
+      <th class="header c6" scope="col" rowspan="2">
         Endbewertung
+      </th>
+    </tr>
+    <tr>
+      <th class="header c3" scope="col">
+        Extern
+      </th>
+      <th class="header c4" scope="col">
+        Manuell
       </th>
     </tr>
     </thead>
@@ -28,7 +33,10 @@
         <td>{{ firstname }} {{ lastname }}</td>
         <td>{{ status }}</td>
         <td>{{ gradeexternal}} </td>
-        <td>{{ grademanual}} </td>
+        <td>
+          {{ grademanual}}<br>
+          <a href="./view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}">Bewerten</a>
+        </td>
         <td>{{ feedback }} </td>
         <td>{{ gradefinal }} </td>
       </tr>

@@ -60,6 +60,7 @@ $string['modulename_help'] = 'The programming assignment activity module enables
 
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade must be achieved to pass';
+$string['pluginadministration'] = 'WHATEVER';
 
 $string['key'] = 'value';
 $string['key'] = 'value';

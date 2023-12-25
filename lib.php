@@ -75,3 +75,25 @@ function assignprogram_update_instance(stdClass $data, $form) {
     $assignment = new assign_control($context, null, null);
     return $assignment->update_instance($data);
 }
+
+function mod_assignprogram_cm_info_view(cm_info $coursemodule) {
+    $info = new cached_cm_info();
+    global $DB;
+    $assignment = $DB->get_record(
+        'assignprogram',
+        array('id'=>$coursemodule->instance),
+        'externallink, alwaysshowassignment, allowsubmissionsfromdate', MUST_EXIST);
+    // TODO check for alwaysshowassignment and allowsubmissionsfromdata
+    $info->content = '<a href="' . $assignment->externallink . ' target="_blank">GitHub Classroom Assignment</a>';
+    return $info;
+}
+
+function mod_assignprogram_cm_info_dynamic(cm_info $coursemodule) {
+    $context = context_module::instance($coursemodule->id);
+    $urlparams = array('cmid' => $coursemodule->id,
+        'action' => optional_param('action', '', PARAM_ALPHA),
+        'rownum' => optional_param('rownum', 0, PARAM_INT));
+    if ($urlparams['action'] != '') {
+
+    }
+}

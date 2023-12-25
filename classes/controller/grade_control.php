@@ -5,30 +5,42 @@ namespace mod_assignprogram\controller;
 use cm_info;
 use core\context;
 use mod_assignprogram\data\Grade;
+use mod_assignprogram\form\grader_form;
+use moodle_url;
 use stdClass;
 
 class grade_control
 {
     /** @var int  the coursemodule-id */
-    private $cmid = null;
-    /** @var context the context of the course module for this assign instance
+    private $coursemoduleid = null;
+    /** @var context the context of the course module for this grade instance
      *               (or just the course if we are creating a new one)
      */
     private $context;
     /** @var string A key used to identify userlists created by this object. */
     private $userlist = null;
 
+    /** @var string The key to identify the user */
+    private $userid;
 
     /**
      * default constructor
      */
-    public function __construct($cmid, $context)
+    public function __construct($coursemoduleid, $context, $userid = 0)
     {
         global $CFG;
         require_once($CFG->libdir . '/modinfolib.php');
-        $this->cmid = $cmid;
+        $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;
-        $this->userlist = $this->read_cm_students($context);
+        $this->userlist = $this->read_coursemodule_students();
+        if ($userid == 0) {
+            $students = $this->read_coursemodule_students();
+            reset($students);
+            $this->userid = key($students);
+        } else {
+            $this->userid = $userid;
+        }
+
     }
 
     /**
@@ -38,11 +50,12 @@ class grade_control
     public function list_grades()
     {
         $grades = $this->read_grades();
-        $users = $this->read_cm_students();
+        $users = $this->read_coursemodule_students();
         $gradelist = array();
         foreach ($users as $userid => $user) {
             $grade = new \stdClass();
-
+            $grade->coursemoduleid = $this->coursemoduleid;
+            $grade->userid = $userid;
             $grade->firstname = $user->firstname;
             $grade->lastname = $user->lastname;
             if (array_key_exists($userid, $grades)) {
@@ -62,8 +75,95 @@ class grade_control
     }
 
     /**
+     * show the feedback form for a student
+     * @return void
+     * @throws \dml_exception
+     */
+    public function process_feedback(): void
+    {
+        global $CFG;
+        global $PAGE, $OUTPUT;
+        require_once($CFG->dirroot . '/mod/assignprogram/classes/form/graderform.php');
+        $user = $this->read_coursemodule_student($this->userid);
+
+        $assignment = new \stdClass();
+
+        $assignment->userid = $this->userid;
+        $assignment->assignmentid = $this->coursemoduleid;
+        $assignment->firstname = $user->firstname;
+        $assignment->lastname = $user->lastname;
+        $assignment->gradeexternalmax = 99;  // FIXME
+        $assignment->grademanualmax = 99;  // FIXME
+
+        $mform = new grader_form(null, $assignment);
+
+// Form processing and displaying is done here.
+        if ($mform->is_cancelled()) {
+            error_log('Cancelled');
+        } else if ($formdata = $mform->get_data()) {
+            global $DB;
+            require_once($CFG->dirroot . '/mod/assignprogram/classes/data/grade.php');
+            $grade = new grade();
+            $grade->init($formdata);
+            if ($grade->id == -1)
+                $result = $DB->insert_record('assignprogram_grades', $grade);
+            else
+                $result = $DB->update_record('assignprogram_grades', $grade);
+
+            redirect(new moodle_url('view.php',
+                array(
+                'id' => $this->coursemoduleid,
+                'action' => 'grader',
+                'userid' => $this->userid
+            )));
+        } else {
+            $grades = $this->read_grades();
+            $grade = new \stdClass();
+            if (array_key_exists($this->userid, $grades)) {
+                $gradedata = $grades[$this->userid];
+                $grade->gradeid = $gradedata->id;
+                $grade->status = $this->get_status($gradedata->gradeexternal);
+                $grade->timeleft = 'FIXME';
+                $grade->gradeexternal = $gradedata->gradeexternal;
+                $grade->feedbackexternal['text'] = $gradedata->feedbackexternal;
+                $grade->feedbackexternal['format'] = 1; // FIXME
+                $grade->grademanual = $gradedata->grademanual;
+                $grade->feedbackmanual['text'] = $gradedata->feedbackmanual;
+                $grade->feedbackmanual['format'] = 1; // FIXME
+                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->grademanual;
+            } else {
+                $grade->gradeid = -1;
+                $grade->status = 'pending';
+                $grade->timeleft = 'FIXME';
+                $grade->gradeexternal = '';
+                $grade->grademanual = '';
+                $grade->feedbackexternal['text'] = '';
+                $grade->feedbackexternal['format'] = 1; // FIXME
+                $grade->feedbackmanual['text'] = '<p>Nothing here</p>';
+                $grade->feedbackmanual['format'] = 1;
+                $grade->gradefinal = 0;
+            }
+            $mform->set_data($grade);
+
+            // Display the form.
+            $PAGE->set_title("foobar");
+            //$PAGE->add_body_class('limitedwidth');
+            $PAGE->set_heading("foofoo");
+
+            echo $OUTPUT->header();
+
+            $mform->display();
+
+            echo $OUTPUT->footer();
+        }
+    }
+
+
+
+    /**
      * reads all grades for the current coursemodule
      * @return array list of grades
+     * @throws \dml_exception
      */
     private function read_grades()
     {
@@ -71,7 +171,7 @@ class grade_control
         $grades = $DB->get_records_list(
             'assignprogram_grades',
             'assignment',
-            array($this->cmid)
+            array($this->coursemoduleid)
         );
         $gradelist = array();
         foreach ($grades as $grade) {
@@ -81,12 +181,31 @@ class grade_control
     }
 
     /**
+     * reads the data of a user enrolled in this course
+     * @param $userid
+     * @return stdClass
+     */
+    private function read_coursemodule_student($userid): \stdClass
+    {
+        $users = get_enrolled_users(
+            $this->context,
+            'mod/assign:submit',
+            0,
+            'u.id, u.firstname, u.lastname'
+        );
+        foreach ($users as $user) {
+            if ($user->id == $userid)
+                return $user;
+        }
+        return new \stdClass();
+    }
+
+    /**
      * reads all students for the coursemodule
      * @return array of students
      */
-    private function read_cm_students()
+    private function read_coursemodule_students(): array
     {
-        global $DB;
         $userlist = array();
         $users = get_enrolled_users(
             $this->context,
@@ -105,7 +224,8 @@ class grade_control
      * @param $grade
      * @return string
      */
-    private function get_status($grade) {
+    private function get_status($grade)
+    {
         if (!$grade) {
             return 'pending';
         } else {
