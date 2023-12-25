@@ -23,14 +23,5 @@
  */
 
 $functions = array(
-    'mod_assign_submit_grading_form' => array(
-        'classname'     => 'grade_control',
-        'methodname'    => 'submit_grader_form',
-        'classpath'     => 'mod/assignprogram/classes/grade_control.php',
-        'description'   => 'Submit the grading form data via ajax',
-        'type'          => 'write',
-        'ajax'          => true,
-        'capabilities'  => 'mod/assign:grade',
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
-    ),
+
 );
