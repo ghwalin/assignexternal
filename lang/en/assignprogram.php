@@ -47,14 +47,16 @@ $string['duedate'] = 'Due date';
 //$string['duedatecolon'] = 'Due date: {$a}';
 $string['duedate_help'] = 'This is when the assignment is due. Submissions will still be allowed after this date, but any assignments submitted after this date will be marked as late. Set an assignment cut-off date to prevent submissions after a certain date.';
 
+$string['externalgrademax'] = 'Maximum grade from external assignment';
 $string['externalname'] = 'External assignment';
 $string['externalname_help'] = 'The name of the assignment in the external system';
 $string['externallink'] = 'Assignment link';
 $string['externallink_help'] = 'The link to the assignment in the external system';
 
-$string['grade'] = 'Maximum grade';
+
 $string['grading'] = 'Grade';
 
+$string['manualgrademax'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'Programming assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
 

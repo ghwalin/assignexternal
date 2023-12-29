@@ -9,6 +9,13 @@ use mod_assignprogram\form\grader_form;
 use moodle_url;
 use stdClass;
 
+/**
+ * Controller for grading
+ *
+ * @package   mod_assignprogram
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class grade_control
 {
     /** @var int  the coursemodule-id */
@@ -25,6 +32,9 @@ class grade_control
 
     /**
      * default constructor
+     * @param $coursemoduleid
+     * @param $context
+     * @param $userid
      */
     public function __construct($coursemoduleid, $context, $userid = 0)
     {
@@ -62,9 +72,9 @@ class grade_control
                 $gradedata = $grades[$userid];
                 $grade->status = $this->get_status($gradedata->gradeexternal);
                 $grade->gradeexternal = $gradedata->gradeexternal;
-                $grade->grademanual = $gradedata->grademanual;
-                $grade->feedback = $gradedata->feedbackexternal . $gradedata->feedbackmanual;
-                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->grademanual;
+                $grade->manualgrade = $gradedata->manualgrade;
+                $grade->feedback = $gradedata->externalfeedback . $gradedata->manualfeedback;
+                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
             } else {
                 $grade->status = 'pending';
             }
@@ -75,7 +85,7 @@ class grade_control
     }
 
     /**
-     * show the feedback form for a student
+     * process the feedback form for a student
      * @return void
      * @throws \dml_exception
      */
@@ -93,7 +103,7 @@ class grade_control
         $assignment->firstname = $user->firstname;
         $assignment->lastname = $user->lastname;
         $assignment->gradeexternalmax = 99;  // FIXME
-        $assignment->grademanualmax = 99;  // FIXME
+        $assignment->manualgrademax = 99;  // FIXME
 
         $mform = new grader_form(null, $assignment);
 
@@ -112,10 +122,10 @@ class grade_control
 
             redirect(new moodle_url('view.php',
                 array(
-                'id' => $this->coursemoduleid,
-                'action' => 'grader',
-                'userid' => $this->userid
-            )));
+                    'id' => $this->coursemoduleid,
+                    'action' => 'grader',
+                    'userid' => $this->userid
+                )));
         } else {
             $grades = $this->read_grades();
             $grade = new \stdClass();
@@ -125,22 +135,22 @@ class grade_control
                 $grade->status = $this->get_status($gradedata->gradeexternal);
                 $grade->timeleft = 'FIXME';
                 $grade->gradeexternal = $gradedata->gradeexternal;
-                $grade->feedbackexternal['text'] = $gradedata->feedbackexternal;
-                $grade->feedbackexternal['format'] = 1; // FIXME
-                $grade->grademanual = $gradedata->grademanual;
-                $grade->feedbackmanual['text'] = $gradedata->feedbackmanual;
-                $grade->feedbackmanual['format'] = 1; // FIXME
-                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->grademanual;
+                $grade->externalfeedback['text'] = $gradedata->externalfeedback;
+                $grade->externalfeedback['format'] = 1; // FIXME
+                $grade->manualgrade = $gradedata->manualgrade;
+                $grade->manualfeedback['text'] = $gradedata->manualfeedback;
+                $grade->manualfeedback['format'] = 1; // FIXME
+                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
             } else {
                 $grade->gradeid = -1;
                 $grade->status = 'pending';
                 $grade->timeleft = 'FIXME';
                 $grade->gradeexternal = '';
-                $grade->grademanual = '';
-                $grade->feedbackexternal['text'] = '';
-                $grade->feedbackexternal['format'] = 1; // FIXME
-                $grade->feedbackmanual['text'] = '<p>Nothing here</p>';
-                $grade->feedbackmanual['format'] = 1;
+                $grade->manualgrade = '';
+                $grade->externalfeedback['text'] = '';
+                $grade->externalfeedback['format'] = 1; // FIXME
+                $grade->manualfeedback['text'] = '<p>Nothing here</p>';
+                $grade->manualfeedback['format'] = 1;
                 $grade->gradefinal = 0;
             }
             $mform->set_data($grade);
@@ -158,8 +168,6 @@ class grade_control
         }
     }
 
-
-
     /**
      * reads all grades for the current coursemodule
      * @return array list of grades
@@ -167,11 +175,11 @@ class grade_control
      */
     private function read_grades()
     {
-        error_log(var_export($this->context,true));
+        error_log(var_export($this->context, true));
         global $DB;
         $grades = $DB->get_records_list(
             'assignprogram_grades',
-            'assignment',
+            'assignprogram',
             array($this->coursemoduleid)
         );
         $gradelist = array();

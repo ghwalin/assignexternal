@@ -12,6 +12,13 @@ use external_value;
 use mod_assign_external;
 use mod_assignprogram\data\grade;
 
+/**
+ * webservice to update the externalgrade and externalfeedback
+ *
+ * @package   mod_assignprogram
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class update_grade extends \external_api
 {
     /**
@@ -104,7 +111,7 @@ class update_grade extends \external_api
                 $grade = new grade();
                 $grade->load($data);
                 $grade->gradeexternal = $params['points'];
-                $grade->feedbackexternal = $params['feedback'];
+                $grade->externalfeedback = $params['feedback'];
                 self::update_grade($grade);
             } else {
                 echo 'WARNING: no assignment ' . $params['assignment_name'] . ' found';
@@ -173,8 +180,8 @@ class update_grade extends \external_api
 
         $query =
             'SELECT ue.id as enroleid, ue.userid, en.id, en.courseid,' .
-            '       ap.id AS assignmentid, ap.name, ap.course AS courseid, ap.grade, ap.externalname, ' .
-            '       ag.id AS gradeid, ag.gradeexternal, ag.feedbackexternal, ag.grademanual, ag.feedbackmanual' .
+            '       ap.id AS assignmentid, ap.name, ap.course AS courseid, ap.externalgrademax, ap.externalname, ' .
+            '       ag.id AS gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback' .
             '  FROM mdl_user_enrolments AS ue' .
             '  JOIN mdl_enrol AS en ON (ue.enrolid = en.id)' .
             '  JOIN mdl_assignprogram AS ap ON (ap.course = en.courseid)' .

@@ -8,13 +8,18 @@ use stdClass;
 class view_link implements renderable, templatable
 {
     private $externallink = null;
+
+    /**
+     * default constructor
+     * @param $course_module
+     */
     public function __construct($course_module) {
         $this->externallink = $course_module->externallink;
     }
 
     /**
-     * Export this data so it can be used as the context for a mustache template.
-     *
+     * Export this data, so it can be used as the context for a mustache template.
+     * @param renderer_base $output
      * @return stdClass
      */
     public function export_for_template(renderer_base $output): stdClass {

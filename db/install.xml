@@ -19,8 +19,8 @@
                 <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The due date for the assignment. Displayed to students."/>
                 <FIELD NAME="cutoffdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The final date after which submissions will no longer be accepted for this assignment without an extensions."/>
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time the settings for this assign module instance were last modified."/>
-                <FIELD NAME="externalgrademax" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
-                <FIELD NAME="manualgrademax" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
+                <FIELD NAME="externalgrademax" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
+                <FIELD NAME="manualgrademax" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
                 <FIELD NAME="passingpercentage" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="60" SEQUENCE="false" COMMENT="What percentage of the maximum grade must be achieved to pass."/>
             </FIELDS>
             <KEYS>
@@ -44,7 +44,7 @@
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this grade."/>
-                <KEY NAME="assignment" TYPE="foreign" FIELDS="assignment" REFTABLE="assignprogram" REFFIELDS="id" COMMENT="The assignprogram instance this grade belongs to."/>
+                <KEY NAME="assignprogram" TYPE="foreign" FIELDS="assignprogram" REFTABLE="assignprogram" REFFIELDS="id" COMMENT="The assignprogram instance this grade belongs to."/>
             </KEYS>
             <INDEXES>
                 <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" COMMENT="The userid for the submission relating to this grade."/>

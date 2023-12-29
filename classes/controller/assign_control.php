@@ -3,8 +3,15 @@
 namespace mod_assignprogram\controller;
 use cm_info;
 use core\context;
-use mod_assignprogram\data\Assign;
+use mod_assignprogram\data\assign;
 use stdClass;
+/**
+ * Controller for the programming assignment
+ *
+ * @package   mod_assignprogram
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class assign_control
 {
     /** @var stdClass the assignment record that contains the global settings for this assign instance */
@@ -58,7 +65,7 @@ class assign_control
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
-        $assign = new Assign($formdata);
+        $assign = new assign($formdata);
         $returnid = $DB->insert_record('assignprogram', $assign);
         $this->instance = $DB->get_record('assignprogram', array('id'=>$returnid), '*', MUST_EXIST);
         // Cache the course record.
@@ -78,7 +85,7 @@ class assign_control
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
-        $assign = new Assign($formdata);
+        $assign = new assign($formdata);
         $result = $DB->update_record('assignprogram', $assign);
         $this->set_instance( $DB->get_record('assignprogram', array('id'=>$assign->id), '*', MUST_EXIST));
         return $result;

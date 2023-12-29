@@ -5,11 +5,21 @@ namespace mod_assignprogram\form;
 use moodleform;
 
 require_once("$CFG->libdir/formslib.php");
-
+/**
+ * definition and validation of the grading form
+ *
+ * @package   mod_assignprogram
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class grader_form extends moodleform
 {
-    // Add elements to form.
 
+    /**
+     * definition of the grader form
+     * @return void
+     * @throws \coding_exception
+     */
     public function definition()
     {
 
@@ -20,32 +30,27 @@ class grader_form extends moodleform
             'Bewertung ' . $this->_customdata->firstname .' ' . $this->_customdata->lastname);
         $mform->setExpanded('grading');
 
-        $elem = $mform->addElement('text', 'status', get_string('status'));
-        $mform->freeze('status');
-        $mform->setType('status', PARAM_ALPHA);
-
-        $elem = $mform->addElement('text', 'timeleft', get_string('time'));
-        $mform->freeze('timeleft');
-        $mform->setType('timeleft', PARAM_ALPHA);
-
+        $mform->addElement('static', 'status', get_string('status'), $this->_customdata->status);
+        $mform->addElement('static', 'timeleft', get_string('time'), $this->_customdata->timeleft);
+        $mform->addElement('static', 'externallink', get_string('externallink'), $this->_customdata->externallink);
 
         $mform->addElement('header', 'external', 'T-Feedback aus externem System');
         $mform->setExpanded('external');
 
         $elem = $mform->addElement(
             'float',
-            'gradeexternal',
+            'externalgrade',
             'T-Bewertung (max. ' . $this->_customdata->gradeexternalmax . ')'
         );
 
         $elem = $mform->addElement(
             'editor',
-            'feedbackexternal',
+            'externalfeedback',
             get_string('feedback',
                 null,
                 self::editor_options())
         );
-        $mform->setType('feedbackexternal', PARAM_RAW);
+        $mform->setType('externalfeedback', PARAM_RAW);
 
 
         $mform->addElement('header', 'manual', 'Manuelles Feedback');
@@ -53,13 +58,20 @@ class grader_form extends moodleform
 
         $elem = $mform->addElement(
             'float',
-            'grademanual',
-            'T-Bewertung (max. ' . $this->_customdata->grademanualmax . ')'
+            'manualgrade',
+            'T-Bewertung (max. ' . $this->_customdata->manualgrademax . ')'
         );
 
-        $elem = $mform->addElement('editor', 'feedbackmanual', get_string('feedback'));
-        $mform->setType('feedbackmanual', PARAM_RAW);
+        $elem = $mform->addElement('editor', 'manualfeedback', get_string('feedback'));
+        $mform->setType('manualfeedback', PARAM_RAW);
 
+        // --- for development only ---
+        $mform->addElement('header', 'development', 'Infos');
+        $mform->addElement('static', 'idx', 'AssignmentId', $this->_customdata->assignmentid);
+        $mform->addElement('static', 'useridx', 'UserId', $this->_customdata->userid);
+        $mform->addElement('static', 'gradeidx', 'GradeId', $this->_customdata->gradeid);
+        $mform->addElement('static', 'graderx', 'Grader', $this->_customdata->gradeid);
+        // --- for development only ---
         $mform->addElement('hidden', 'id', $this->_customdata->assignmentid);
         $mform->setType('id', PARAM_INT);
         $mform->addElement('hidden', 'userid', $this->_customdata->userid);
@@ -78,6 +90,12 @@ class grader_form extends moodleform
         $this->set_data($this->_customdata);
     }
 
+    /**
+     * validates the formdata
+     * @param $data
+     * @param $files
+     * @return array  error messages
+     */
     public function validation($data, $files)
     {
         $errors = parent::validation($data, $files);
@@ -85,6 +103,10 @@ class grader_form extends moodleform
         return $errors;
     }
 
+    /**
+     * returns an array of options for the editor
+     * @return array  options for the editor
+     */
     private static function editor_options(): array
     {
         return array(

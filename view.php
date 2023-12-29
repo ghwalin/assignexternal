@@ -62,6 +62,14 @@ if ($urlparams['action'] == '') {
 }
 
 
+/**
+ * shows the details for the programming assignment
+ * @param $context
+ * @param $coursemoduleid
+ * @return void
+ * @throws coding_exception
+ * @throws dml_exception
+ */
 function show_details($context, $coursemoduleid): void
 {
     global $PAGE;
@@ -143,7 +151,6 @@ function show_grading($context, $coursemoduleid): void
  */
 function show_grader($context, $coursemoduleid, $userid): void
 {
-    error_log('show_grader()');
     global $CFG;
     global $PAGE;
 

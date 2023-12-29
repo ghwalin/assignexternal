@@ -35,7 +35,6 @@ class mod_assignprogram_mod_form extends moodleform_mod
 {
     function definition()
     {
-        global $CFG, $DB, $OUTPUT;
         $mform =& $this->_form;
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -75,8 +74,10 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform->addHelpButton('cutoffdate', 'cutoffdate', 'assignprogram');
 
         $mform->addElement('header', 'grading', get_string('grading', 'assignprogram'));
+        $mform->setExpanded('grading', true);
 
-        $mform->addElement('float', 'grade', get_string('grade', 'assignprogram'));
+        $mform->addElement('float', 'externalgrademax', get_string('externalgrademax', 'assignprogram'));
+        $mform->addElement('float', 'manualgrademax', get_string('manualgrademax', 'assignprogram'));
 
         $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignprogram'));
 
