@@ -35,4 +35,15 @@ class grade
         $this->grademanual = $formdata->grademanual;
         $this->feedbackmanual = $formdata->feedbackmanual['text'];
     }
+
+    public function load($data) {
+        $this->id = $data->gradeid;
+        $this->assignment = $data->assignmentid;
+        $this->userid = $data->userid;
+        //$this->grader = $data->grader;
+        $this->gradeexternal = $data->gradeexternal;
+        $this->feedbackexternal = $data->feedbackexternal;
+        $this->grademanual = $data->grademanual;
+        $this->feedbackmanual = $data->feedbackmanual;
+    }
 }

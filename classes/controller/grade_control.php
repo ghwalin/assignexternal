@@ -16,7 +16,7 @@ class grade_control
     /** @var context the context of the course module for this grade instance
      *               (or just the course if we are creating a new one)
      */
-    private $context;
+    private context $context;
     /** @var string A key used to identify userlists created by this object. */
     private $userlist = null;
 
@@ -167,6 +167,7 @@ class grade_control
      */
     private function read_grades()
     {
+        error_log(var_export($this->context,true));
         global $DB;
         $grades = $DB->get_records_list(
             'assignprogram_grades',

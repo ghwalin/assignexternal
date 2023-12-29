@@ -30,6 +30,15 @@ if ($hassiteconfig) {
 
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
-        // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
+        $settings = new admin_settingpage('local_gradeassignments', 'Grade Assignments');
+        $ADMIN->add('localplugins', $settings);
+
+        $settings->add(new admin_setting_configtext(
+            'local_gradeassignments/external_username',
+            'External Username',
+            'The user profile field containing the external username',
+            '',
+            PARAM_TEXT
+        ));
     }
 }
