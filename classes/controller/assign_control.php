@@ -25,7 +25,7 @@ class assign_control
     /** @var stdClass the course this assign instance belongs to */
     private $course;
     /** @var cm_info the course module for this assign instance */
-    private $coursemodule;
+    private ?cm_info $coursemodule;
     /** @var array cache for things like the coursemodule name or the scale menu -
      *             only lives for a single request.
      */
@@ -46,7 +46,6 @@ class assign_control
 
         // Ensure that $this->coursemodule is a cm_info object (or null).
         $this->coursemodule = cm_info::create($coursemodule);
-
         // Temporary cache only lives for a single request - used to reduce db lookups.
         $this->cache = array();
 
@@ -60,12 +59,14 @@ class assign_control
      * @param stdClass $formdata The data submitted from the form
      * @return mixed false if an error occurs or the int id of the new instance
      */
-    public function add_instance(\stdClass $formdata)
+    public function add_instance(\stdClass $formdata, $coursemoduleid)
     {
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
         $assign = new assign($formdata);
+        $assign->coursemodule = $coursemoduleid;
+        //$assign->coursemodule = 0; // TODO determine coursemoduleid
         $returnid = $DB->insert_record('assignprogram', $assign);
         $this->instance = $DB->get_record('assignprogram', array('id'=>$returnid), '*', MUST_EXIST);
         // Cache the course record.
@@ -80,12 +81,13 @@ class assign_control
      * @param stdClass $formdata - the data submitted from the form
      * @return bool false if an error occurs
      */
-    public function update_instance(\stdClass $formdata): bool
+    public function update_instance(\stdClass $formdata, int $coursemoduleid): bool
     {
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
         $assign = new assign($formdata);
+        $assign->coursemodule = $coursemoduleid;
         $result = $DB->update_record('assignprogram', $assign);
         $this->set_instance( $DB->get_record('assignprogram', array('id'=>$assign->id), '*', MUST_EXIST));
         return $result;

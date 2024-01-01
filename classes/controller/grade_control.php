@@ -4,6 +4,7 @@ namespace mod_assignprogram\controller;
 
 use cm_info;
 use core\context;
+use mod_assignprogram\data\assign;
 use mod_assignprogram\data\Grade;
 use mod_assignprogram\form\grader_form;
 use moodle_url;
@@ -19,11 +20,15 @@ use stdClass;
 class grade_control
 {
     /** @var int  the coursemodule-id */
-    private $coursemoduleid = null;
+    private $coursemoduleid;
     /** @var context the context of the course module for this grade instance
      *               (or just the course if we are creating a new one)
      */
     private context $context;
+
+    /** @var assign $assign  the assignprogram instance this grade belongs to*/
+    private assign $assign;
+
     /** @var string A key used to identify userlists created by this object. */
     private $userlist = null;
 
@@ -42,11 +47,11 @@ class grade_control
         require_once($CFG->libdir . '/modinfolib.php');
         $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;
+        $this->assign = new assign(null,$coursemoduleid);
         $this->userlist = $this->read_coursemodule_students();
         if ($userid == 0) {
-            $students = $this->read_coursemodule_students();
-            reset($students);
-            $this->userid = key($students);
+            reset($this->userlist);
+            $this->userid = key($this->userlist);
         } else {
             $this->userid = $userid;
         }
@@ -60,9 +65,8 @@ class grade_control
     public function list_grades()
     {
         $grades = $this->read_grades();
-        $users = $this->read_coursemodule_students();
         $gradelist = array();
-        foreach ($users as $userid => $user) {
+        foreach ($this->userlist as $userid => $user) {
             $grade = new \stdClass();
             $grade->coursemoduleid = $this->coursemoduleid;
             $grade->userid = $userid;
@@ -95,17 +99,28 @@ class grade_control
         global $PAGE, $OUTPUT;
         require_once($CFG->dirroot . '/mod/assignprogram/classes/form/graderform.php');
         $user = $this->read_coursemodule_student($this->userid);
+        $data = new \stdClass();
 
-        $assignment = new \stdClass();
-
-        $assignment->userid = $this->userid;
-        $assignment->assignmentid = $this->coursemoduleid;
-        $assignment->firstname = $user->firstname;
-        $assignment->lastname = $user->lastname;
-        $assignment->gradeexternalmax = 99;  // FIXME
-        $assignment->manualgrademax = 99;  // FIXME
-
-        $mform = new grader_form(null, $assignment);
+        $assignment = new assign(null,$this->coursemoduleid);
+        $data->userid = $this->userid;
+        $data->assignmentid = $this->coursemoduleid;
+        $data->firstname = $user->firstname;
+        $data->lastname = $user->lastname;
+        $data->externalgrademax = $assignment->externalgrademax;
+        $data->manualgrademax = $assignment->manualgrademax;
+        $data->gradeid = -1;
+        $data->assignprogram = -1;
+        $data->status = 'pending';
+        $data->timeleft = 'FIXME';
+        $data->gradeexternal = '';
+        $data->manualgrade = '';
+        $data->externallink = '';
+        $data->externalfeedback['text'] = '';
+        $data->externalfeedback['format'] = 1;
+        $data->manualfeedback['text'] = '<p>Nothing here</p>';
+        $data->manualfeedback['format'] = 1;
+        $data->gradefinal = 0;
+        $mform = new grader_form(null, $data);
 
 // Form processing and displaying is done here.
         if ($mform->is_cancelled()) {
@@ -128,33 +143,23 @@ class grade_control
                 )));
         } else {
             $grades = $this->read_grades();
-            $grade = new \stdClass();
+
             if (array_key_exists($this->userid, $grades)) {
                 $gradedata = $grades[$this->userid];
-                $grade->gradeid = $gradedata->id;
-                $grade->status = $this->get_status($gradedata->gradeexternal);
-                $grade->timeleft = 'FIXME';
-                $grade->gradeexternal = $gradedata->gradeexternal;
-                $grade->externalfeedback['text'] = $gradedata->externalfeedback;
-                $grade->externalfeedback['format'] = 1; // FIXME
-                $grade->manualgrade = $gradedata->manualgrade;
-                $grade->manualfeedback['text'] = $gradedata->manualfeedback;
-                $grade->manualfeedback['format'] = 1; // FIXME
-                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
-            } else {
-                $grade->gradeid = -1;
-                $grade->status = 'pending';
-                $grade->timeleft = 'FIXME';
-                $grade->gradeexternal = '';
-                $grade->manualgrade = '';
-                $grade->externalfeedback['text'] = '';
-                $grade->externalfeedback['format'] = 1; // FIXME
-                $grade->manualfeedback['text'] = '<p>Nothing here</p>';
-                $grade->manualfeedback['format'] = 1;
-                $grade->gradefinal = 0;
-            }
-            $mform->set_data($grade);
+                $data->gradeid = $gradedata->id;
+                $data->assignprogram = $gradedata->assignprogram;
+                $data->status = $this->get_status($gradedata->externalgrade);
+                $data->timeleft = 'FIXME';
+                $data->externalgrade = $gradedata->externalgrade;
+                $data->externalfeedback['text'] = $gradedata->externalfeedback;
+                $data->externalfeedback['format'] = 1; // FIXME
+                $data->manualgrade = $gradedata->manualgrade;
+                $data->manualfeedback['text'] = $gradedata->manualfeedback;
+                $data->manualfeedback['format'] = 1; // FIXME
+                $data->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
 
+            }
+            $mform->set_data($data);
             // Display the form.
             $PAGE->set_title("foobar");
             //$PAGE->add_body_class('limitedwidth');
@@ -167,6 +172,7 @@ class grade_control
             echo $OUTPUT->footer();
         }
     }
+
 
     /**
      * reads all grades for the current coursemodule

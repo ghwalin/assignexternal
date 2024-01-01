@@ -62,7 +62,7 @@ class grade
      */
     public function load($data) {
         $this->id = $data->gradeid;
-        $this->assignprogram = $data->assignprogramid;
+        $this->assignprogram = $data->coursemodule;
         $this->userid = $data->userid;
         //$this->grader = $data->grader;
         $this->externallink = $data->externallink;

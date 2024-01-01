@@ -180,12 +180,12 @@ class update_grade extends \external_api
 
         $query =
             'SELECT ue.id as enroleid, ue.userid, en.id, en.courseid,' .
-            '       ap.id AS assignmentid, ap.name, ap.course AS courseid, ap.externalgrademax, ap.externalname, ' .
+            '       ap.id AS assignmentid, ap.name, ap.course AS courseid, ap.coursemodule, ap.externalgrademax, ap.externalname, ' .
             '       ag.id AS gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback' .
             '  FROM mdl_user_enrolments AS ue' .
             '  JOIN mdl_enrol AS en ON (ue.enrolid = en.id)' .
             '  JOIN mdl_assignprogram AS ap ON (ap.course = en.courseid)' .
-            '  LEFT JOIN mdl_assignprogram_grades AS ag ON (ag.assignment = ap.id)' .
+            '  LEFT JOIN mdl_assignprogram_grades AS ag ON (ag.assignprogram = ap.id)' .
             ' WHERE ue.userid=:userid AND ap.externalname=:assignment_name' .
             ' ';
         $data = $DB->get_records_sql(

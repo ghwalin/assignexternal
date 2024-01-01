@@ -38,7 +38,7 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform =& $this->_form;
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-        $mform->addElement('text', 'name', get_string('assignmentname', 'assignprogram'), ['size'=>'64']);
+        $mform->addElement('text', 'name', get_string('assignmentname', 'assign'), ['size'=>'64']);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
@@ -54,30 +54,32 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform->addElement('checkbox', 'alwaysshowlink', get_string('alwaysshowlink', 'assignprogram'));
         $mform->addHelpButton('alwaysshowlink', 'alwaysshowlink', 'assignprogram');
 
-        $this->standard_intro_elements(get_string('description', 'assignprogram'));
+        $this->standard_intro_elements(get_string('description', 'assign'));
 
-        $mform->addElement('checkbox', 'alwaysshowdescription', get_string('alwaysshowdescription', 'assignprogram'));
-        $mform->addHelpButton('alwaysshowdescription', 'alwaysshowdescription', 'assignprogram');
+        $mform->addElement('checkbox', 'alwaysshowdescription', get_string('alwaysshowdescription', 'assign'));
+        $mform->addHelpButton('alwaysshowdescription', 'alwaysshowdescription', 'assign');
         $mform->disabledIf('alwaysshowdescription', 'allowsubmissionsfromdate[enabled]', 'notchecked');
 
-        $mform->addElement('header', 'availability', get_string('availability', 'assignprogram'));
+        $mform->addElement('header', 'availability', get_string('availability', 'assign'));
         $mform->setExpanded('availability', true);
 
         $options = array('optional'=>true);
-        $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'assignprogram'), $options);
-        $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assignprogram');
+        $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'assign'), $options);
+        $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assign');
 
-        $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'assignprogram'), $options);
-        $mform->addHelpButton('duedate', 'duedate', 'assignprogram');
+        $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'assign'), $options);
+        $mform->addHelpButton('duedate', 'duedate', 'assign');
 
-        $mform->addElement('date_time_selector', 'cutoffdate', get_string('cutoffdate', 'assignprogram'), $options);
-        $mform->addHelpButton('cutoffdate', 'cutoffdate', 'assignprogram');
+        $mform->addElement('date_time_selector', 'cutoffdate', get_string('cutoffdate', 'assign'), $options);
+        $mform->addHelpButton('cutoffdate', 'cutoffdate', 'assign');
 
         $mform->addElement('header', 'grading', get_string('grading', 'assignprogram'));
         $mform->setExpanded('grading', true);
 
         $mform->addElement('float', 'externalgrademax', get_string('externalgrademax', 'assignprogram'));
+        $mform->addHelpButton('externalgrademax', 'externalgrademax', 'assignprogram');
         $mform->addElement('float', 'manualgrademax', get_string('manualgrademax', 'assignprogram'));
+        $mform->addHelpButton('manualgrademax', 'manualgrademax', 'assignprogram');
 
         $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignprogram'));
 

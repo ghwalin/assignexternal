@@ -27,23 +27,27 @@ class grader_form extends moodleform
         $mform->addElement(
             'header',
             'grading',
-            'Bewertung ' . $this->_customdata->firstname .' ' . $this->_customdata->lastname);
+            get_string('grade') . ' ' . $this->_customdata->firstname . ' ' . $this->_customdata->lastname);
         $mform->setExpanded('grading');
 
         $mform->addElement('static', 'status', get_string('status'), $this->_customdata->status);
         $mform->addElement('static', 'timeleft', get_string('time'), $this->_customdata->timeleft);
-        $mform->addElement('static', 'externallink', get_string('externallink'), $this->_customdata->externallink);
 
-        $mform->addElement('header', 'external', 'T-Feedback aus externem System');
+        $mform->addElement('header', 'external', get_string('externalfeedback', 'assignprogram'));
         $mform->setExpanded('external');
-
-        $elem = $mform->addElement(
+        $mform->addElement(
+            'static',
+            'externallink',
+            get_string('externallink', 'assignprogram'),
+            $this->_customdata->externallink
+        );
+        $mform->addElement(
             'float',
             'externalgrade',
-            'T-Bewertung (max. ' . $this->_customdata->gradeexternalmax . ')'
+            get_string('points') . ' (max. ' . $this->_customdata->externalgrademax . ')'
         );
 
-        $elem = $mform->addElement(
+        $mform->addElement(
             'editor',
             'externalfeedback',
             get_string('feedback',
@@ -53,13 +57,13 @@ class grader_form extends moodleform
         $mform->setType('externalfeedback', PARAM_RAW);
 
 
-        $mform->addElement('header', 'manual', 'Manuelles Feedback');
+        $mform->addElement('header', 'manual', get_string('manualfeedback', 'assignprogram'));
         $mform->setExpanded('manual');
 
         $elem = $mform->addElement(
             'float',
             'manualgrade',
-            'T-Bewertung (max. ' . $this->_customdata->manualgrademax . ')'
+            get_string('points') . ' (max. ' . $this->_customdata->manualgrademax . ')'
         );
 
         $elem = $mform->addElement('editor', 'manualfeedback', get_string('feedback'));
@@ -68,12 +72,15 @@ class grader_form extends moodleform
         // --- for development only ---
         $mform->addElement('header', 'development', 'Infos');
         $mform->addElement('static', 'idx', 'AssignmentId', $this->_customdata->assignmentid);
+        $mform->addElement('static', 'instancex', 'Instance', $this->_customdata->assignment->id);
         $mform->addElement('static', 'useridx', 'UserId', $this->_customdata->userid);
         $mform->addElement('static', 'gradeidx', 'GradeId', $this->_customdata->gradeid);
         $mform->addElement('static', 'graderx', 'Grader', $this->_customdata->gradeid);
         // --- for development only ---
         $mform->addElement('hidden', 'id', $this->_customdata->assignmentid);
         $mform->setType('id', PARAM_INT);
+        $mform->addElement('hidden', 'instance', $this->_customdata->assignment->id);
+        $mform->setType('instance', PARAM_INT);
         $mform->addElement('hidden', 'userid', $this->_customdata->userid);
         $mform->setType('userid', PARAM_INT);
         $mform->addElement('hidden', 'gradeid', $this->_customdata->gradeid);

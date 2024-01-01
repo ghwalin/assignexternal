@@ -27,44 +27,34 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'programming assignment';
 
-$string['allowsubmissionsfromdate'] = 'Allow submissions from';
-$string['allowsubmissionsfromdate_help'] = 'If enabled, students will not be able to submit before this date. If disabled, students will be able to start submitting right away.';
-$string['alwaysshowdescription'] = 'Always show description';
-$string['alwaysshowdescription_help'] = 'If disabled, the assignment description above will only become visible to students on the "Allow submissions from" date.';
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
-$string['assignmentname'] = 'Programming assignment name';
-$string['availability'] = 'Availability';
 
-$string['cutoffdate'] = 'Cut-off date';
-//$string['cutoffdatecolon'] = 'Cut-off date: {$a}';
-$string['cutoffdate_help'] = 'If set, the assignment will not accept submissions after this date without an extension.';
-$string['cutoffdatevalidation'] = 'Cut-off date cannot be earlier than the due date.';
-$string['cutoffdatefromdatevalidation'] = 'Cut-off date cannot be earlier than the allow submissions from date.';
-
-$string['description'] = 'Description';
-$string['duedate'] = 'Due date';
-//$string['duedatecolon'] = 'Due date: {$a}';
-$string['duedate_help'] = 'This is when the assignment is due. Submissions will still be allowed after this date, but any assignments submitted after this date will be marked as late. Set an assignment cut-off date to prevent submissions after a certain date.';
-
-$string['externalgrademax'] = 'Maximum grade from external assignment';
-$string['externalname'] = 'External assignment';
-$string['externalname_help'] = 'The name of the assignment in the external system';
+$string['externalfeedback'] = 'Feedback from external system';
+$string['externalgrademax'] = 'External grade max.';
+$string['externalgrademax_help'] = 'Maximum grade from external assignment';
 $string['externallink'] = 'Assignment link';
 $string['externallink_help'] = 'The link to the assignment in the external system';
-
+$string['externalname'] = 'External assignment';
+$string['externalname_help'] = 'The name of the assignment in the external system';
 
 $string['grading'] = 'Grade';
 
-$string['manualgrademax'] = 'Maximum grade from manual grading';
+$string['manualfeedback'] = 'Manual feedback';
+$string['manualgrademax'] = 'Manual grade max.';
+$string['manualgrademax_help'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'Programming assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
 
 $string['passingpercentage'] = 'Percentage to pass';
-$string['passingpercentage_help'] = 'What percentage of the maximum grade must be achieved to pass';
+$string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
+/*
+
+
 $string['pluginadministration'] = 'WHATEVER';
 
 $string['key'] = 'value';
 $string['key'] = 'value';
 $string['key'] = 'value';
 $string['key'] = 'value';
+*/

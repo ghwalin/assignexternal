@@ -3,27 +3,27 @@
     <thead>
     <tr>
       <th class="header c1" scope="col" rowspan="2">
-        Vorname / Nachname
+        {{#str}} firstname, core {{/str}} / {{#str}} lastname, core {{/str}}
       </th>
       <th class="header c2" scope="col" rowspan="2">
-        Status
+        {{#str}} status, core {{/str}}
       </th>
       <th class="header c2" scope="col" colspan="2">
-        Bewertung
+        {{#str}} assessment, core {{/str}}
       </th>
       <th class="header c5" scope="col" rowspan="2">
-        Feedback als Kommentar
+        {{#str}} feedback, core {{/str}}
       </th>
       <th class="header c6" scope="col" rowspan="2">
-        Endbewertung
+        {{#str}} finalassessment, core {{/str}}
       </th>
     </tr>
     <tr>
       <th class="header c3" scope="col">
-        Extern
+        {{#str}} external, core {{/str}}
       </th>
       <th class="header c4" scope="col">
-        Manuell
+        {{#str}} manual, core {{/str}}
       </th>
     </tr>
     </thead>
@@ -32,10 +32,10 @@
       <tr>
         <td>{{ firstname }} {{ lastname }}</td>
         <td>{{ status }}</td>
-        <td>{{ gradeexternal}} </td>
+        <td><br>{{ gradeexternal }}</td>
         <td>
-          {{ manualgrade}}<br>
-          <a href="./view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}">Bewerten</a>
+          <a href="{{ config.wwwroot }}/course/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}">{{#str}} grade, core {{/str}}</a>
+          <br>{{ manualgrade }}
         </td>
         <td>{{ feedback }} </td>
         <td>{{ gradefinal }} </td>

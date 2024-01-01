@@ -15,6 +15,7 @@ class assign
 {
     public $id;
     public $course;
+    public $coursemodule;
     public $name;
     public $intro;
     public $introformat;
@@ -32,25 +33,61 @@ class assign
 
     /**
      * constructor
-     * @param stdClass $formdata
+     * @param stdClass|null $formdata
+     * @param int|null $coursemoduleid
      */
-    public function __construct(\stdClass $formdata)
+    public function __construct(\stdClass $formdata=null, int $coursemoduleid=null)
     {
-        $this->id = ($formdata->instance);
-        $this->course = ($formdata->course);
-        $this->name = ($formdata->name);
-        $this->intro = ($formdata->intro);
-        $this->introformat = ($formdata->introformat);
-        $this->alwaysshowdescription = (!empty($formdata->alwaysshowdescription));
-        $this->externalname = ($formdata->externalname);
-        $this->externallink = ($formdata->externallink);
-        $this->alwaysshowlink = (!empty($formdata->alwaysshowlink));
-        $this->allowsubmissionsfromdate = ($formdata->allowsubmissionsfromdate);
-        $this->duedate = ($formdata->duedate);
-        $this->cutoffdate = ($formdata->cutoffdate);
-        $this->timemodified = (time());
-        $this->externalgrademax = ($formdata->externalgrademax);
-        $this->manualgrademax = ($formdata->manualgrademax);
-        $this->passingpercentage = ($formdata->passingpercentage);
+        if (!empty($formdata)) $this->load_formdata($formdata);
+        else $this->load_db($coursemoduleid);
+    }
+
+    private function load_formdata(\stdClass $formdata) {
+        $this->id = $formdata->instance;
+        $this->coursemodule = '0'; // TODO determine coursemodule
+        $this->extracted($formdata);
+        $this->timemodified = time();
+    }
+
+    public function load_db($coursemoduleid) {
+        global $DB;
+        $sql =
+            'SELECT ap.id, ap.course, coursemodule, name, intro, introformat, alwaysshowdescription, externalname, ' .
+            '       externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate, timemodified ' .
+            '       externalgrademax, manualgrademax, passingpercentage' .
+            ' FROM mdl_assignprogram AS ap INNER JOIN mdl_course_modules AS cm ON (ap.id = cm.instance) ' .
+            'WHERE cm.id=:coursemodule';
+        $data = $DB->get_record_sql(
+            $sql,
+            ['coursemodule' => $coursemoduleid]
+        );
+        error_log(var_export($data,true));
+        if (!empty($data)) {
+            $this->id = $data->id;
+            $this->extracted($data);
+            $this->timemodified = $data->timemodified;
+        }
+    }
+
+    /**
+     * @param $data
+     * @return void
+     */
+    private function extracted($data): void
+    {
+        $this->course = $data->course;
+        $this->name = $data->name;
+        $this->intro = $data->intro;
+        $this->introformat = $data->introformat;
+        $this->alwaysshowdescription = !empty($data->alwaysshowdescription);
+        $this->externalname = $data->externalname;
+        $this->externallink = $data->externallink;
+        $this->alwaysshowlink = !empty($data->alwaysshowlink);
+        $this->allowsubmissionsfromdate = $data->allowsubmissionsfromdate;
+        $this->duedate = $data->duedate;
+        $this->cutoffdate = $data->cutoffdate;
+        $this->externalgrademax = $data->externalgrademax;
+        $this->manualgrademax = $data->manualgrademax;
+        $this->passingpercentage = $data->passingpercentage;
     }
 }
