@@ -77,11 +77,18 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform->setExpanded('grading', true);
 
         $mform->addElement('float', 'externalgrademax', get_string('externalgrademax', 'assignprogram'));
+        $mform->addRule('externalgrademax', null, 'required', null, 'client');
+        $mform->setDefault('externalgrademax', 100);
         $mform->addHelpButton('externalgrademax', 'externalgrademax', 'assignprogram');
+
         $mform->addElement('float', 'manualgrademax', get_string('manualgrademax', 'assignprogram'));
+        $mform->addRule('manualgrademax', null, 'required', null, 'client');
+        $mform->setDefault('manualgrademax', 0);
         $mform->addHelpButton('manualgrademax', 'manualgrademax', 'assignprogram');
 
         $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignprogram'));
+        $mform->addRule('passingpercentage', null, 'required', null, 'client');
+        $mform->setDefault('passingpercentage', 60);
 
         $mform->addHelpButton('passingpercentage', 'passingpercentage', 'assignprogram');
 
