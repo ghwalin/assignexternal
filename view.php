@@ -24,8 +24,7 @@
 
 use mod_assignprogram\controller\grade_control;
 use mod_assignprogram\data\grade;
-use mod_assignprogram\form\grader_form;
-use mod_assignprogram\output\view_grader;
+use mod_assignprogram\output\view_grader_navigation;
 use mod_assignprogram\output\view_grading;
 use mod_assignprogram\output\view_link;
 use mod_assignprogram\output\view_summary;
@@ -36,18 +35,13 @@ global $PAGE;
 
 $coursemoduleid = required_param('id', PARAM_INT);
 
-list ($course, $cm) = get_course_and_cm_from_cmid($coursemoduleid, 'assignprogram');
-require_login($course, true, $cm);
-$context = context_module::instance($cm->id);
+list ($course, $coursemodule) = get_course_and_cm_from_cmid($coursemoduleid, 'assignprogram');
+require_login($course, true, $coursemodule);
+$context = context_module::instance($coursemodule->id);
 require_capability('mod/assign:view', $context);
 
-/*
-mod/assign:grade
-mod/assign:reviewgrades
- */
 $urlparams = array('cmid' => $coursemoduleid,
     'action' => optional_param('action', '', PARAM_ALPHA),
-    'rownum' => optional_param('rownum', 0, PARAM_INT),
     'userid' => optional_param('userid', 0, PARAM_INT)
 );
 
@@ -93,7 +87,6 @@ function show_details($context, $coursemoduleid): void
         echo $output->render($renderable);
     } else {
         require_once($CFG->dirroot . '/mod/assignprogram/classes/data/grade.php');
-        error_log("cmid=$coursemoduleid / userid=$USER->id");
         $gradedata = $DB->get_record(
             'assignprogram_grades',
             array('assignment' => $coursemoduleid, 'userid' => $USER->id),
@@ -101,7 +94,6 @@ function show_details($context, $coursemoduleid): void
         );
         $grade = new grade();
         if ($gradedata) {
-            error_log('data found');
             $grade->init($gradedata);
         }
         $renderable = new view_summary(
@@ -114,7 +106,6 @@ function show_details($context, $coursemoduleid): void
 
 /**
  * shows the grading overview
- * @param $output
  * @param $context
  * @param $coursemoduleid
  * @return void
@@ -125,10 +116,12 @@ function show_grading($context, $coursemoduleid): void
 {
     global $PAGE;
     require_capability('mod/assign:reviewgrades', $context);
+
     $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $coursemoduleid));
     $PAGE->set_title('My title');  // FIXME
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('base');
+    $PAGE->add_body_class('assignprogram-grading');
     $output = $PAGE->get_renderer('mod_assignprogram');
     echo $output->header();
 
@@ -165,8 +158,19 @@ function show_grader($context, $coursemoduleid, $userid): void
             'userid' => $userid
         )
     );
-    $PAGE->set_pagelayout('standard');
+    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $coursemoduleid));
+    $PAGE->set_title('My title');  // FIXME
+    $PAGE->set_heading('My modules page heading');
+    $PAGE->set_pagelayout('base');
+    $PAGE->add_body_class('assignprogram-grading');
+    $output = $PAGE->get_renderer('mod_assignprogram');
+    echo $output->header();
+
+    $renderable = new view_grader_navigation($coursemoduleid, $context);
+    echo $output->render($renderable);
 
     $grade_control = new grade_control($coursemoduleid, $context, $userid);
     $grade_control->process_feedback();
+
+    echo $output->footer();
 }

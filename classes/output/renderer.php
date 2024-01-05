@@ -47,6 +47,19 @@ class renderer extends plugin_renderer_base
      *
      * @return string html for the page
      */
+    public function render_view_grader_navigation($page): string
+    {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('assignprogram/view_grader_navigation', $data);
+    }
+
+    /**
+     * Defer to template.
+     *
+     * @param $page the page to render
+     *
+     * @return string html for the page
+     */
     public function render_view_link($page): string
     {
         $data = $page->export_for_template($this);

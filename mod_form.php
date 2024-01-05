@@ -89,7 +89,6 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignprogram'));
         $mform->addRule('passingpercentage', null, 'required', null, 'client');
         $mform->setDefault('passingpercentage', 60);
-
         $mform->addHelpButton('passingpercentage', 'passingpercentage', 'assignprogram');
 
         $this->standard_coursemodule_elements();

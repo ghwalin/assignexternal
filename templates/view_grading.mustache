@@ -15,27 +15,29 @@
         {{#str}} feedback, core {{/str}}
       </th>
       <th class="header c6" scope="col" rowspan="2">
-        {{#str}} finalassessment, core {{/str}}
+        {{#str}} finalgrade, assignprogram {{/str}}
       </th>
     </tr>
     <tr>
       <th class="header c3" scope="col">
-        {{#str}} external, core {{/str}}
+        {{#str}} external, assignprogram {{/str}}
       </th>
       <th class="header c4" scope="col">
-        {{#str}} manual, core {{/str}}
+        {{#str}} manual, assignprogram {{/str}}
       </th>
     </tr>
     </thead>
     <tbody>
     {{#grades}}
       <tr>
-        <td>{{ firstname }} {{ lastname }}</td>
+        <td><a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}">{{ firstname }} {{ lastname }}</a></td>
         <td>{{ status }}</td>
         <td><br>{{ gradeexternal }}</td>
         <td>
-          <a href="{{ config.wwwroot }}/course/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}">{{#str}} grade, core {{/str}}</a>
-          <br>{{ manualgrade }}
+          {{ manualgrade }}<br>
+          <a href="{{ config.wwwroot }}/mod/assignprogram/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}" class="btn btn-primary">
+          {{#str}} grade, assign {{/str}}
+          </a>
         </td>
         <td>{{ feedback }} </td>
         <td>{{ gradefinal }} </td>

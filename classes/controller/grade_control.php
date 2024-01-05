@@ -7,6 +7,8 @@ use core\context;
 use mod_assignprogram\data\assign;
 use mod_assignprogram\data\Grade;
 use mod_assignprogram\form\grader_form;
+use mod_assignprogram\output\view_grader_navigation;
+use mod_assignprogram\output\renderer;
 use moodle_url;
 use stdClass;
 
@@ -68,6 +70,7 @@ class grade_control
         $gradelist = array();
         foreach ($this->userlist as $userid => $user) {
             $grade = new \stdClass();
+            $grade->courseid = $this->context->get_course_context()->instanceid;
             $grade->coursemoduleid = $this->coursemoduleid;
             $grade->userid = $userid;
             $grade->firstname = $user->firstname;
@@ -92,6 +95,7 @@ class grade_control
      * process the feedback form for a student
      * @return void
      * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function process_feedback(): void
     {
@@ -102,6 +106,7 @@ class grade_control
         $data = new \stdClass();
 
         $assignment = new assign(null,$this->coursemoduleid);
+        $data->id = $assignment->id;
         $data->userid = $this->userid;
         $data->assignmentid = $this->coursemoduleid;
         $data->firstname = $user->firstname;
@@ -111,7 +116,7 @@ class grade_control
         $data->gradeid = -1;
         $data->assignprogram = -1;
         $data->status = 'pending';
-        $data->timeleft = 'FIXME';
+        $data->timeleft = 'FIXME'; // $assignment->cutoffdate - time();
         $data->gradeexternal = '';
         $data->manualgrade = '';
         $data->externallink = '';
@@ -149,7 +154,6 @@ class grade_control
                 $data->gradeid = $gradedata->id;
                 $data->assignprogram = $gradedata->assignprogram;
                 $data->status = $this->get_status($gradedata->externalgrade);
-                $data->timeleft = 'FIXME';
                 $data->externalgrade = $gradedata->externalgrade;
                 $data->externalfeedback['text'] = $gradedata->externalfeedback;
                 $data->externalfeedback['format'] = 1; // FIXME
@@ -161,15 +165,8 @@ class grade_control
             }
             $mform->set_data($data);
             // Display the form.
-            $PAGE->set_title("foobar");
-            //$PAGE->add_body_class('limitedwidth');
-            $PAGE->set_heading("foofoo");
-
-            echo $OUTPUT->header();
 
             $mform->display();
-
-            echo $OUTPUT->footer();
         }
     }
 
@@ -181,7 +178,6 @@ class grade_control
      */
     private function read_grades()
     {
-        error_log(var_export($this->context, true));
         global $DB;
         $grades = $DB->get_records_list(
             'assignprogram_grades',
@@ -239,7 +235,7 @@ class grade_control
      * @param $grade
      * @return string
      */
-    private function get_status($grade)
+    private function get_status($grade): string
     {
         if (!$grade) {
             return 'pending';

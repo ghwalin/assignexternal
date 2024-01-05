@@ -53,7 +53,7 @@ class assign
         global $DB;
         $sql =
             'SELECT ap.id, ap.course, coursemodule, name, intro, introformat, alwaysshowdescription, externalname, ' .
-            '       externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate, timemodified ' .
+            '       externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate, timemodified, ' .
             '       externalgrademax, manualgrademax, passingpercentage' .
             ' FROM mdl_assignprogram AS ap INNER JOIN mdl_course_modules AS cm ON (ap.id = cm.instance) ' .
             'WHERE cm.id=:coursemodule';
@@ -61,7 +61,6 @@ class assign
             $sql,
             ['coursemodule' => $coursemoduleid]
         );
-        error_log(var_export($data,true));
         if (!empty($data)) {
             $this->id = $data->id;
             $this->extracted($data);

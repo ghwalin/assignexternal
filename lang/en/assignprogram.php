@@ -30,6 +30,7 @@ $string['pluginname'] = 'programming assignment';
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
 
+$string['external'] = 'External';
 $string['externalfeedback'] = 'Feedback from external system';
 $string['externalgrademax'] = 'External grade max.';
 $string['externalgrademax_help'] = 'Maximum grade from external assignment';
@@ -38,8 +39,11 @@ $string['externallink_help'] = 'The link to the assignment in the external syste
 $string['externalname'] = 'External assignment';
 $string['externalname_help'] = 'The name of the assignment in the external system';
 
+$string['finalgrade'] = 'Final grade';
+
 $string['grading'] = 'Grade';
 
+$string['manual'] = 'Manual';
 $string['manualfeedback'] = 'Manual feedback';
 $string['manualgrademax'] = 'Manual grade max.';
 $string['manualgrademax_help'] = 'Maximum grade from manual grading';
@@ -48,10 +52,11 @@ $string['modulename_help'] = 'The programming assignment activity module enables
 
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
+$string['pluginadministration'] = 'WHATEVER';
 /*
 
 
-$string['pluginadministration'] = 'WHATEVER';
+
 
 $string['key'] = 'value';
 $string['key'] = 'value';
