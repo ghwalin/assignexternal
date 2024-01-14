@@ -17,7 +17,7 @@
 /**
  * Code to be executed after the plugin's database scheme has been installed is defined here.
  *
- * @package     mod_assignprogram
+ * @package     mod_assignexternal
  * @category    upgrade
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,7 +26,7 @@
 /**
  * Custom code to be run on installing the plugin.
  */
-function xmldb_assignprogram_install() {
+function xmldb_assignexternal_install() {
 
     return true;
 }

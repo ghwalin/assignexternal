@@ -17,15 +17,15 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     mod_assignprogram
+ * @package     mod_assignexternal
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_assignprogram';
+$plugin->component = 'mod_assignexternal';
 $plugin->release = '0.1.1';
-$plugin->version = 2023122901;
+$plugin->version = 2024011401;
 $plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_ALPHA;

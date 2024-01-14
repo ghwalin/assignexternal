@@ -17,7 +17,7 @@
 /**
  * Plugin administration pages are defined here.
  *
- * @package     assignfeedback_assignprogram
+ * @package     assignfeedback_assignexternal
  * @category    admin
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('mod_assignprogram_settings', new lang_string('pluginname', 'mod_assignprogram'));
+    $settings = new admin_settingpage('mod_assignexternal_settings', new lang_string('pluginname', 'mod_assignexternal'));
 
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {

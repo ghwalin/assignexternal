@@ -17,7 +17,7 @@
 /**
  * Plugin upgrade steps are defined here.
  *
- * @package     mod_assignprogram
+ * @package     mod_assignexternal
  * @category    upgrade
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,12 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__.'/upgradelib.php');
 
 /**
- * Execute mod_assignprogram upgrade from the given old version.
+ * Execute mod_assignexternal upgrade from the given old version.
  *
  * @param int $oldversion
  * @return bool
  */
-function xmldb_assignprogram_upgrade($oldversion) {
+function xmldb_assignexternal_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();

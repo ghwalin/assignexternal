@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the moodle hooks for the assignprogram module.
+ * This file contains the moodle hooks for the assignexternal module.
  *
  * It delegates most functions to the assignment class.
  *
- * @package     mod_assignprogram
+ * @package     mod_assignexternal
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
-use mod_assignprogram\controller\assign_control;
+use mod_assignexternal\controller\assign_control;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -34,13 +34,13 @@ defined('MOODLE_INTERNAL') || die();
  *
  * This is done by calling the add_instance() method of the assignment type class
  * @param stdClass $data
- * @param mod_assignprogram_mod_form $form
+ * @param mod_assignexternal_mod_form $form
  * @return int The instance id of the new assignment
  */
-function assignprogram_add_instance(stdClass $data, mod_assignprogram_mod_form $form = null)
+function assignexternal_add_instance(stdClass $data, mod_assignexternal_mod_form $form = null)
 {
     global $CFG, $CONTEXT;
-    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/assign_control.php');
+    require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/assign_control.php');
     $instance = context_module::instance($data->coursemodule);
     $assignment = new assign_control($instance, null, null);
     return $assignment->add_instance($data, $instance->instanceid);
@@ -51,11 +51,11 @@ function assignprogram_add_instance(stdClass $data, mod_assignprogram_mod_form $
  * @param int $id
  * @return bool
  */
-function assignprogram_delete_instance($id)
+function assignexternal_delete_instance($id)
 {
     global $CFG;
-    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/assign_control.php');
-    $cm = get_coursemodule_from_instance('assignprogram', $id, 0, false, MUST_EXIST);
+    require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/assign_control.php');
+    $cm = get_coursemodule_from_instance('assignexternal', $id, 0, false, MUST_EXIST);
     $context = context_module::instance($cm->id);
 
     $assignment = new assign_control($context, null, null);
@@ -70,10 +70,10 @@ function assignprogram_delete_instance($id)
  * @param stdClass $form - unused
  * @return bool
  */
-function assignprogram_update_instance(stdClass $data, $form)
+function assignexternal_update_instance(stdClass $data, $form)
 {
     global $CFG;
-    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/assign_control.php');
+    require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/assign_control.php');
     $context = context_module::instance($data->coursemodule);
     $assignment = new assign_control($context, null, null);
     return $assignment->update_instance($data, $context->instanceid);
@@ -86,11 +86,11 @@ function assignprogram_update_instance(stdClass $data, $form)
  * @return cached_cm_info
  * @throws dml_exception
  */
-function assignprogram_get_coursemodule_info(\stdClass $coursemodule)
+function assignexternal_get_coursemodule_info(\stdClass $coursemodule)
 {
     global $DB;
     $assignment = $DB->get_record(
-        'assignprogram',
+        'assignexternal',
         array('id' => $coursemodule->instance),
         'id, name, externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate',
         MUST_EXIST);
@@ -118,10 +118,10 @@ function assignprogram_get_coursemodule_info(\stdClass $coursemodule)
  * @return cached_cm_info
  * @throws dml_exception
  */
-function assignprogram_cm_info_view(cm_info $coursemodule)
+function assignexternal_cm_info_view(cm_info $coursemodule)
 {
     $externallink = '<a href="' . $coursemodule->customdata['externallink'] .
-        '" target="_blank">' . get_string('externallink', 'assignprogram') . '</a>';
+        '" target="_blank">' . get_string('externallink', 'assignexternal') . '</a>';
     $content = '';
     if (array_key_exists('allowsubmissionsfromdate', $coursemodule->customdata)) {
         if ($coursemodule->customdata['alwaysshowlink'] ||
@@ -148,7 +148,7 @@ function assignprogram_cm_info_view(cm_info $coursemodule)
  * @return void
  * @throws coding_exception
  */
-function assignprogram_cm_info_dynamic(cm_info $coursemodule)
+function assignexternal_cm_info_dynamic(cm_info $coursemodule)
 {
     $context = context_module::instance($coursemodule->id);
 }

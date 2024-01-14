@@ -15,27 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity view page for the mod_assignprogram plugin.
+ * Activity view page for the mod_assignexternal plugin.
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_assignprogram\controller\grade_control;
-use mod_assignprogram\data\grade;
-use mod_assignprogram\output\view_grader_navigation;
-use mod_assignprogram\output\view_grading;
-use mod_assignprogram\output\view_link;
-use mod_assignprogram\output\view_summary;
-use mod_assignprogram\output\renderer;
+use mod_assignexternal\controller\grade_control;
+use mod_assignexternal\data\grade;
+use mod_assignexternal\output\view_grader_navigation;
+use mod_assignexternal\output\view_grading;
+use mod_assignexternal\output\view_link;
+use mod_assignexternal\output\view_summary;
+use mod_assignexternal\output\renderer;
 
 require_once('../../config.php');
 global $PAGE;
 
 $coursemoduleid = required_param('id', PARAM_INT);
 
-list ($course, $coursemodule) = get_course_and_cm_from_cmid($coursemoduleid, 'assignprogram');
+list ($course, $coursemodule) = get_course_and_cm_from_cmid($coursemoduleid, 'assignexternal');
 require_login($course, true, $coursemodule);
 $context = context_module::instance($coursemodule->id);
 require_capability('mod/assign:view', $context);
@@ -71,12 +71,12 @@ function show_details($context, $coursemoduleid): void
     global $CFG;
     global $USER;
 
-    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $coursemoduleid));
+    $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
     $PAGE->set_title('My title');  // FIXME
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('standard');
 
-    $output = $PAGE->get_renderer('mod_assignprogram');
+    $output = $PAGE->get_renderer('mod_assignexternal');
     echo $output->header();
 
     $renderable = new view_link($coursemoduleid);
@@ -86,9 +86,9 @@ function show_details($context, $coursemoduleid): void
         $renderable = new view_summary($coursemoduleid);
         echo $output->render($renderable);
     } else {
-        require_once($CFG->dirroot . '/mod/assignprogram/classes/data/grade.php');
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
         $gradedata = $DB->get_record(
-            'assignprogram_grades',
+            'assignexternal_grades',
             array('assignment' => $coursemoduleid, 'userid' => $USER->id),
             '*'
         );
@@ -117,12 +117,12 @@ function show_grading($context, $coursemoduleid): void
     global $PAGE;
     require_capability('mod/assign:reviewgrades', $context);
 
-    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $coursemoduleid));
+    $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
     $PAGE->set_title('My title');  // FIXME
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('base');
-    $PAGE->add_body_class('assignprogram-grading');
-    $output = $PAGE->get_renderer('mod_assignprogram');
+    $PAGE->add_body_class('assignexternal-grading');
+    $output = $PAGE->get_renderer('mod_assignexternal');
     echo $output->header();
 
     $renderable = new view_grading($coursemoduleid, $context);
@@ -147,23 +147,23 @@ function show_grader($context, $coursemoduleid, $userid): void
     global $CFG;
     global $PAGE;
 
-    require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/grade_control.php');
+    require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
 
     require_capability('mod/assign:reviewgrades', $context);
     $PAGE->set_url(
-        '/mod/assignprogram/view.php',
+        '/mod/assignexternal/view.php',
         array(
             'id' => $coursemoduleid,
             'action' => 'grader',
             'userid' => $userid
         )
     );
-    $PAGE->set_url('/mod/assignprogram/view.php', array('id' => $coursemoduleid));
+    $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
     $PAGE->set_title('My title');  // FIXME
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('base');
-    $PAGE->add_body_class('assignprogram-grading');
-    $output = $PAGE->get_renderer('mod_assignprogram');
+    $PAGE->add_body_class('assignexternal-grading');
+    $output = $PAGE->get_renderer('mod_assignexternal');
     echo $output->header();
 
     $renderable = new view_grader_navigation($coursemoduleid, $context);

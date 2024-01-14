@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/assignprogram/db" VERSION="20210930" COMMENT="XMLDB file for Moodle mod/assignprogram"
+<XMLDB PATH="mod/assignexternal/db" VERSION="20210930" COMMENT="XMLDB file for Moodle mod/assignexternal"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
     <TABLES>
-        <TABLE NAME="assignprogram" COMMENT="This table saves information about an instance of mod_assignprogram in a course.">
+        <TABLE NAME="assignexternal" COMMENT="This table saves information about an instance of mod_assignexternal in a course.">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
@@ -31,10 +31,10 @@
                 <INDEX NAME="course" UNIQUE="false" FIELDS="course" COMMENT="The course this assignment instance belongs to."/>
             </INDEXES>
         </TABLE>
-        <TABLE NAME="assignprogram_grades" COMMENT="Grading information">
+        <TABLE NAME="assignexternal_grades" COMMENT="Grading information">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="assignprogram" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The assignprogram instance this grade belongs to"/>
+                <FIELD NAME="assignexternal" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The assignexternal instance this grade belongs to"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="grader" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="externallink" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The link to this students assignment in the external system"/>
@@ -45,11 +45,11 @@
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this grade."/>
-                <KEY NAME="assignprogram" TYPE="foreign" FIELDS="assignprogram" REFTABLE="assignprogram" REFFIELDS="id" COMMENT="The assignprogram instance this grade belongs to."/>
+                <KEY NAME="assignexternal" TYPE="foreign" FIELDS="assignexternal" REFTABLE="assignexternal" REFFIELDS="id" COMMENT="The assignexternal instance this grade belongs to."/>
             </KEYS>
             <INDEXES>
                 <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" COMMENT="The userid for the submission relating to this grade."/>
-                <INDEX NAME="assignprogram" UNIQUE="false" FIELDS="assignprogram" COMMENT="The assignprogram instance this grade belongs to."/>
+                <INDEX NAME="assignexternal" UNIQUE="false" FIELDS="assignexternal" COMMENT="The assignexternal instance this grade belongs to."/>
             </INDEXES>
         </TABLE>
     </TABLES>

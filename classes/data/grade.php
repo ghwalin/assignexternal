@@ -1,18 +1,18 @@
 <?php
 
-namespace mod_assignprogram\data;
+namespace mod_assignexternal\data;
 
 /**
  * represents the grading information
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grade
 {
     public $id;
-    public $assignprogram;
+    public $assignexternal;
     public $userid;
     public $grader;
     public $externallink;
@@ -27,7 +27,7 @@ class grade
     public function __construct() {
         global  $USER;
         $this->id = null;
-        $this->assignprogram = null;
+        $this->assignexternal = null;
         $this->userid = null;
         $this->grader = $USER->id;
         $this->externallink = null;
@@ -45,7 +45,7 @@ class grade
     public function init($formdata)
     {
         $this->id = $formdata->gradeid;
-        $this->assignprogram = $formdata->id;
+        $this->assignexternal = $formdata->id;
         $this->userid = $formdata->userid;
         //$this->grader = $formdata->grader;
         $this->externallink = $formdata->externallink;
@@ -62,7 +62,7 @@ class grade
      */
     public function load($data) {
         $this->id = $data->gradeid;
-        $this->assignprogram = $data->coursemodule;
+        $this->assignexternal = $data->coursemodule;
         $this->userid = $data->userid;
         //$this->grader = $data->grader;
         $this->externallink = $data->externallink;

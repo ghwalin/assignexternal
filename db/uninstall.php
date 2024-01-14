@@ -17,7 +17,7 @@
 /**
  * Code that is executed before the tables and data are dropped during the plugin uninstallation.
  *
- * @package     mod_assignprogram
+ * @package     mod_assignexternal
  * @category    upgrade
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,7 +26,7 @@
 /**
  * Custom uninstallation procedure.
  */
-function xmldb_mod_assignprogram_uninstall() {
+function xmldb_mod_assignexternal_uninstall() {
 
     return true;
 }

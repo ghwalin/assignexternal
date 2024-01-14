@@ -1,14 +1,14 @@
 <?php
 
-namespace mod_assignprogram\controller;
+namespace mod_assignexternal\controller;
 use cm_info;
 use core\context;
-use mod_assignprogram\data\assign;
+use mod_assignexternal\data\assign;
 use stdClass;
 /**
  * Controller for the programming assignment
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -63,12 +63,12 @@ class assign_control
     {
         global $DB;
         global $CFG;
-        require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assign = new assign($formdata);
         $assign->coursemodule = $coursemoduleid;
         //$assign->coursemodule = 0; // TODO determine coursemoduleid
-        $returnid = $DB->insert_record('assignprogram', $assign);
-        $this->instance = $DB->get_record('assignprogram', array('id'=>$returnid), '*', MUST_EXIST);
+        $returnid = $DB->insert_record('assignexternal', $assign);
+        $this->instance = $DB->get_record('assignexternal', array('id'=>$returnid), '*', MUST_EXIST);
         // Cache the course record.
         $this->course = $DB->get_record('course', array('id'=>$formdata->course), '*', MUST_EXIST);
 
@@ -85,11 +85,11 @@ class assign_control
     {
         global $DB;
         global $CFG;
-        require_once($CFG->dirroot . '/mod/assignprogram/classes/data/assign.php');
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assign = new assign($formdata);
         $assign->coursemodule = $coursemoduleid;
-        $result = $DB->update_record('assignprogram', $assign);
-        $this->set_instance( $DB->get_record('assignprogram', array('id'=>$assign->id), '*', MUST_EXIST));
+        $result = $DB->update_record('assignexternal', $assign);
+        $this->set_instance( $DB->get_record('assignexternal', array('id'=>$assign->id), '*', MUST_EXIST));
         return $result;
     }
 
@@ -102,8 +102,8 @@ class assign_control
     {
         global $DB;
         $result = true;
-        $DB->delete_records('assignprogram_grades', array('assignment' => $this->get_instance()->id));
-        $DB->delete_records('assignprogram', array('id'=>$this->get_instance()->id));
+        $DB->delete_records('assignexternal_grades', array('assignment' => $this->get_instance()->id));
+        $DB->delete_records('assignexternal', array('id'=>$this->get_instance()->id));
 
         return $result;
     }

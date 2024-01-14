@@ -1,9 +1,9 @@
 <?php
 
-namespace mod_assignprogram\output;
+namespace mod_assignexternal\output;
 
 use core\context;
-use mod_assignprogram\controller\grade_control;
+use mod_assignexternal\controller\grade_control;
 use renderable;
 use renderer_base;
 use templatable;
@@ -38,7 +38,7 @@ class view_grader_navigation implements renderable, templatable
     public function export_for_template(renderer_base $output): \stdClass
     {
         global $CFG;
-        require_once($CFG->dirroot . '/mod/assignprogram/classes/controller/grade_control.php');
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
         $data = new \stdClass();
         $grade_control = new grade_control($this->coursemoduleid, $this->context);
         $data->grades = $grade_control->list_grades();

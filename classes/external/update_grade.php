@@ -1,21 +1,20 @@
 <?php
 
 
-namespace mod_assignprogram\external;
+namespace mod_assignexternal\external;
 global $CFG;
 require_once("$CFG->dirroot/lib/externallib.php");
-require_once("$CFG->dirroot/mod/assign/externallib.php");
 
 use external_function_parameters;
 use external_single_structure;
 use external_value;
 use mod_assign_external;
-use mod_assignprogram\data\grade;
+use mod_assignexternal\data\grade;
 
 /**
  * webservice to update the externalgrade and externalfeedback
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -184,8 +183,8 @@ class update_grade extends \external_api
             '       ag.id AS gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback' .
             '  FROM mdl_user_enrolments AS ue' .
             '  JOIN mdl_enrol AS en ON (ue.enrolid = en.id)' .
-            '  JOIN mdl_assignprogram AS ap ON (ap.course = en.courseid)' .
-            '  LEFT JOIN mdl_assignprogram_grades AS ag ON (ag.assignprogram = ap.id)' .
+            '  JOIN mdl_assignexternal AS ap ON (ap.course = en.courseid)' .
+            '  LEFT JOIN mdl_assignexternal_grades AS ag ON (ag.assignexternal = ap.id)' .
             ' WHERE ue.userid=:userid AND ap.externalname=:assignment_name' .
             ' ';
         $data = $DB->get_records_sql(
@@ -208,9 +207,9 @@ class update_grade extends \external_api
         global $DB;
         var_dump($grade);
         if (empty($grade->id)) {
-            $DB->insert_record('assignprogram_grades', $grade);
+            $DB->insert_record('assignexternal_grades', $grade);
         } else {
-            $DB->update_record('assignprogram_grades', $grade);
+            $DB->update_record('assignexternal_grades', $grade);
         }
     }
 }

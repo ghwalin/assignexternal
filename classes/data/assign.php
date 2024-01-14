@@ -1,13 +1,13 @@
 <?php
 
-namespace mod_assignprogram\data;
+namespace mod_assignexternal\data;
 
 use stdClass;
 
 /**
  * represents a programming assignment
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -55,7 +55,7 @@ class assign
             'SELECT ap.id, ap.course, coursemodule, name, intro, introformat, alwaysshowdescription, externalname, ' .
             '       externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate, timemodified, ' .
             '       externalgrademax, manualgrademax, passingpercentage' .
-            ' FROM mdl_assignprogram AS ap INNER JOIN mdl_course_modules AS cm ON (ap.id = cm.instance) ' .
+            ' FROM mdl_assignexternal AS ap INNER JOIN mdl_course_modules AS cm ON (ap.id = cm.instance) ' .
             'WHERE cm.id=:coursemodule';
         $data = $DB->get_record_sql(
             $sql,

@@ -1,6 +1,6 @@
 <?php
 
-namespace mod_assignprogram\form;
+namespace mod_assignexternal\form;
 
 use moodleform;
 
@@ -8,7 +8,7 @@ require_once("$CFG->libdir/formslib.php");
 /**
  * definition and validation of the grading form
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +27,7 @@ class grader_form extends moodleform
         $mform->addElement(
             'header',
             'grading',
-            get_string('grading', 'assignprogram') . ' ' . $this->_customdata->firstname . ' ' . $this->_customdata->lastname);
+            get_string('grading', 'assignexternal') . ' ' . $this->_customdata->firstname . ' ' . $this->_customdata->lastname);
         $mform->setExpanded('grading');
 
         $mform->addElement('static', 'status', get_string('status'), $this->_customdata->status);
@@ -38,18 +38,18 @@ class grader_form extends moodleform
             $this->_customdata->timeleft
         );
 
-        $mform->addElement('header', 'external', get_string('externalfeedback', 'assignprogram'));
+        $mform->addElement('header', 'external', get_string('externalfeedback', 'assignexternal'));
         $mform->setExpanded('external');
         $mform->addElement(
             'static',
             'externallink',
-            get_string('externallink', 'assignprogram'),
+            get_string('externallink', 'assignexternal'),
             $this->_customdata->externallink
         );
         $mform->addElement(
             'float',
             'externalgrade',
-            get_string('grading', 'assignprogram') .
+            get_string('grading', 'assignexternal') .
             ' (max. ' . (float)$this->_customdata->externalgrademax . ')'
         );
 
@@ -63,13 +63,13 @@ class grader_form extends moodleform
         $mform->setType('externalfeedback', PARAM_RAW);
 
 
-        $mform->addElement('header', 'manual', get_string('manualfeedback', 'assignprogram'));
+        $mform->addElement('header', 'manual', get_string('manualfeedback', 'assignexternal'));
         $mform->setExpanded('manual');
 
         $elem = $mform->addElement(
             'float',
             'manualgrade',
-            get_string('grading', 'assignprogram') .
+            get_string('grading', 'assignexternal') .
             ' (max. ' . (float)$this->_customdata->manualgrademax . ')'
         );
 
@@ -78,6 +78,7 @@ class grader_form extends moodleform
 
         // --- for development only ---
         $mform->addElement('header', 'development', 'Infos');
+        $mform->addElement('static', 'courseidx', 'CourseId', $this->_customdata->courseid);
         $mform->addElement('static', 'idx', 'AssignmentId', $this->_customdata->assignmentid);
         $mform->addElement('static', 'instancex', 'Instance', $this->_customdata->id);
         $mform->addElement('static', 'useridx', 'UserId', $this->_customdata->userid);
@@ -86,6 +87,8 @@ class grader_form extends moodleform
         // --- for development only ---
         $mform->addElement('hidden', 'id', $this->_customdata->assignmentid);
         $mform->setType('id', PARAM_INT);
+        $mform->addElement('hidden', 'courseid', $this->_customdata->courseid);
+        $mform->setType('courseid', PARAM_INT);
         $mform->addElement('hidden', 'instance', $this->_customdata->id);
         $mform->setType('instance', PARAM_INT);
         $mform->addElement('hidden', 'userid', $this->_customdata->userid);

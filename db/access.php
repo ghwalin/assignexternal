@@ -17,14 +17,14 @@
 /**
  * Capability definitions for this module.
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $capabilities = array(
 
-    'mod/assignprogram:addinstance' => array(
+    'mod/assignexternal:addinstance' => array(
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
@@ -36,7 +36,7 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/course:manageactivities'
     ),
 
-    'mod/assignprogram:view' => array(
+    'mod/assignexternal:view' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
@@ -49,7 +49,7 @@ $capabilities = array(
         )
     ),
 
-    'mod/assignprogram:grade' => array(
+    'mod/assignexternal:grade' => array(
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
@@ -61,7 +61,7 @@ $capabilities = array(
         )
     ),
 
-    'mod/assignprogram:managegrades' => array(
+    'mod/assignexternal:managegrades' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -71,7 +71,7 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/grade:manage'
     ),
 
-    'mod/assignprogram:viewgrades' => array(
+    'mod/assignexternal:viewgrades' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(

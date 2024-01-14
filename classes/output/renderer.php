@@ -13,14 +13,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-namespace mod_assignprogram\output;
+namespace mod_assignexternal\output;
 
 use plugin_renderer_base;
 
 /**
  * Renders the HTML
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -37,7 +37,7 @@ class renderer extends plugin_renderer_base
     public function render_view_grading($page): string
     {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('assignprogram/view_grading', $data);
+        return parent::render_from_template('assignexternal/view_grading', $data);
     }
 
     /**
@@ -50,7 +50,7 @@ class renderer extends plugin_renderer_base
     public function render_view_grader_navigation($page): string
     {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('assignprogram/view_grader_navigation', $data);
+        return parent::render_from_template('assignexternal/view_grader_navigation', $data);
     }
 
     /**
@@ -63,7 +63,7 @@ class renderer extends plugin_renderer_base
     public function render_view_link($page): string
     {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('assignprogram/view_link', $data);
+        return parent::render_from_template('assignexternal/view_link', $data);
     }
 
     /**
@@ -76,7 +76,7 @@ class renderer extends plugin_renderer_base
     public function render_view_summary($page): string
     {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('assignprogram/view_summary', $data);
+        return parent::render_from_template('assignexternal/view_summary', $data);
     }
 
 }

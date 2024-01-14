@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_assignprogram/grading_navigation
+    @template mod_assignexternal/grading_navigation
 
     Actions panel at the bottom of the assignment grading UI.
 
@@ -34,21 +34,19 @@
   <div data-region="grading-navigation" class="row">
 
     <div data-region="assignment-info" class="col-md-4">
-      <a href="{{config.wwwroot}}/mod/assignprogram/view.php?id={{cmid}}&action=grading">{{#str}}showall, core{{/str}}</a>
+      <a href="{{config.wwwroot}}/mod/assignexternal/view.php?id={{cmid}}&action=grading">{{#str}}showall, core{{/str}}</a>
     </div>
     <div data-region="user-info" class="col-md-4">
-      {{> mod_assignprogram/grader_navigation_user_info }}
+      {{> mod_assignexternal/grader_navigation_user_info }}
     </div>
     <div data-region="user-selector" class="col-md-4">
       <div class="alignment">
-        {{> mod_assignprogram/grader_navigation_user_selector }}
+        {{> mod_assignexternal/grader_navigation_user_selector }}
       </div>
     </div>
   </div>
 </div>
+
 {{#js}}
-  require(['mod_assignprogram/grader_navigation', 'core/tooltip'], function(GraderNavigation, ToolTip) {
-  new GraderNavigation('[data-region="user-selector"]');
-  new ToolTip('[data-region="assignment-tooltip"]');
-  });
+  require(['mod_assignexternal/grader_navigation'], (module) => module.init());
 {{/js}}

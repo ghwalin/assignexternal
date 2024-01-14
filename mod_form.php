@@ -31,7 +31,7 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  *
  * @package   mod_assign
  */
-class mod_assignprogram_mod_form extends moodleform_mod
+class mod_assignexternal_mod_form extends moodleform_mod
 {
     function definition()
     {
@@ -42,17 +42,17 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'externalname', get_string('externalname', 'assignprogram'), ['size'=>'64']);
+        $mform->addElement('text', 'externalname', get_string('externalname', 'assignexternal'), ['size'=>'64']);
         $mform->setType('externalname', PARAM_TEXT);
-        $mform->addHelpButton('externalname', 'externalname', 'assignprogram');
+        $mform->addHelpButton('externalname', 'externalname', 'assignexternal');
 
-        $mform->addElement('text', 'externallink', get_string('externallink', 'assignprogram'), ['size'=>'64']);
+        $mform->addElement('text', 'externallink', get_string('externallink', 'assignexternal'), ['size'=>'64']);
         $mform->setType('externallink', PARAM_TEXT);
         $mform->addRule('externallink', null, 'required', null, 'client');
-        $mform->addHelpButton('externallink', 'externallink', 'assignprogram');
+        $mform->addHelpButton('externallink', 'externallink', 'assignexternal');
 
-        $mform->addElement('checkbox', 'alwaysshowlink', get_string('alwaysshowlink', 'assignprogram'));
-        $mform->addHelpButton('alwaysshowlink', 'alwaysshowlink', 'assignprogram');
+        $mform->addElement('checkbox', 'alwaysshowlink', get_string('alwaysshowlink', 'assignexternal'));
+        $mform->addHelpButton('alwaysshowlink', 'alwaysshowlink', 'assignexternal');
 
         $this->standard_intro_elements(get_string('description', 'assign'));
 
@@ -73,28 +73,28 @@ class mod_assignprogram_mod_form extends moodleform_mod
         $mform->addElement('date_time_selector', 'cutoffdate', get_string('cutoffdate', 'assign'), $options);
         $mform->addHelpButton('cutoffdate', 'cutoffdate', 'assign');
 
-        $mform->addElement('header', 'grading', get_string('grading', 'assignprogram'));
+        $mform->addElement('header', 'grading', get_string('grading', 'assignexternal'));
         $mform->setExpanded('grading', true);
 
-        $mform->addElement('float', 'externalgrademax', get_string('externalgrademax', 'assignprogram'));
+        $mform->addElement('float', 'externalgrademax', get_string('externalgrademax', 'assignexternal'));
         $mform->addRule('externalgrademax', null, 'required', null, 'client');
         $mform->setDefault('externalgrademax', 100);
-        $mform->addHelpButton('externalgrademax', 'externalgrademax', 'assignprogram');
+        $mform->addHelpButton('externalgrademax', 'externalgrademax', 'assignexternal');
 
-        $mform->addElement('float', 'manualgrademax', get_string('manualgrademax', 'assignprogram'));
+        $mform->addElement('float', 'manualgrademax', get_string('manualgrademax', 'assignexternal'));
         $mform->addRule('manualgrademax', null, 'required', null, 'client');
         $mform->setDefault('manualgrademax', 0);
-        $mform->addHelpButton('manualgrademax', 'manualgrademax', 'assignprogram');
+        $mform->addHelpButton('manualgrademax', 'manualgrademax', 'assignexternal');
 
-        $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignprogram'));
+        $mform->addElement('float', 'passingpercentage', get_string('passingpercentage', 'assignexternal'));
         $mform->addRule('passingpercentage', null, 'required', null, 'client');
         $mform->setDefault('passingpercentage', 60);
-        $mform->addHelpButton('passingpercentage', 'passingpercentage', 'assignprogram');
+        $mform->addHelpButton('passingpercentage', 'passingpercentage', 'assignexternal');
 
         $this->standard_coursemodule_elements();
 
         $this->add_action_buttons();
     }
 
-    
+
 }

@@ -1,21 +1,21 @@
 <?php
 
-namespace mod_assignprogram\controller;
+namespace mod_assignexternal\controller;
 
 use cm_info;
 use core\context;
-use mod_assignprogram\data\assign;
-use mod_assignprogram\data\Grade;
-use mod_assignprogram\form\grader_form;
-use mod_assignprogram\output\view_grader_navigation;
-use mod_assignprogram\output\renderer;
+use mod_assignexternal\data\assign;
+use mod_assignexternal\data\Grade;
+use mod_assignexternal\form\grader_form;
+use mod_assignexternal\output\view_grader_navigation;
+use mod_assignexternal\output\renderer;
 use moodle_url;
 use stdClass;
 
 /**
  * Controller for grading
  *
- * @package   mod_assignprogram
+ * @package   mod_assignexternal
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -23,12 +23,16 @@ class grade_control
 {
     /** @var int  the coursemodule-id */
     private $coursemoduleid;
+
+    /** @var int the course-id */
+    private $courseid;
+
     /** @var context the context of the course module for this grade instance
      *               (or just the course if we are creating a new one)
      */
     private context $context;
 
-    /** @var assign $assign  the assignprogram instance this grade belongs to*/
+    /** @var assign $assign  the assignexternal instance this grade belongs to*/
     private assign $assign;
 
     /** @var string A key used to identify userlists created by this object. */
@@ -48,6 +52,7 @@ class grade_control
         global $CFG;
         require_once($CFG->libdir . '/modinfolib.php');
         $this->coursemoduleid = $coursemoduleid;
+        $this->courseid = $context->get_course_context()->instanceid;
         $this->context = $context;
         $this->assign = new assign(null,$coursemoduleid);
         $this->userlist = $this->read_coursemodule_students();
@@ -70,7 +75,7 @@ class grade_control
         $gradelist = array();
         foreach ($this->userlist as $userid => $user) {
             $grade = new \stdClass();
-            $grade->courseid = $this->context->get_course_context()->instanceid;
+            $grade->courseid = $this->courseid;
             $grade->coursemoduleid = $this->coursemoduleid;
             $grade->userid = $userid;
             $grade->firstname = $user->firstname;
@@ -101,7 +106,7 @@ class grade_control
     {
         global $CFG;
         global $PAGE, $OUTPUT;
-        require_once($CFG->dirroot . '/mod/assignprogram/classes/form/graderform.php');
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/form/graderform.php');
         $user = $this->read_coursemodule_student($this->userid);
         $data = new \stdClass();
 
@@ -109,12 +114,13 @@ class grade_control
         $data->id = $assignment->id;
         $data->userid = $this->userid;
         $data->assignmentid = $this->coursemoduleid;
+        $data->courseid = $this->courseid;
         $data->firstname = $user->firstname;
         $data->lastname = $user->lastname;
         $data->externalgrademax = $assignment->externalgrademax;
         $data->manualgrademax = $assignment->manualgrademax;
         $data->gradeid = -1;
-        $data->assignprogram = -1;
+        $data->assignexternal = -1;
         $data->status = 'pending';
         $data->timeleft = 'FIXME'; // $assignment->cutoffdate - time();
         $data->gradeexternal = '';
@@ -132,13 +138,13 @@ class grade_control
             error_log('Cancelled');
         } else if ($formdata = $mform->get_data()) {
             global $DB;
-            require_once($CFG->dirroot . '/mod/assignprogram/classes/data/grade.php');
+            require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
             $grade = new grade();
             $grade->init($formdata);
             if ($grade->id == -1)
-                $result = $DB->insert_record('assignprogram_grades', $grade);
+                $result = $DB->insert_record('assignexternal_grades', $grade);
             else
-                $result = $DB->update_record('assignprogram_grades', $grade);
+                $result = $DB->update_record('assignexternal_grades', $grade);
 
             redirect(new moodle_url('view.php',
                 array(
@@ -152,7 +158,7 @@ class grade_control
             if (array_key_exists($this->userid, $grades)) {
                 $gradedata = $grades[$this->userid];
                 $data->gradeid = $gradedata->id;
-                $data->assignprogram = $gradedata->assignprogram;
+                $data->assignexternal = $gradedata->assignexternal;
                 $data->status = $this->get_status($gradedata->externalgrade);
                 $data->externalgrade = $gradedata->externalgrade;
                 $data->externalfeedback['text'] = $gradedata->externalfeedback;
@@ -180,8 +186,8 @@ class grade_control
     {
         global $DB;
         $grades = $DB->get_records_list(
-            'assignprogram_grades',
-            'assignprogram',
+            'assignexternal_grades',
+            'assignexternal',
             array($this->coursemoduleid)
         );
         $gradelist = array();

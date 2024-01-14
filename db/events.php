@@ -17,7 +17,7 @@
 /**
  * Add event handlers for the assign
  *
- * @package     mod_assignprogram
+ * @package     mod_assignexternal
  * @category    event
  * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
