@@ -1,2 +1,13 @@
-.assignexternal-grader .activity-header, .assignexternal-grading .activity-header { display: none; }
+.assignexternal-grader .activity-header,
+.assignexternal-grading .activity-header {
+    display: none;
+}
 
+.path-mod-assignexternal [data-region="user-selector"] .form-autocomplete-suggestions {
+    text-align: left;
+    margin-left: 48px;
+}
+
+.path-mod-assignexternal [data-region="user-selector"] .form-autocomplete-downarrow {
+    top: 0;
+}

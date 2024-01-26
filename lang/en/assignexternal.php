@@ -30,6 +30,8 @@ $string['pluginname'] = 'external assignment';
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
 
+$string['changeuser'] = 'Change user';
+
 $string['external'] = 'External';
 $string['externalfeedback'] = 'Feedback from external system';
 $string['externalgrademax'] = 'External grade max.';
@@ -50,9 +52,12 @@ $string['manualgrademax_help'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'Programming assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
 
+$string['nextuser'] = "Next user";
+
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
 $string['pluginadministration'] = 'WHATEVER';
+$string['previoususer'] = 'Previous user';
 /*
 
 
