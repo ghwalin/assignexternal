@@ -15,15 +15,15 @@
         {{#str}} feedback, core {{/str}}
       </th>
       <th class="header c6" scope="col" rowspan="2">
-        {{#str}} finalgrade, assignexternal {{/str}}
+        {{#str}} finalgrade, mod_assignexternal {{/str}}
       </th>
     </tr>
     <tr>
       <th class="header c3" scope="col">
-        {{#str}} external, assignexternal {{/str}}
+        {{#str}} external, mod_assignexternal {{/str}}
       </th>
       <th class="header c4" scope="col">
-        {{#str}} manual, assignexternal {{/str}}
+        {{#str}} manual, mod_assignexternal {{/str}}
       </th>
     </tr>
     </thead>
@@ -36,7 +36,7 @@
         <td>
           {{ manualgrade }}<br>
           <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}" class="btn btn-primary">
-          {{#str}} grade, assign {{/str}}
+          {{#str}} grade, mod_assignexternal {{/str}}
           </a>
         </td>
         <td>{{ feedback }} </td>

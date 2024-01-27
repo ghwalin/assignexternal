@@ -32,6 +32,8 @@ $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will on
 
 $string['changeuser'] = 'Change user';
 
+$string['duedate'] = 'Due date';
+
 $string['external'] = 'External';
 $string['externalfeedback'] = 'Feedback from external system';
 $string['externalgrademax'] = 'External grade max.';
