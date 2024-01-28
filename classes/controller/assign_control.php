@@ -66,7 +66,6 @@ class assign_control
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assign = new assign($formdata);
         $assign->coursemodule = $coursemoduleid;
-        //$assign->coursemodule = 0; // TODO determine coursemoduleid
         $returnid = $DB->insert_record('assignexternal', $assign);
         $this->instance = $DB->get_record('assignexternal', array('id'=>$returnid), '*', MUST_EXIST);
         // Cache the course record.

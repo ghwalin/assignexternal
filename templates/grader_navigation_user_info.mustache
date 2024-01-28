@@ -31,8 +31,9 @@
     Example context (json):
     { }
 }}
-<a href="http://localhost/moodle/user/view.php?id={{userid}}&amp;course={{courseid}}">
-  {{fullname}} <br>
+
+<a href="{{config.wwwroot}}/user/view.php?id={{userid}}&amp;course={{courseid}}">
+  {{firstname}} {{lastname}} <br>
   {{email}}<br>
-  {{#str}}duedate, assignexternal{{/str}}: {{duedate}}
+  {{#str}}duedate, assignexternal{{/str}}: {{#userdate}} {{duedate}}, {{#str}} strftimedate, core_langconfig {{/str}} {{/userdate}}
 </a>

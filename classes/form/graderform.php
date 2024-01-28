@@ -33,9 +33,9 @@ class grader_form extends moodleform
         $mform->addElement('static', 'status', get_string('status'), $this->_customdata->status);
         $mform->addElement(
             'static',
-            'timeleft',
+            'timeremaining',
             get_string('time'),
-            $this->_customdata->timeleft
+            $this->_customdata->timeremainingstr
         );
 
         $mform->addElement('header', 'external', get_string('externalfeedback', 'assignexternal'));

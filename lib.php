@@ -128,14 +128,19 @@ function assignexternal_cm_info_view(cm_info $coursemodule)
             $coursemodule->customdata['allowsubmissionsfromdate'] < time()) {
             $content .= $externallink;
         }
-        $content .= '<br><strong>' . get_string('activitydate:submissionsopen', 'assign') . '</strong> ' . userdate($coursemodule->customdata['allowsubmissionsfromdate']);
+        if ($coursemodule->customdata['allowsubmissionsfromdate'] >= time()) {
+            $label = get_string('submissionsopen', 'assignexternal');
+        } else {
+            $label = get_string('submissionsopened', 'assignexternal');
+        }
+        $content .= '<br><strong>' . $label . '</strong> ' . userdate($coursemodule->customdata['allowsubmissionsfromdate']);
 
     } else {
         $content .= $externallink;
     }
 
     if (array_key_exists('duedate', $coursemodule->customdata)) {
-        $content .= '<br><strong>' . get_string('activitydate:submissionsdue', 'assign') . '</strong> ' . userdate($coursemodule->customdata['duedate']);
+        $content .= '<br><strong>' . get_string('submissionsdue', 'assignexternal') . '</strong> ' . userdate($coursemodule->customdata['duedate']);
     }
 
     $coursemodule->set_content($content);
@@ -151,4 +156,45 @@ function assignexternal_cm_info_view(cm_info $coursemodule)
 function assignexternal_cm_info_dynamic(cm_info $coursemodule)
 {
     $context = context_module::instance($coursemodule->id);
+}
+
+/**
+ * Return the features this module supports
+ * @param string $feature FEATURE_xx constant for requested feature
+ * @return mixed True if module supports feature, false if not, null if doesn't know or string for the module purpose.
+ */
+function assignexternal_supports($feature) {
+    switch ($feature) {
+        /*  TODO
+         case FEATURE_GROUPS:
+            return true;
+        case FEATURE_GROUPINGS:
+            return true;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return true;
+        case FEATURE_GRADE_HAS_GRADE:
+            return true;
+        case FEATURE_GRADE_OUTCOMES:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_ADVANCED_GRADING:
+            return true;
+        case FEATURE_PLAGIARISM:
+            return true;
+        case FEATURE_COMMENT:
+            return true;
+         */
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_ASSESSMENT;
+
+        default:
+            return null;
+    }
 }

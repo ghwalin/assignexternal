@@ -29,9 +29,10 @@ $string['pluginname'] = 'external assignment';
 
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
-
+$string['assignmentisdue'] = 'Assignment is due';
 $string['changeuser'] = 'Change user';
 
+$string['done'] = 'done';
 $string['duedate'] = 'Due date';
 
 $string['external'] = 'External';
@@ -45,21 +46,31 @@ $string['externalname_help'] = 'The name of the assignment in the external syste
 
 $string['finalgrade'] = 'Final grade';
 
+$string['graded'] = 'Graded';
 $string['grading'] = 'Grade';
 
 $string['manual'] = 'Manual';
 $string['manualfeedback'] = 'Manual feedback';
 $string['manualgrademax'] = 'Manual grade max.';
 $string['manualgrademax_help'] = 'Maximum grade from manual grading';
-$string['modulename'] = 'Programming assignment';
+$string['modulename'] = 'External assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
 
 $string['nextuser'] = "Next user";
 
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
+$string['pending'] = 'pending';
 $string['pluginadministration'] = 'WHATEVER';
 $string['previoususer'] = 'Previous user';
+
+$string['submissionsdue'] = 'Due:';
+$string['submissionsopen'] = 'Opens:';
+$string['submissionsopened'] = 'Opened:';
+
+$string['timeremaining'] = 'Time left';
+$string['timeremainingcolon'] = 'Time remaining: {$a}';
+
 /*
 
 

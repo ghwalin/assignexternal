@@ -5,6 +5,14 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
+
+/**
+ * Renderer for summary
+ *
+ * @package   mod_assignexternal
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class view_summary  implements renderable, templatable
 {
     private $coursemoduleid = null;

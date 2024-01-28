@@ -88,7 +88,7 @@ class grade_control
                 $grade->feedback = $gradedata->externalfeedback . $gradedata->manualfeedback;
                 $grade->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
             } else {
-                $grade->status = 'pending';
+                $grade->status = $this->get_status($gradedata->gradeexternal);
             }
             $gradelist[] = $grade;
         }
@@ -121,8 +121,18 @@ class grade_control
         $data->manualgrademax = $assignment->manualgrademax;
         $data->gradeid = -1;
         $data->assignexternal = -1;
-        $data->status = 'pending';
-        $data->timeleft = 'FIXME'; // $assignment->cutoffdate - time();
+        $data->status = get_string('pending', 'assignexternal');
+
+        // Time remaining.
+        $timeremaining = $assignment->duedate - time();
+        $due = '';
+        if ($timeremaining<= 0) {
+            $due = get_string('assignmentisdue', 'assignexternal');
+        } else {
+            $due = get_string('timeremainingcolon', 'assignexternal', format_time($timeremaining));
+        }
+        $data->timeremainingstr = $due;
+
         $data->gradeexternal = '';
         $data->manualgrade = '';
         $data->externallink = '';
@@ -135,7 +145,7 @@ class grade_control
 
 // Form processing and displaying is done here.
         if ($mform->is_cancelled()) {
-            error_log('Cancelled');
+            error_log('Cancelled');  // TODO reset the form
         } else if ($formdata = $mform->get_data()) {
             global $DB;
             require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
@@ -170,8 +180,6 @@ class grade_control
 
             }
             $mform->set_data($data);
-            // Display the form.
-
             $mform->display();
         }
     }
@@ -202,13 +210,13 @@ class grade_control
      * @param $userid
      * @return stdClass
      */
-    private function read_coursemodule_student($userid): \stdClass
+    public function read_coursemodule_student($userid): \stdClass
     {
         $users = get_enrolled_users(
             $this->context,
             'mod/assign:submit',
             0,
-            'u.id, u.firstname, u.lastname'
+            'u.id, u.firstname, u.lastname, u.email'
         );
         foreach ($users as $user) {
             if ($user->id == $userid)
@@ -228,7 +236,7 @@ class grade_control
             $this->context,
             'mod/assign:submit',
             0,
-            'u.id, u.firstname, u.lastname'
+            'u.id, u.firstname, u.lastname, u.email'
         );
         foreach ($users as $user) {
             $userlist[$user->id] = $user;
@@ -244,9 +252,25 @@ class grade_control
     private function get_status($grade): string
     {
         if (!$grade) {
-            return 'pending';
+            return get_string('pending', 'assignexternal');;
         } else {
-            return 'done';
+            return get_string('done', 'assignexternal');;
         }
+    }
+
+    /**
+     * @return int gets the userid for this grade
+     */
+    public function get_userid(): int
+    {
+        return $this->userid;
+    }
+
+    /**
+     * @return assign gets the assignment this grade belongs to
+     */
+    public function get_assign(): assign
+    {
+        return $this->assign;
     }
 }

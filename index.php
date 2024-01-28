@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity index for the mod_[modname] plugin.
+ * Activity index for the mod_assignexternal plugin.
  *
- * @package   mod_[modname]
- * @copyright Year, You Name <your@email.address>
+ * @package   mod_assignexternal
+ * @copyright 2024, Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
