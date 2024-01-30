@@ -42,7 +42,7 @@ class grader_form extends moodleform
         $mform->setExpanded('external');
         $mform->addElement(
             'static',
-            'externallink',
+            'externallink_static',
             get_string('externallink', 'assignexternal'),
             $this->_customdata->externallink
         );
@@ -66,26 +66,35 @@ class grader_form extends moodleform
         $mform->addElement('header', 'manual', get_string('manualfeedback', 'assignexternal'));
         $mform->setExpanded('manual');
 
-        $elem = $mform->addElement(
+        $mform->addElement(
             'float',
             'manualgrade',
             get_string('grading', 'assignexternal') .
             ' (max. ' . (float)$this->_customdata->manualgrademax . ')'
         );
+        $mform->setDefault('manualgrade', 0);
+        $mform->addRule(
+            'manualgrade',
+            get_string('mandatory'),
+            'numeric',
+            '',
+            'client'
+        );
 
-        $elem = $mform->addElement('editor', 'manualfeedback', get_string('feedback'));
+        $mform->addElement('editor', 'manualfeedback', get_string('feedback'));
         $mform->setType('manualfeedback', PARAM_RAW);
 
         // --- for development only ---
         $mform->addElement('header', 'development', 'Infos');
         $mform->addElement('static', 'courseidx', 'CourseId', $this->_customdata->courseid);
-        $mform->addElement('static', 'idx', 'AssignmentId', $this->_customdata->assignmentid);
+        $mform->addElement('static', 'idx', 'CourseModuleId', $this->_customdata->id);
         $mform->addElement('static', 'instancex', 'Instance', $this->_customdata->id);
         $mform->addElement('static', 'useridx', 'UserId', $this->_customdata->userid);
         $mform->addElement('static', 'gradeidx', 'GradeId', $this->_customdata->gradeid);
         $mform->addElement('static', 'graderx', 'Grader', $this->_customdata->gradeid);
         // --- for development only ---
-        $mform->addElement('hidden', 'id', $this->_customdata->assignmentid);
+
+        $mform->addElement('hidden', 'id', $this->_customdata->id);
         $mform->setType('id', PARAM_INT);
         $mform->addElement('hidden', 'courseid', $this->_customdata->courseid);
         $mform->setType('courseid', PARAM_INT);
@@ -97,6 +106,8 @@ class grader_form extends moodleform
         $mform->setType('gradeid', PARAM_INT);
         $mform->addElement('hidden', 'action', 'grader');
         $mform->setType('action', PARAM_ALPHA);
+        $mform->addElement('hidden', 'externallink', $this->_customdata->externallink);
+        $mform->setType('externallink', PARAM_ALPHA);
 
         $buttonarray = array();
         $buttonarray[] =& $mform->createElement('submit', 'submitbutton', get_string('savechanges'));
@@ -113,9 +124,9 @@ class grader_form extends moodleform
      * @param $files
      * @return array  error messages
      */
-    public function validation($data, $files)
+    public function validation($data, $files): array
     {
-        $errors = parent::validation($data, $files);
+        $errors = parent::validation($data, $files);  // TODO validate grade external/manual
         error_log(var_export($errors, true));
         return $errors;
     }

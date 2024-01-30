@@ -30,7 +30,7 @@ class grade
         $this->assignexternal = null;
         $this->userid = null;
         $this->grader = $USER->id;
-        $this->externallink = null;
+        $this->externallink = '';
         $this->externalfeedback = '';
         $this->externalgrade = 0;
         $this->manualfeedback = '';

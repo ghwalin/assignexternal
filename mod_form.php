@@ -96,5 +96,48 @@ class mod_assignexternal_mod_form extends moodleform_mod
         $this->add_action_buttons();
     }
 
+    /**
+     * Add elements for setting the custom completion rules.
+     *
+     * @category completion
+     * @return array List of added element names, or names of wrapping group elements.
+     */
+    public function add_completion_rules() {
+        $mform = $this->_form;
+        $group = [
+            $mform->createElement(
+                'radio',
+                $this->get_suffixed_name('autocompletionenabeled'),
+                ' ',
+                get_string('passinggrade', 'assignexternal'),
+                0
+            ),
+            $mform->createElement(
+                'radio',
+                $this->get_suffixed_name('autocompletionenabeled'),
+                ' ',
+                get_string('hasgrade', 'assignexternal'),
+                1
+            ),
+        ];
+        $mform->addGroup(
+            $group,
+            $this->get_suffixed_name('completiongradesgroup'),
+            get_string('completiongradesgroup','assignexternal'),
+            [' '],
+            false
+        );
+        $mform->setDefault('autocompletionenabeled', 0);
+        $mform->addHelpButton(
+            $this->get_suffixed_name('completiongradesgroup'),
+            'completiongradesgroup',
+            'assignexternal'
+        );
+        return [$this->get_suffixed_name('completiongradesgroup')];
+    }
+
+    protected function get_suffixed_name(string $fieldname): string {
+        return $fieldname . $this->get_suffix();
+    }
 
 }

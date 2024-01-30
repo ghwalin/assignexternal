@@ -82,13 +82,13 @@ class grade_control
             $grade->lastname = $user->lastname;
             if (array_key_exists($userid, $grades)) {
                 $gradedata = $grades[$userid];
-                $grade->status = $this->get_status($gradedata->gradeexternal);
-                $grade->gradeexternal = $gradedata->gradeexternal;
+                $grade->status = $this->get_status($gradedata->externalgrade);
+                $grade->externalgrade = $gradedata->externalgrade;
                 $grade->manualgrade = $gradedata->manualgrade;
                 $grade->feedback = $gradedata->externalfeedback . $gradedata->manualfeedback;
-                $grade->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
+                $grade->gradefinal = $gradedata->externalgrade + $gradedata->manualgrade;
             } else {
-                $grade->status = $this->get_status($gradedata->gradeexternal);
+                $grade->status = $this->get_status(null);
             }
             $gradelist[] = $grade;
         }
@@ -111,9 +111,9 @@ class grade_control
         $data = new \stdClass();
 
         $assignment = new assign(null,$this->coursemoduleid);
-        $data->id = $assignment->id;
+        $data->id = $this->coursemoduleid;
         $data->userid = $this->userid;
-        $data->assignmentid = $this->coursemoduleid;
+        $data->assignmentid = $assignment->id;
         $data->courseid = $this->courseid;
         $data->firstname = $user->firstname;
         $data->lastname = $user->lastname;
@@ -133,7 +133,7 @@ class grade_control
         }
         $data->timeremainingstr = $due;
 
-        $data->gradeexternal = '';
+        $data->externalgrade = '';
         $data->manualgrade = '';
         $data->externallink = '';
         $data->externalfeedback['text'] = '';
@@ -176,7 +176,7 @@ class grade_control
                 $data->manualgrade = $gradedata->manualgrade;
                 $data->manualfeedback['text'] = $gradedata->manualfeedback;
                 $data->manualfeedback['format'] = 1; // FIXME
-                $data->gradefinal = $gradedata->gradeexternal + $gradedata->manualgrade;
+                $data->gradefinal = $gradedata->externalgrade + $gradedata->manualgrade;
 
             }
             $mform->set_data($data);
@@ -205,6 +205,15 @@ class grade_control
         return $gradelist;
     }
 
+    /**
+     * counts the number of grades
+     * @return int
+     * @throws \dml_exception
+     */
+    public function count_grades() : int{
+        $grades = $this->read_grades();
+        return count($grades);
+    }
     /**
      * reads the data of a user enrolled in this course
      * @param $userid
@@ -242,6 +251,16 @@ class grade_control
             $userlist[$user->id] = $user;
         }
         return $userlist;
+    }
+
+    /**
+     * counts the students for the assignment
+     * @return int
+     */
+    public function count_coursemodule_students(): int
+    {
+        $users = $this->read_coursemodule_students();
+        return count($users);
     }
 
     /**

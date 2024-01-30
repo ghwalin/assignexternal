@@ -83,7 +83,7 @@ function show_details($context, $coursemoduleid): void
     echo $output->render($renderable);
 
     if (has_capability('mod/assign:reviewgrades', $context)) {
-        $renderable = new view_summary($coursemoduleid);
+        $renderable = new view_summary($coursemoduleid, $context);
         echo $output->render($renderable);
     } else {
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
@@ -96,9 +96,7 @@ function show_details($context, $coursemoduleid): void
         if ($gradedata) {
             $grade->init($gradedata);
         }
-        $renderable = new view_summary(
-            $coursemoduleid
-        );
+        $renderable = new view_summary($coursemoduleid, $context);
         echo $output->render($renderable);
     }
     echo $output->footer();
@@ -158,15 +156,15 @@ function show_grader($context, $coursemoduleid, $userid): void
             'userid' => $userid
         )
     );
-    $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
-    $PAGE->set_title('My title');  // FIXME
+
+    $PAGE->set_title(get_string('externalname', 'assignexternal'));
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('base');
     $PAGE->add_body_class('assignexternal-grading');
     $output = $PAGE->get_renderer('mod_assignexternal');
     echo $output->header();
 
-    $renderable = new view_grader_navigation($coursemoduleid, $context);
+    $renderable = new view_grader_navigation($coursemoduleid, $context, $userid);
     echo $output->render($renderable);
 
     $grade_control = new grade_control($coursemoduleid, $context, $userid);

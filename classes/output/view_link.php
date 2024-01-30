@@ -1,6 +1,7 @@
 <?php
 
 namespace mod_assignexternal\output;
+use mod_assignexternal\data\assign;
 use renderable;
 use renderer_base;
 use templatable;
@@ -19,10 +20,13 @@ class view_link implements renderable, templatable
 
     /**
      * default constructor
-     * @param $course_module
+     * @param $coursemoduleid
      */
-    public function __construct($course_module) {
-        $this->externallink = $course_module->externallink;
+    public function __construct($coursemoduleid) {
+        global $CFG;
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
+        $assignment = new assign(null, $coursemoduleid);
+        $this->externallink = $assignment->externallink;
     }
 
     /**

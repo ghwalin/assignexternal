@@ -26,15 +26,18 @@ class view_grader_navigation implements renderable, templatable
      */
     private $context;
 
+    /** @var int the userid of the currently selected user  */
+    private $userid = 0;
     /**
      * default constructor
      * @param $coursemoduleid
      * @param $context
      */
-    public function __construct($coursemoduleid, $context)
+    public function __construct($coursemoduleid, $context, $userid)
     {
         $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;
+        $this->userid = $userid;
     }
 
     /**
@@ -48,7 +51,7 @@ class view_grader_navigation implements renderable, templatable
         require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
 
         $grade_control = new grade_control($this->coursemoduleid, $this->context);
-        $user = $grade_control->read_coursemodule_student($grade_control->get_userid());
+        $user = $grade_control->read_coursemodule_student($this->userid);
 
         $data = new \stdClass();
         $data->grades = $grade_control->list_grades();
