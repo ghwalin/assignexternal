@@ -43,7 +43,8 @@ function assignexternal_add_instance(stdClass $data, mod_assignexternal_mod_form
     require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/assign_control.php');
     $instance = context_module::instance($data->coursemodule);
     $assignment = new assign_control($instance, null, null);
-    return $assignment->add_instance($data, $instance->instanceid);
+    $assignid = $assignment->add_instance($data, $instance->instanceid);
+    return $assignid;
 }
 
 /**
@@ -164,6 +165,7 @@ function assignexternal_cm_info_dynamic(cm_info $coursemodule)
     $context = context_module::instance($coursemodule->id);
 }
 
+
 /**
  * Return the features this module supports
  * @param string $feature FEATURE_xx constant for requested feature
@@ -181,8 +183,7 @@ function assignexternal_supports($feature) {
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
 
-        case FEATURE_GRADE_HAS_GRADE:
-            return true;
+
         case FEATURE_GRADE_OUTCOMES:
             return true;
         case FEATURE_BACKUP_MOODLE2:
@@ -196,6 +197,8 @@ function assignexternal_supports($feature) {
         case FEATURE_COMMENT:
             return true;
          */
+        case FEATURE_GRADE_HAS_GRADE:
+            return true;
         case FEATURE_COMPLETION_HAS_RULES:
             return true;
         case FEATURE_MOD_PURPOSE:

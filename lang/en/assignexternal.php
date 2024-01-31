@@ -30,7 +30,11 @@ $string['pluginname'] = 'external assignment';
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
 $string['assignmentisdue'] = 'Assignment is due';
+
+
 $string['changeuser'] = 'Change user';
+$string['completiongradesgroup'] = 'TODO completion grades group';
+$string['completiongradesgroup_help'] = 'TODO completion grades group help';
 
 $string['done'] = 'done';
 $string['duedate'] = 'Due date';
@@ -64,6 +68,7 @@ $string['pending'] = 'pending';
 $string['pluginadministration'] = 'WHATEVER';
 $string['previoususer'] = 'Previous user';
 
+$string['seefeedback'] = 'See feedback';
 $string['submissionsdue'] = 'Due:';
 $string['submissionsopen'] = 'Opens:';
 $string['submissionsopened'] = 'Opened:';

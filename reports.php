@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,26 +16,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity index for the mod_assignexternal plugin.
+ * shows reports for assignexternal
  *
  * @package   mod_assignexternal
- * @copyright 2024, Marcel Suter <marcel@ghwalin.ch>
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once('../../config.php');
+global $DB, $PAGE;
 
-// The `id` parameter is the course id.
-$id = required_param('id', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
+$assignmentid  = required_param('assignmentid', PARAM_INT);
 
-// Fetch the requested course.
-$course = $DB->get_record('course', ['id'=> $id], '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
+$coursemodule = get_coursemodule_from_instance('assignexternal', $assignmentid, $courseid, false, MUST_EXIST);
+$assignment = $DB->get_record('assignexternal', ['id' => $coursemodule->instance], '*', MUST_EXIST);
 
-// Require that the user is logged into the course.
-require_course_login($course);
+$PAGE->set_url('/mod/assignexternal/reports.php',
+    array('courseid' => $courseid, 'assignmentid' => $assignmentid));
 
-$modinfo = get_fast_modinfo($course);
+require_login($course, true, $cm);
+$coursecontext = context_course::instance($courseid);
+$modulecontext = context_module::instance($cm->id);
 
-foreach ($modinfo->get_instances_of('[modinfo]') as $instanceid => $cm) {
-    // TODO Display information about your activity.
-}
+require_capability('mod/assignment:view', $modulecontext);

@@ -15,26 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity index for the mod_assignexternal plugin.
+ * redirect from gradebook
  *
  * @package   mod_assignexternal
- * @copyright 2024, Marcel Suter <marcel@ghwalin.ch>
+ * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once('../../config.php');
+global $DB;
 
-// The `id` parameter is the course id.
 $id = required_param('id', PARAM_INT);
+$coursemodule = get_coursemodule_from_id('assignexternal', $id, 0, false, MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $coursemodule->course], '*', MUST_EXIST);
+$assignment = $DB->get_record('assignexternal', ['id' => $coursemodule->instance], '*', MUST_EXIST);
 
-// Fetch the requested course.
-$course = $DB->get_record('course', ['id'=> $id], '*', MUST_EXIST);
+require_login($course, false, $coursemodule);
+$modulecontext = context_module::instance($coursemodule->id);
 
-// Require that the user is logged into the course.
-require_course_login($course);
-
-$modinfo = get_fast_modinfo($course);
-
-foreach ($modinfo->get_instances_of('[modinfo]') as $instanceid => $cm) {
-    // TODO Display information about your activity.
+// Re-direct the user.
+if (has_capability('mod/assign:manage', $modulecontext)) {
+    $url = new moodle_url('reports.php', ['courseid' => $coursemodule->course,
+        'id' => $assignment->id]);
+} else {
+    $url = new moodle_url('view.php', ['id' => $id]);
 }
+redirect($url);

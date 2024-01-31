@@ -70,7 +70,7 @@ class assign_control
         $this->instance = $DB->get_record('assignexternal', array('id'=>$returnid), '*', MUST_EXIST);
         // Cache the course record.
         $this->course = $DB->get_record('course', array('id'=>$formdata->course), '*', MUST_EXIST);
-
+        $this->grade_item_update();
         return $returnid;
     }
 
@@ -89,6 +89,7 @@ class assign_control
         $assign->coursemodule = $coursemoduleid;
         $result = $DB->update_record('assignexternal', $assign);
         $this->set_instance( $DB->get_record('assignexternal', array('id'=>$assign->id), '*', MUST_EXIST));
+        $this->grade_item_update();
         return $result;
     }
 
@@ -105,6 +106,28 @@ class assign_control
         $DB->delete_records('assignexternal', array('id'=>$this->get_instance()->id));
 
         return $result;
+    }
+
+    /**
+     * Inserts or updates the grade settings for this assignment in grade_items
+     * @return int
+     */
+    public function grade_item_update() {
+        global $CFG;
+        require_once($CFG->libdir.'/gradelib.php');
+        $params['itemname'] = $this->instance->name;
+        $params['gradetype'] = GRADE_TYPE_VALUE;
+        $params['grademax']  = $this->instance->externalgrademax + $this->instance->manualgrademax;
+        $params['grademin']  = 0;
+        return grade_update(
+            'mod/assignexternal',
+            $this->instance->course,
+            'mod',
+            'assignexternal',
+            $this->instance->id,
+            0,
+            null,
+            $params);
     }
 
     public function get_instance(): mixed

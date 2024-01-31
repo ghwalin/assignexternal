@@ -30,11 +30,11 @@ if ($hassiteconfig) {
 
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
-        $settings = new admin_settingpage('local_gradeassignments', 'Grade Assignments');
-        $ADMIN->add('localplugins', $settings);
+        $settings = new admin_settingpage('mod_assignexternal', 'External assignments');
+        $ADMIN->add('mod_assignexternal', $settings);
 
         $settings->add(new admin_setting_configtext(
-            'local_gradeassignments/external_username',
+            'mod_assignexternal/external_username',
             'External Username',
             'The user profile field containing the external username',
             '',

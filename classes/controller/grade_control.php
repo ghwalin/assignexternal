@@ -151,10 +151,13 @@ class grade_control
             require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
             $grade = new grade();
             $grade->init($formdata);
-            if ($grade->id == -1)
-                $result = $DB->insert_record('assignexternal_grades', $grade);
-            else
+            if ($grade->id == -1) {
+                $grade->id = $DB->insert_record('assignexternal_grades', $grade);
+            }
+            else {
                 $result = $DB->update_record('assignexternal_grades', $grade);
+            }
+            $this->grade_item_update($grade);
 
             redirect(new moodle_url('view.php',
                 array(
@@ -184,6 +187,36 @@ class grade_control
         }
     }
 
+    /**
+     * Inserts or updates the grade for a user in grade_grades
+     * @param grade $grade  the grading data for this user
+     * @return int
+     */
+    public function grade_item_update($grade): int
+    {
+        global $CFG;
+        require_once($CFG->libdir.'/gradelib.php');
+
+        $grade_values = new \stdClass;
+        $grade_values->userid = $this->userid;
+        $grade_values->rawgrade = floatval($grade->externalgrade) + floatval($grade->manualgrade);
+        $link = new moodle_url('/mod/assignexternal/view.php',
+            array(
+                'id' => $this->coursemoduleid
+            ));
+        $grade_values->feedback = '<a href="' . $link->out(true) . '">' .
+            get_string('seefeedback', 'assignexternal') . '</a>';
+        $grade_values->feedbackformat = 1;
+
+        return grade_update(
+            'mod/assignexternal',
+            $this->courseid,
+            'mod',
+            'assignexternal',
+            $this->assign->id,
+            0,
+            $grade_values);
+    }
 
     /**
      * reads all grades for the current coursemodule
