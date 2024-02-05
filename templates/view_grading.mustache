@@ -8,7 +8,7 @@
       <th class="header c2" scope="col" rowspan="2">
         {{#str}} status, core {{/str}}
       </th>
-      <th class="header c2" scope="col" colspan="2">
+      <th class="header c2" scope="col" colspan="3">
         {{#str}} assessment, core {{/str}}
       </th>
       <th class="header c5" scope="col" rowspan="2">
@@ -25,17 +25,22 @@
       <th class="header c4" scope="col">
         {{#str}} manual, mod_assignexternal {{/str}}
       </th>
+      <th>&nbsp;</th>
     </tr>
     </thead>
     <tbody>
     {{#grades}}
       <tr>
-        <td><a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}">{{ firstname }} {{ lastname }}</a></td>
+        <td><a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}
+          ">{{ firstname }} {{ lastname }}</a></td>
         <td>{{ status }}</td>
-        <td><br>{{ gradeexternal }}</td>
+        <td><br>{{ externalgrade }}</td>
         <td>
-          {{ manualgrade }}<br>
-          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}" class="btn btn-primary">
+          {{ manualgrade }}
+        </td>
+        <td>
+          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}
+          &userid={{ userid }}" class="btn btn-primary">
           {{#str}} grading, mod_assignexternal {{/str}}
           </a>
         </td>

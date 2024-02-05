@@ -55,7 +55,7 @@ class assign
             'SELECT ap.id, ap.course, coursemodule, name, intro, introformat, alwaysshowdescription, externalname, ' .
             '       externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate, timemodified, ' .
             '       externalgrademax, manualgrademax, passingpercentage' .
-            ' FROM mdl_assignexternal AS ap INNER JOIN mdl_course_modules AS cm ON (ap.id = cm.instance) ' .
+            ' FROM {assignexternal} ap INNER JOIN {course_modules} cm ON (ap.id = cm.instance) ' .
             'WHERE cm.id=:coursemodule';  // FIXME DB prefix
         $data = $DB->get_record_sql(
             $sql,

@@ -179,13 +179,13 @@ class update_grade extends \external_api
         global $DB;
 
         $query =
-            'SELECT ue.id as enroleid, ue.userid, en.id, en.courseid,' .
-            '       ap.id AS assignmentid, ap.name, ap.course AS courseid, ap.coursemodule, ap.externalgrademax, ap.externalname, ' .
-            '       ag.id AS gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback' .
-            '  FROM mdl_user_enrolments AS ue' .
-            '  JOIN mdl_enrol AS en ON (ue.enrolid = en.id)' .
-            '  JOIN mdl_assignexternal AS ap ON (ap.course = en.courseid)' .
-            '  LEFT JOIN mdl_assignexternal_grades AS ag ON (ag.assignexternal = ap.coursemodule)' .
+            'SELECT ue.id  enroleid, ue.userid, en.id, en.courseid,' .
+            '       ap.id  assignmentid, ap.name, ap.course  courseid, ap.coursemodule, ap.externalgrademax, ap.externalname, ' .
+            '       ag.id  gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback' .
+            '  FROM {user_enrolments} ue' .
+            '  JOIN {enrol} en ON (ue.enrolid = en.id)' .
+            '  JOIN {assignexternal} ap ON (ap.course = en.courseid)' .
+            '  LEFT JOIN {assignexternal_grades} ag ON (ag.assignexternal = ap.coursemodule)' .
             ' WHERE ue.userid=:userid AND ap.externalname=:assignment_name' .
             ' ';
         $data = $DB->get_records_sql(
@@ -195,7 +195,7 @@ class update_grade extends \external_api
                 'assignment_name' => $assignment_name
             ]
         );
-        var_dump(current($data));
+
         return current($data);
     }
 
@@ -208,12 +208,9 @@ class update_grade extends \external_api
     private static function update_grade(grade $grade) {
         global $DB;
 
-        var_dump($grade);
         if (empty($grade->id)) {
-            echo "INSERT";
             $DB->insert_record('assignexternal_grades', $grade);
         } else {
-            echo "UPDATE";
             $DB->update_record('assignexternal_grades', $grade);
         }
     }
