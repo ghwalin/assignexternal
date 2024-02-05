@@ -109,8 +109,9 @@ class update_grade extends \external_api
 
                 $grade = new grade();
                 $grade->load($data);
-                $grade->gradeexternal = $params['points'];
+                $grade->externalgrade = $params['points'];
                 $grade->externalfeedback = $params['feedback'];
+                $grade->externallink = $params['externallink'];
                 self::update_grade($grade);
             } else {
                 echo 'WARNING: no assignment ' . $params['assignment_name'] . ' found';
@@ -184,7 +185,7 @@ class update_grade extends \external_api
             '  FROM mdl_user_enrolments AS ue' .
             '  JOIN mdl_enrol AS en ON (ue.enrolid = en.id)' .
             '  JOIN mdl_assignexternal AS ap ON (ap.course = en.courseid)' .
-            '  LEFT JOIN mdl_assignexternal_grades AS ag ON (ag.assignexternal = ap.id)' .
+            '  LEFT JOIN mdl_assignexternal_grades AS ag ON (ag.assignexternal = ap.coursemodule)' .
             ' WHERE ue.userid=:userid AND ap.externalname=:assignment_name' .
             ' ';
         $data = $DB->get_records_sql(
@@ -194,6 +195,7 @@ class update_grade extends \external_api
                 'assignment_name' => $assignment_name
             ]
         );
+        var_dump(current($data));
         return current($data);
     }
 
@@ -205,10 +207,13 @@ class update_grade extends \external_api
      */
     private static function update_grade(grade $grade) {
         global $DB;
+
         var_dump($grade);
         if (empty($grade->id)) {
+            echo "INSERT";
             $DB->insert_record('assignexternal_grades', $grade);
         } else {
+            echo "UPDATE";
             $DB->update_record('assignexternal_grades', $grade);
         }
     }
