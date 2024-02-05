@@ -110,7 +110,7 @@ class update_grade extends \external_api
                 $grade = new grade();
                 $grade->load($data);
                 $grade->externalgrade = $params['points'];
-                $grade->externalfeedback = $params['feedback'];
+                $grade->externalfeedback = urldecode($params['feedback']);
                 $grade->externallink = $params['externallink'];
                 self::update_grade($grade);
             } else {
@@ -181,7 +181,7 @@ class update_grade extends \external_api
         $query =
             'SELECT ue.id  enroleid, ue.userid, en.id, en.courseid,' .
             '       ap.id  assignmentid, ap.name, ap.course  courseid, ap.coursemodule, ap.externalgrademax, ap.externalname, ' .
-            '       ag.id  gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback' .
+            '       ag.id  gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback, ag.externallink' .
             '  FROM {user_enrolments} ue' .
             '  JOIN {enrol} en ON (ue.enrolid = en.id)' .
             '  JOIN {assignexternal} ap ON (ap.course = en.courseid)' .
