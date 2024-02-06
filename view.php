@@ -89,7 +89,7 @@ function show_details($context, $coursemoduleid): void
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
         $gradedata = $DB->get_record(
             'assignexternal_grades',
-            array('assignment' => $coursemoduleid, 'userid' => $USER->id),
+            array('assignexternal' => $coursemoduleid, 'userid' => $USER->id),
             '*'
         );
         $grade = new grade();

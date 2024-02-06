@@ -29,7 +29,11 @@ export const init = () => {
         document.getElementById('user_autocomplete_suggestions').addEventListener('click', selectUser);
         document.getElementById('previous-user').addEventListener('click', navigateUser);
         document.getElementById('next-user').addEventListener('click', navigateUser);
-    });
+        return true;
+    })
+        .catch((error) => {
+            window.alert('Oops!' + error);
+        });
 };
 
 /**

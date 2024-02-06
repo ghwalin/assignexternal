@@ -34,13 +34,13 @@
         <td><a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}
           ">{{ firstname }} {{ lastname }}</a></td>
         <td>{{ status }}</td>
-        <td><br>{{ externalgrade }}</td>
+        <td>{{ externalgrade }}</td>
         <td>
           {{ manualgrade }}
         </td>
         <td>
-          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}
-          &userid={{ userid }}" class="btn btn-primary">
+          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}"
+            class="btn btn-primary">
           {{#str}} grading, mod_assignexternal {{/str}}
           </a>
         </td>
