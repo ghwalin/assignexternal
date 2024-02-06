@@ -44,15 +44,15 @@ These are the basic steps to use this module. The details depend on the kind of 
 1. Add the external username to the Moodle profile of your students.
 2. Create an assignment in the external system.
 3. Create a new external assignment in your Moodle with the following details:
-- a link to the external assignment.
-- the name of the external assignment.
-- a description of the task.
-- maximum points for external and manual grade.
+  - a link to the external assignment.
+  - the name of the external assignment.
+  - a description of the task.
+  - maximum points for external and manual grade.
 
 ### Grading
 The external system needs a script that calls the webservice in Moodle. Every time the webservice gets called, it updates the external grade and feedback for the student.
 Additionally you can manually grade the assignement and give feedback.
 
 
-For more information see the wiki.
+For more information see the [Wiki](../../wiki).
 
