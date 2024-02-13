@@ -63,7 +63,7 @@ class view_grader_navigation implements renderable, templatable
         $data->firstname = $user->firstname;
         $data->lastname = $user->lastname;
         $data->email = $user->email;
-        $data->duedate = $grade_control->get_assign()->duedate;
+        $data->duedate = $grade_control->get_assign()->getDuedate();
         return $data;
     }
 }

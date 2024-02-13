@@ -27,6 +27,7 @@ use mod_assignexternal\data\grade;
 use mod_assignexternal\output\view_grader_navigation;
 use mod_assignexternal\output\view_grading;
 use mod_assignexternal\output\view_link;
+use mod_assignexternal\output\view_student;
 use mod_assignexternal\output\view_summary;
 use mod_assignexternal\output\renderer;
 
@@ -72,8 +73,8 @@ function show_details($context, $coursemoduleid): void
     global $USER;
 
     $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
-    $PAGE->set_title('My title');  // FIXME
-    $PAGE->set_heading('My modules page heading');
+    $PAGE->set_title(get_string('modulename', 'assignexternal'));
+    $PAGE->set_heading('TODO My modules page heading');
     $PAGE->set_pagelayout('standard');
 
     $output = $PAGE->get_renderer('mod_assignexternal');
@@ -94,9 +95,9 @@ function show_details($context, $coursemoduleid): void
         );
         $grade = new grade();
         if ($gradedata) {
-            $grade->init($gradedata);
+            $grade->load_formdata($gradedata);
         }
-        $renderable = new view_summary($coursemoduleid, $context);
+        $renderable = new view_student($coursemoduleid, $context);
         echo $output->render($renderable);
     }
     echo $output->footer();
@@ -116,8 +117,8 @@ function show_grading($context, $coursemoduleid): void
     require_capability('mod/assign:reviewgrades', $context);
 
     $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
-    $PAGE->set_title('My title');  // FIXME
-    $PAGE->set_heading('My modules page heading');
+    $PAGE->set_title(get_string('modulename', 'assignexternal'));
+    $PAGE->set_heading('TODO My modules page heading');
     $PAGE->set_pagelayout('base');
     $PAGE->add_body_class('assignexternal-grading');
     $output = $PAGE->get_renderer('mod_assignexternal');

@@ -113,18 +113,18 @@ class grade_control
         $assignment = new assign(null,$this->coursemoduleid);
         $data->id = $this->coursemoduleid;
         $data->userid = $this->userid;
-        $data->assignmentid = $assignment->id;
+        $data->assignmentid = $assignment->getId();
         $data->courseid = $this->courseid;
         $data->firstname = $user->firstname;
         $data->lastname = $user->lastname;
-        $data->externalgrademax = $assignment->externalgrademax;
-        $data->manualgrademax = $assignment->manualgrademax;
+        $data->externalgrademax = $assignment->getExternalgrademax();
+        $data->manualgrademax = $assignment->getManualgrademax();
         $data->gradeid = -1;
         $data->assignexternal = -1;
         $data->status = get_string('pending', 'assignexternal');
 
         // Time remaining.
-        $timeremaining = $assignment->duedate - time();
+        $timeremaining = $assignment->getDuedate() - time();
         $due = '';
         if ($timeremaining<= 0) {
             $due = get_string('assignmentisdue', 'assignexternal');
@@ -150,9 +150,9 @@ class grade_control
             global $DB;
             require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
             $grade = new grade();
-            $grade->init($formdata);
-            if ($grade->id == -1) {
-                $grade->id = $DB->insert_record('assignexternal_grades', $grade);
+            $grade->load_formdata($formdata);
+            if ($grade->getId() == -1) {
+                $grade->setId($DB->insert_record('assignexternal_grades', $grade));
             }
             else {
                 $result = $DB->update_record('assignexternal_grades', $grade);
@@ -199,7 +199,7 @@ class grade_control
 
         $grade_values = new \stdClass;
         $grade_values->userid = $this->userid;
-        $grade_values->rawgrade = floatval($grade->externalgrade) + floatval($grade->manualgrade);
+        $grade_values->rawgrade = floatval($grade->getExternalgrade()) + floatval($grade->getManualgrade());
         $link = new moodle_url('/mod/assignexternal/view.php',
             array(
                 'id' => $this->coursemoduleid
@@ -213,7 +213,7 @@ class grade_control
             $this->courseid,
             'mod',
             'assignexternal',
-            $this->assign->id,
+            $this->assign->getId(),
             0,
             $grade_values);
     }

@@ -79,4 +79,16 @@ class renderer extends plugin_renderer_base
         return parent::render_from_template('assignexternal/view_summary', $data);
     }
 
+    /**
+     * Defer to template.
+     *
+     * @param $page the page to render
+     *
+     * @return string html for the page
+     */
+    public function render_view_student($page): string
+    {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('assignexternal/view_student', $data);
+    }
 }

@@ -31,10 +31,7 @@ $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
 $string['assignmentisdue'] = 'Assignment is due';
 
-
 $string['changeuser'] = 'Change user';
-$string['completiongradesgroup'] = 'TODO completion grades group';
-$string['completiongradesgroup_help'] = 'TODO completion grades group help';
 
 $string['done'] = 'done';
 $string['duedate'] = 'Due date';
@@ -52,6 +49,10 @@ $string['finalgrade'] = 'Final grade';
 
 $string['graded'] = 'Graded';
 $string['grading'] = 'Grade';
+$string['gradingoverview'] = 'Grading overview';
+
+$string['hasgrade'] = 'Student needs any grade to complete the assignment';
+$string['haspassinggrade'] = 'Student needs a passing grade to complete the assignment';
 
 $string['manual'] = 'Manual';
 $string['manualfeedback'] = 'Manual feedback';
@@ -60,13 +61,9 @@ $string['manualgrademax_help'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'External assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
 
-$string['nextuser'] = "Next user";
-
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
 $string['pending'] = 'pending';
-$string['pluginadministration'] = 'WHATEVER';
-$string['previoususer'] = 'Previous user';
 
 $string['seefeedback'] = 'See feedback';
 $string['submissionsdue'] = 'Due:';
@@ -75,14 +72,21 @@ $string['submissionsopened'] = 'Opened:';
 
 $string['timeremaining'] = 'Time left';
 $string['timeremainingcolon'] = 'Time remaining: {$a}';
-
 /*
 
+$string['completiongradesgroup'] = 'TODO completion grades group';
+$string['completiongradesgroup_help'] = 'TODO completion grades group help';
+
+$string['nextuser'] = "Next user";
+
+$string['pluginadministration'] = 'WHATEVER';
+$string['previoususer'] = 'Previous user';
 
 
 
-$string['key'] = 'value';
-$string['key'] = 'value';
-$string['key'] = 'value';
-$string['key'] = 'value';
+
+
+
+
+
 */

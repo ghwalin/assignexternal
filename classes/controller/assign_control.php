@@ -65,8 +65,8 @@ class assign_control
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assign = new assign($formdata);
-        $assign->coursemodule = $coursemoduleid;
-        $returnid = $DB->insert_record('assignexternal', $assign);
+        $assign->setCoursemodule($coursemoduleid);
+        $returnid = $DB->insert_record('assignexternal', $assign->to_stdClass());
         $this->instance = $DB->get_record('assignexternal', array('id'=>$returnid), '*', MUST_EXIST);
         // Cache the course record.
         $this->course = $DB->get_record('course', array('id'=>$formdata->course), '*', MUST_EXIST);
@@ -79,6 +79,7 @@ class assign_control
      *
      * @param stdClass $formdata - the data submitted from the form
      * @return bool false if an error occurs
+     * @throws \dml_exception
      */
     public function update_instance(\stdClass $formdata, int $coursemoduleid): bool
     {
@@ -86,9 +87,9 @@ class assign_control
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assign = new assign($formdata);
-        $assign->coursemodule = $coursemoduleid;
-        $result = $DB->update_record('assignexternal', $assign);
-        $this->set_instance( $DB->get_record('assignexternal', array('id'=>$assign->id), '*', MUST_EXIST));
+        $assign->setCoursemodule($coursemoduleid);
+        $result = $DB->update_record('assignexternal', $assign->to_stdClass());
+        $this->set_instance( $DB->get_record('assignexternal', array('id'=>$assign->getId()), '*', MUST_EXIST));
         $this->grade_item_update();
         return $result;
     }

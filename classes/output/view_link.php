@@ -26,7 +26,7 @@ class view_link implements renderable, templatable
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assignment = new assign(null, $coursemoduleid);
-        $this->externallink = $assignment->externallink;
+        $this->externallink = $assignment->getExternallink();
     }
 
     /**

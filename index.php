@@ -23,6 +23,7 @@
  */
 
 require_once('../../config.php');
+global $DB;
 
 // The `id` parameter is the course id.
 $id = required_param('id', PARAM_INT);

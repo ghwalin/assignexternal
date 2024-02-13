@@ -108,10 +108,10 @@ class update_grade extends \external_api
             if (!empty($data)) {
 
                 $grade = new grade();
-                $grade->load($data);
-                $grade->externalgrade = $params['points'];
-                $grade->externalfeedback = urldecode($params['feedback']);
-                $grade->externallink = $params['externallink'];
+                $grade->load_webservice_data($data);
+                $grade->setExternalgrade($params['points']);
+                $grade->setExternalfeedback(urldecode($params['feedback']));
+                $grade->setExternallink($params['externallink']);
                 self::update_grade($grade);
             } else {
                 echo 'WARNING: no assignment ' . $params['assignment_name'] . ' found';
@@ -208,10 +208,10 @@ class update_grade extends \external_api
     private static function update_grade(grade $grade) {
         global $DB;
 
-        if (empty($grade->id)) {
-            $DB->insert_record('assignexternal_grades', $grade);
+        if (empty($grade->getId())) {
+            $DB->insert_record('assignexternal_grades', $grade->to_stdClass());
         } else {
-            $DB->update_record('assignexternal_grades', $grade);
+            $DB->update_record('assignexternal_grades', $grade->to_stdClass());
         }
     }
 }

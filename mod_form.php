@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 /**
  * Assignment program settings form.
@@ -38,15 +38,15 @@ class mod_assignexternal_mod_form extends moodleform_mod
         $mform =& $this->_form;
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-        $mform->addElement('text', 'name', get_string('assignmentname', 'assign'), ['size'=>'64']);
+        $mform->addElement('text', 'name', get_string('assignmentname', 'assign'), ['size' => '64']);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'externalname', get_string('externalname', 'assignexternal'), ['size'=>'64']);
+        $mform->addElement('text', 'externalname', get_string('externalname', 'assignexternal'), ['size' => '64']);
         $mform->setType('externalname', PARAM_TEXT);
         $mform->addHelpButton('externalname', 'externalname', 'assignexternal');
 
-        $mform->addElement('text', 'externallink', get_string('externallink', 'assignexternal'), ['size'=>'64']);
+        $mform->addElement('text', 'externallink', get_string('externallink', 'assignexternal'), ['size' => '64']);
         $mform->setType('externallink', PARAM_TEXT);
         $mform->addRule('externallink', null, 'required', null, 'client');
         $mform->addHelpButton('externallink', 'externallink', 'assignexternal');
@@ -63,7 +63,7 @@ class mod_assignexternal_mod_form extends moodleform_mod
         $mform->addElement('header', 'availability', get_string('availability', 'assign'));
         $mform->setExpanded('availability', true);
 
-        $options = array('optional'=>true);
+        $options = array('optional' => true);
         $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'assign'), $options);
         $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assign');
 
@@ -99,35 +99,37 @@ class mod_assignexternal_mod_form extends moodleform_mod
     /**
      * Add elements for setting the custom completion rules.
      *
-     * @category completion
      * @return array List of added element names, or names of wrapping group elements.
+     * @category completion
      */
-    public function add_completion_rules() {
+    public function add_completion_rules(): array
+    {
         $mform = $this->_form;
         $group = [
             $mform->createElement(
-                'radio',
-                $this->get_suffixed_name('autocompletionenabeled'),
+                'checkbox',
+                $this->get_suffixed_name('haspassinggrade'),
                 ' ',
-                get_string('passinggrade', 'assignexternal'),
+                get_string('haspassinggrade', 'assignexternal'),
                 0
             ),
             $mform->createElement(
-                'radio',
-                $this->get_suffixed_name('autocompletionenabeled'),
+                'checkbox',
+                $this->get_suffixed_name('hasgrade'),
                 ' ',
                 get_string('hasgrade', 'assignexternal'),
-                1
+                0
             ),
+
         ];
         $mform->addGroup(
             $group,
             $this->get_suffixed_name('completiongradesgroup'),
-            get_string('completiongradesgroup','assignexternal'),
+            '',
             [' '],
             false
         );
-        $mform->setDefault('autocompletionenabeled', 0);
+        $mform->setDefault('passinggradeenabled', 1);
         $mform->addHelpButton(
             $this->get_suffixed_name('completiongradesgroup'),
             'completiongradesgroup',
@@ -136,8 +138,24 @@ class mod_assignexternal_mod_form extends moodleform_mod
         return [$this->get_suffixed_name('completiongradesgroup')];
     }
 
-    protected function get_suffixed_name(string $fieldname): string {
+    /**
+     * gets the name of the element with the suffix
+     * @param string $fieldname
+     * @return string
+     */
+    protected function get_suffixed_name(string $fieldname): string
+    {
         return $fieldname . $this->get_suffix();
     }
 
+    /**
+     * checks if custom completion conditions are enabeld
+     * @param $data
+     * @return bool
+     */
+    public function completion_rule_enabled($data)
+    {
+        return (!empty($data[$this->get_suffixed_name('hasgrade')]) ||
+            !empty($data[$this->get_suffixed_name('haspassinggrade')]));
+    }
 }

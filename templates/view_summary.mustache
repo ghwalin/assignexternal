@@ -1,37 +1,71 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_assignexternal/view_summary
+
+    View the external assignment as a teacher
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * hidden, student_count, graded_count, timeremaining
+
+    Example context (json):
+    {
+    }
+}}
 <div class="container-fluid tertiary-navigation">
-    <div class="row">
-        <div class="navitem">
-            <a class="btn btn-secondary mr-1" href="{{link_grading}}">{{#str}}showall, core{{/str}}</a>
-        </div>
-        <div class="navitem">
-            <a class="btn btn-primary" href="{{link_grader}}">{{#str}}grading, mod_assignexternal{{/str}}</a>
-        </div>
+  <div class="row">
+    <div class="navitem">
+      <a class="btn btn-secondary mr-1" href="{{link_grading}}">{{#str}}showall, core{{/str}}</a>
     </div>
+    <div class="navitem">
+      <a class="btn btn-primary" href="{{link_grader}}">{{#str}}grading, mod_assignexternal{{/str}}</a>
+    </div>
+  </div>
 </div>
 <div class="gradingsummary">
-    <h3>Grading overview</h3>
-    <div class="box py-3 boxaligncenter gradingsummarytable">
-        <div class="table-responsive">
-            <table class="generaltable table-bordered">
-                <tbody>
-                <tr class="">
-                    <th class="cell c0" style="" scope="row">{{#str}}hiddenfromstudents{{/str}}</th>
-                    <td class="cell c1 lastcol" style="">{{hidden}}</td>
-                </tr>
-                <tr class="">
-                    <th class="cell c0" style="" scope="row">{{#str}}students, core{{/str}}</th>
-                    <td class="cell c1 lastcol" style="">{{student_count}}</td>
-                </tr>
-                <tr class="">
-                    <th class="cell c0" style="" scope="row">{{#str}}graded, mod_assignexternal{{/str}}</th>
-                    <td class="cell c1 lastcol" style="">{{graded_count}}</td>
-                </tr>
-                <tr class="lastrow">
-                    <th class="cell c0" style="" scope="row">{{#str}}timeremaining, mod_assignexternal{{/str}}</th>
-                    <td class="cell c1 lastcol" style="">{{timeremaining}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+  <h3>{{#str}}gradingoverview, assignexternal{{/str}}</h3>
+  <div class="box py-3 boxaligncenter gradingsummarytable">
+    <div class="table-responsive">
+      <table class="generaltable table-bordered">
+        <tbody>
+        <tr class="">
+          <th class="cell c0" style="" scope="row">{{#str}}hiddenfromstudents{{/str}}</th>
+          <td class="cell c1 lastcol" style="">{{hidden}}</td>
+        </tr>
+        <tr class="">
+          <th class="cell c0" style="" scope="row">{{#str}}students, core{{/str}}</th>
+          <td class="cell c1 lastcol" style="">{{student_count}}</td>
+        </tr>
+        <tr class="">
+          <th class="cell c0" style="" scope="row">{{#str}}graded, mod_assignexternal{{/str}}</th>
+          <td class="cell c1 lastcol" style="">{{graded_count}}</td>
+        </tr>
+        <tr class="lastrow">
+          <th class="cell c0" style="" scope="row">{{#str}}timeremaining, mod_assignexternal{{/str}}</th>
+          <td class="cell c1 lastcol" style="">{{timeremaining}}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>

@@ -42,8 +42,8 @@ function assignexternal_add_instance(stdClass $data, mod_assignexternal_mod_form
     global $CFG, $CONTEXT;
     require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/assign_control.php');
     $instance = context_module::instance($data->coursemodule);
-    $assignment = new assign_control($instance, null, null);
-    $assignid = $assignment->add_instance($data, $instance->instanceid);
+    $assign_control = new assign_control($instance, null, null);
+    $assignid = $assign_control->add_instance($data, $instance->instanceid);
     return $assignid;
 }
 
@@ -90,28 +90,25 @@ function assignexternal_update_instance(stdClass $data, $form)
 function assignexternal_get_coursemodule_info(\stdClass $coursemodule)
 {
     global $DB;
-    $assignment = $DB->get_record(
-        'assignexternal',
-        array('id' => $coursemodule->instance),
-        'id, name, externallink, alwaysshowlink, allowsubmissionsfromdate, duedate, cutoffdate',
-        MUST_EXIST);
+    $assignment = new \mod_assignexternal\data\assign(null, $coursemodule->instance);
     $result = new cached_cm_info();
-    $result->name = $assignment->name;
-    if ($assignment->duedate) {
-        $result->customdata['duedate'] = $assignment->duedate;
+    $result->name = $assignment->getName();
+    if ($assignment->getDuedate()) {
+        $result->customdata['duedate'] = $assignment->getDuedate();
     }
-    if ($assignment->cutoffdate) {
-        $result->customdata['cutoffdate'] = $assignment->cutoffdate;
+    if ($assignment->getCutoffdate()) {
+        $result->customdata['cutoffdate'] = $assignment->getCutoffdate();
     }
-    if ($assignment->allowsubmissionsfromdate) {
-        $result->customdata['allowsubmissionsfromdate'] = $assignment->allowsubmissionsfromdate;
+    if ($assignment->getAllowsubmissionsfromdate()) {
+        $result->customdata['allowsubmissionsfromdate'] = $assignment->getAllowsubmissionsfromdate();
     }
-    $result->customdata['alwaysshowlink'] = $assignment->alwaysshowlink;
+    $result->customdata['alwaysshowlink'] = $assignment->getAlwaysshowlink();
 
-    $result->customdata['externallink'] = $assignment->externallink;
+    $result->customdata['externallink'] = $assignment->getExternallink();
 
     if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
-        $result->customdata['customcompletionrules']['completion'] = 'TODO completionrules';
+        $result->customdata['customcompletionrules']['hasgrade'] = $assignment->getHasgrade();
+        $result->customdata['customcompletionrules']['haspassinggrade'] = $assignment->getHaspassinggrade();
     }
 
 
@@ -150,6 +147,8 @@ function assignexternal_cm_info_view(cm_info $coursemodule)
         $content .= '<br><strong>' . get_string('submissionsdue', 'assignexternal') . '</strong> ' . userdate($coursemodule->customdata['duedate']);
     }
 
+    // TODO information about completion settings
+
     $coursemodule->set_content($content);
 
 }
@@ -182,8 +181,6 @@ function assignexternal_supports($feature) {
             return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
-
-
         case FEATURE_GRADE_OUTCOMES:
             return true;
         case FEATURE_BACKUP_MOODLE2:
@@ -198,7 +195,7 @@ function assignexternal_supports($feature) {
             return true;
          */
         case FEATURE_GRADE_HAS_GRADE:
-            return true;
+            return false;
         case FEATURE_COMPLETION_HAS_RULES:
             return true;
         case FEATURE_MOD_PURPOSE:
@@ -207,4 +204,63 @@ function assignexternal_supports($feature) {
         default:
             return null;
     }
+}
+
+/**
+ * Obtains the automatic completion state for this external assignment based on the conditions in settings.
+ *
+ * @param object $course Course
+ * @param object $cm Course-module
+ * @param int $userid User ID
+ * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+ * @return bool True if completed, false if not, $type if conditions not set.
+ * @throws dml_exception
+ */
+function assignexternal_get_completion_state(
+    $course,
+    $coursemodule,
+    $userid,
+    $type
+) {
+    global $CFG,$DB;
+
+    $assign = $DB->get_record('assignexternal', ['id' => $coursemodule->instance], '*', MUST_EXIST);
+    if ($assign->hasgrade || $assign->haspassinggrade) {
+        $grade = new \mod_assignexternal\data\grade();
+        $grade->load_db($coursemodule, $userid);
+        $completed = false;
+        if ($assign->hasgrade && $grade->total_grade() > 0) {
+            $completed = true;
+        }
+        if ($assign->haspassinggrade) {
+            $max_grade = $assign->externalgrademax + $assign->manualgrademax;
+            $passing_grade = $max_grade * $assign->passingpercentage / 100;
+            $completed = $grade->total_grade() >= $passing_grade;
+        }
+        return $completed;
+    } else {
+        return $type;
+    }
+}
+
+/**
+ * Callback which returns human-readable strings describing the active completion custom rules for the module instance.
+ *
+ * @param cm_info|stdClass $coursemodule object with fields ->completion and ->customdata['customcompletionrules']
+ * @return array $descriptions the array of descriptions for the custom rules.
+ */
+function mod_assignexternal_get_completion_active_rule_descriptions($coursemodule) {
+    if (empty($cm->customdata['customcompletionrules']) || $cm->completion != COMPLETION_TRACKING_AUTOMATIC) {
+        return ['foobar'];
+    }
+
+    $descriptions = [];
+    foreach ($coursemodule->customdata['customcompletionrules'] as $key => $val) {
+        if ($key == 'hasgrade') {
+            $descriptions[] = get_string('hasgradedesc', 'assignexternal', $val);
+        } elseif ($key == 'haspassinggrade') {
+            $descriptions[] = get_string('haspassinggradedesc', 'assignexternal', $val);
+        }
+    }
+    return $descriptions;
 }

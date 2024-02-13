@@ -23,6 +23,8 @@
                 <FIELD NAME="externalgrademax" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
                 <FIELD NAME="manualgrademax" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
                 <FIELD NAME="passingpercentage" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="60" SEQUENCE="false" COMMENT="What percentage of the maximum grade must be achieved to pass."/>
+                <FIELD NAME="haspassinggrade" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If enabled, student must achieve a passing grade to complete the assignment"/>
+                <FIELD NAME="hasgrade" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If enabled, student must recieve a grade to complete the assignment"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment instance."/>
@@ -50,6 +52,24 @@
             <INDEXES>
                 <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" COMMENT="The userid for the submission relating to this grade."/>
                 <INDEX NAME="assignexternal" UNIQUE="false" FIELDS="assignexternal" COMMENT="The assignexternal instance this grade belongs to."/>
+            </INDEXES>
+        </TABLE>
+        <TABLE NAME="assignexternal_overrides" COMMENT="Overrides to assignexternal per user">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="assignexternal" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The assignexternal instance this grade belongs to"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="allowsubmissionsfromdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If set, submissions will only be accepted after this date."/>
+                <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The due date for the assignment. Displayed to students."/>
+                <FIELD NAME="cutoffdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The final date after which submissions will no longer be accepted for this assignment without an extensions."/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this grade."/>
+                <KEY NAME="fk_assignexternal" TYPE="foreign" FIELDS="assignexternal" REFTABLE="assignexternal" REFFIELDS="id" COMMENT="The assignexternal instance this grade belongs to."/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" COMMENT="The userid this override refers to."/>
+                <INDEX NAME="ix_assignexternal" UNIQUE="false" FIELDS="assignexternal" COMMENT="The assignexternal instance this grade belongs to."/>
             </INDEXES>
         </TABLE>
     </TABLES>
