@@ -46,7 +46,8 @@
     </div>
   </div>
 </div>
-
+{{^element.frozen}}
 {{#js}}
   require(['mod_assignexternal/grader_navigation'], (module) => module.init());
 {{/js}}
+{{/element.frozen}}

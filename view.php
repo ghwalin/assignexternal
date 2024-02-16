@@ -29,7 +29,6 @@ use mod_assignexternal\output\view_grading;
 use mod_assignexternal\output\view_link;
 use mod_assignexternal\output\view_student;
 use mod_assignexternal\output\view_summary;
-use mod_assignexternal\output\renderer;
 
 require_once('../../config.php');
 global $PAGE;
@@ -41,9 +40,11 @@ require_login($course, true, $coursemodule);
 $context = context_module::instance($coursemodule->id);
 require_capability('mod/assign:view', $context);
 
-$urlparams = array('cmid' => $coursemoduleid,
+$urlparams = array(
+    'id' => $coursemoduleid,
     'action' => optional_param('action', '', PARAM_ALPHA),
-    'userid' => optional_param('userid', 0, PARAM_INT)
+    'userid' => optional_param('userid', null, PARAM_INT),
+    'userids' => optional_param_array('uid', array(), PARAM_INT)
 );
 
 
@@ -54,6 +55,8 @@ if ($urlparams['action'] == '') {
     show_grading($context, $coursemoduleid);
 } elseif ($urlparams['action'] == 'grader') {
     show_grader($context, $coursemoduleid, $urlparams['userid']);
+} elseif ($urlparams['action'] == 'override') {
+    show_override($context, $coursemoduleid, $urlparams['userids']);
 }
 
 
@@ -132,7 +135,6 @@ function show_grading($context, $coursemoduleid): void
 
 /**
  * shows the grades and feedbacks
- * @param $output
  * @param $context
  * @param $coursemoduleid
  * @param $userid
@@ -170,6 +172,43 @@ function show_grader($context, $coursemoduleid, $userid): void
 
     $grade_control = new grade_control($coursemoduleid, $context, $userid);
     $grade_control->process_feedback();
+
+    echo $output->footer();
+}
+
+/**
+ * shows the overrides
+ * @param $context
+ * @param int $coursemoduleid
+ * @param array $userids
+ * @return void
+ * @throws coding_exception
+ * @throws required_capability_exception
+ * @throws dml_exception
+ */
+function show_override($context, int $coursemoduleid, array $userids): void
+{
+    global $CFG;
+    global $PAGE;
+
+    require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
+    require_capability('mod/assign:reviewgrades', $context);
+    $PAGE->set_url(
+        '/mod/assignexternal/view.php',
+        array(
+            'id' => $coursemoduleid,
+            'action' => 'override'
+        )
+    );
+    $PAGE->set_title(get_string('externalname', 'assignexternal'));
+    $PAGE->set_heading('My modules page heading');
+    $PAGE->set_pagelayout('base');
+    $PAGE->add_body_class('assignexternal-grading');
+    $output = $PAGE->get_renderer('mod_assignexternal');
+    echo $output->header();
+
+    $grade_control = new grade_control($coursemoduleid, $context);
+    $grade_control->process_override($userids);
 
     echo $output->footer();
 }

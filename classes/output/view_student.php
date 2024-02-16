@@ -27,6 +27,7 @@ class view_student implements renderable, templatable
     /**
      * default constructor
      * @param $coursemoduleid
+     * @param $context
      */
     public function __construct($coursemoduleid, $context)
     {
@@ -39,7 +40,7 @@ class view_student implements renderable, templatable
      *
      * @param renderer_base $output
      * @return \stdClass
-     * @throws \dml_exception
+     * @throws \dml_exception|\coding_exception
      */
     public function export_for_template(renderer_base $output): \stdClass
     {

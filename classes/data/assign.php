@@ -25,7 +25,7 @@ class assign
     private $intro;
     /** @var int the format of the intro */
     private $introformat;
-    /** @var bool if not set the description won't show until the allowsubmissionsformdate */
+    /** @var bool|null if not set the description won't show until the allowsubmissionsformdate */
     private $alwaysshowdescription;
     /** @var string the name of the assignment in the external system */
     private $externalname;
@@ -33,13 +33,13 @@ class assign
     private $externallink;
     /** @var bool if not set the externallink won't show until the allowsubmissionsformdate*/
     private $alwaysshowlink;
-    /** @var datetime  TODO*/
+    /** @var int|null  the time when submissions are allowed */
     private $allowsubmissionsfromdate;
-    /** @var datetime TODO */
+    /** @var int|null the time this assignment is due */
     private $duedate;
-    /** @var datetime TODO */
+    /** @var int|null the time when submissions are no longer possible */
     private $cutoffdate;
-    /** @var datetime the date and time this assignment was last modified */
+    /** @var int|null the date and time this assignment was last modified */
     private $timemodified;
     /** @var float the maximum grade from the external system */
     private $externalgrademax;
@@ -47,9 +47,9 @@ class assign
     private $manualgrademax;
     /** @var float the percentage of the total grade (external + manual) to reach for completing the assignment */
     private $passingpercentage;
-    /** @var bool if set the user must reach the passingpercentage to complete the assignment */
+    /** @var bool|null if set the user must reach the passingpercentage to complete the assignment */
     private $haspassinggrade;
-    /** @var bool if set the student must have a grade to complete the assignment */
+    /** @var bool|null if set the student must have a grade to complete the assignment */
     private $hasgrade;
 
     /**
@@ -144,308 +144,310 @@ class assign
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
+     * @param int $id
      */
-    public function setId($id): void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getCourse()
+    public function getCourse(): int
     {
         return $this->course;
     }
 
     /**
-     * @param mixed $course
+     * @param int $course
      */
-    public function setCourse($course): void
+    public function setCourse(int $course): void
     {
         $this->course = $course;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getCoursemodule()
+    public function getCoursemodule(): int
     {
         return $this->coursemodule;
     }
 
     /**
-     * @param mixed $coursemodule
+     * @param int $coursemodule
      */
-    public function setCoursemodule($coursemodule): void
+    public function setCoursemodule(int $coursemodule): void
     {
         $this->coursemodule = $coursemodule;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getIntro()
+    public function getIntro(): string
     {
         return $this->intro;
     }
 
     /**
-     * @param mixed $intro
+     * @param string $intro
      */
-    public function setIntro($intro): void
+    public function setIntro(string $intro): void
     {
         $this->intro = $intro;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getIntroformat()
+    public function getIntroformat(): int
     {
         return $this->introformat;
     }
 
     /**
-     * @param mixed $introformat
+     * @param int $introformat
      */
-    public function setIntroformat($introformat): void
+    public function setIntroformat(int $introformat): void
     {
         $this->introformat = $introformat;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getAlwaysshowdescription()
+    public function getAlwaysshowdescription(): bool
     {
         return $this->alwaysshowdescription;
     }
 
     /**
-     * @param mixed $alwaysshowdescription
+     * @param bool $alwaysshowdescription
      */
-    public function setAlwaysshowdescription($alwaysshowdescription): void
+    public function setAlwaysshowdescription(bool $alwaysshowdescription): void
     {
         $this->alwaysshowdescription = $alwaysshowdescription;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getExternalname()
+    public function getExternalname(): string
     {
         return $this->externalname;
     }
 
     /**
-     * @param mixed $externalname
+     * @param string $externalname
      */
-    public function setExternalname($externalname): void
+    public function setExternalname(string $externalname): void
     {
         $this->externalname = $externalname;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getExternallink()
+    public function getExternallink(): string
     {
         return $this->externallink;
     }
 
     /**
-     * @param mixed $externallink
+     * @param string $externallink
      */
-    public function setExternallink($externallink): void
+    public function setExternallink(string $externallink): void
     {
         $this->externallink = $externallink;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getAlwaysshowlink()
+    public function getAlwaysshowlink(): bool
     {
         return $this->alwaysshowlink;
     }
 
     /**
-     * @param mixed $alwaysshowlink
+     * @param bool $alwaysshowlink
      */
-    public function setAlwaysshowlink($alwaysshowlink): void
+    public function setAlwaysshowlink(bool $alwaysshowlink): void
     {
         $this->alwaysshowlink = $alwaysshowlink;
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getAllowsubmissionsfromdate()
+    public function getAllowsubmissionsfromdate(): ?int
     {
         return $this->allowsubmissionsfromdate;
     }
 
     /**
-     * @param mixed $allowsubmissionsfromdate
+     * @param int|null $allowsubmissionsfromdate
      */
-    public function setAllowsubmissionsfromdate($allowsubmissionsfromdate): void
+    public function setAllowsubmissionsfromdate(?int $allowsubmissionsfromdate): void
     {
         $this->allowsubmissionsfromdate = $allowsubmissionsfromdate;
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getDuedate()
+    public function getDuedate(): ?int
     {
         return $this->duedate;
     }
 
     /**
-     * @param mixed $duedate
+     * @param int|null $duedate
      */
-    public function setDuedate($duedate): void
+    public function setDuedate(?int $duedate): void
     {
         $this->duedate = $duedate;
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getCutoffdate()
+    public function getCutoffdate(): ?int
     {
         return $this->cutoffdate;
     }
 
     /**
-     * @param mixed $cutoffdate
+     * @param int|null $cutoffdate
      */
-    public function setCutoffdate($cutoffdate): void
+    public function setCutoffdate(?int $cutoffdate): void
     {
         $this->cutoffdate = $cutoffdate;
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getTimemodified()
+    public function getTimemodified(): ?int
     {
         return $this->timemodified;
     }
 
     /**
-     * @param mixed $timemodified
+     * @param int|null $timemodified
      */
-    public function setTimemodified($timemodified): void
+    public function setTimemodified(?int $timemodified): void
     {
         $this->timemodified = $timemodified;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getExternalgrademax()
+    public function getExternalgrademax(): float
     {
         return $this->externalgrademax;
     }
 
     /**
-     * @param mixed $externalgrademax
+     * @param float $externalgrademax
      */
-    public function setExternalgrademax($externalgrademax): void
+    public function setExternalgrademax(float $externalgrademax): void
     {
         $this->externalgrademax = $externalgrademax;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getManualgrademax()
+    public function getManualgrademax(): float
     {
         return $this->manualgrademax;
     }
 
     /**
-     * @param mixed $manualgrademax
+     * @param float $manualgrademax
      */
-    public function setManualgrademax($manualgrademax): void
+    public function setManualgrademax(float $manualgrademax): void
     {
         $this->manualgrademax = $manualgrademax;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getPassingpercentage()
+    public function getPassingpercentage(): float
     {
         return $this->passingpercentage;
     }
 
     /**
-     * @param mixed $passingpercentage
+     * @param float $passingpercentage
      */
-    public function setPassingpercentage($passingpercentage): void
+    public function setPassingpercentage(float $passingpercentage): void
     {
         $this->passingpercentage = $passingpercentage;
     }
 
     /**
-     * @return null
+     * @return bool|null
      */
-    public function getHaspassinggrade()
+    public function getHaspassinggrade(): ?bool
     {
         return $this->haspassinggrade;
     }
 
     /**
-     * @param null $haspassinggrade
+     * @param bool|null $haspassinggrade
      */
-    public function setHaspassinggrade($haspassinggrade): void
+    public function setHaspassinggrade(?bool $haspassinggrade): void
     {
         $this->haspassinggrade = $haspassinggrade;
     }
 
     /**
-     * @return null
+     * @return bool|null
      */
-    public function getHasgrade()
+    public function getHasgrade(): ?bool
     {
         return $this->hasgrade;
     }
 
     /**
-     * @param null $hasgrade
+     * @param bool|null $hasgrade
      */
-    public function setHasgrade($hasgrade): void
+    public function setHasgrade(?bool $hasgrade): void
     {
         $this->hasgrade = $hasgrade;
     }
+
+
 
 
 }

@@ -36,13 +36,17 @@
   <table class="flexible table table-striped table-hover generaltable generalbox">
     <thead>
     <tr>
-      <th class="header c1" scope="col" rowspan="2">
+      <th class="header c1" scope="col">
+        {{#str}} select {{/str}}
+      </th>
+
+      <th class="header c2" scope="col" rowspan="2">
         {{#str}} firstname, core {{/str}} / {{#str}} lastname, core {{/str}}
       </th>
-      <th class="header c2" scope="col" rowspan="2">
+      <th class="header c3" scope="col" rowspan="2">
         {{#str}} status, core {{/str}}
       </th>
-      <th class="header c2" scope="col" colspan="3">
+      <th class="header c4" scope="col" colspan="3">
         {{#str}} assessment, core {{/str}}
       </th>
       <th class="header c5" scope="col" rowspan="2">
@@ -53,6 +57,9 @@
       </th>
     </tr>
     <tr>
+      <th class="header c1" scope="col">
+        <input id="selectAll" type="checkbox"/>
+      </th>
       <th class="header c3" scope="col">
         {{#str}} external, mod_assignexternal {{/str}}
       </th>
@@ -65,6 +72,9 @@
     <tbody>
     {{#grades}}
       <tr>
+        <td>
+          <input type="checkbox" name="selectbox" data-userid="{{userid}}"/>
+        </td>
         <td><a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}
           ">{{ firstname }} {{ lastname }}</a></td>
         <td>{{ status }}</td>
@@ -73,8 +83,9 @@
           {{ manualgrade }}
         </td>
         <td>
-          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}"
-            class="btn btn-primary">
+          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}
+          &userid={{ userid }}"
+          class="btn btn-primary">
           {{#str}} grading, mod_assignexternal {{/str}}
           </a>
         </td>
@@ -85,3 +96,34 @@
     </tbody>
   </table>
 </div>
+<div id="fgroup_id_actionsgrp" class="form-group row fitem" data-groupname="actionsgrp">
+  <div class="col-md-9 form-inline align-items-start felement" data-fieldtype="group">
+    <fieldset class="w-100 m-0 p-0 border-0">
+      <div class="d-flex flex-wrap align-items-center">
+        <div class="form-group fitem">With selected...</div>
+        <div class="form-group fitem">
+          <label class="col-form-label sr-only" for="id_operation">
+            Choose operation
+          </label>
+          <span data-fieldtype="select">
+            <select class="custom-select" name="operation" id="id_operation">
+                <option value="grantextension">Grant extension</option>
+            </select>
+          </span>
+          <div class="form-group fitem">
+            <span data-fieldtype="submit">
+              <input type="submit" class="btn btn-primary" name="submit" id="id_submit" value="Go">
+            </span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <div class="form-control-feedback invalid-feedback" id="fgroup_id_error_actionsgrp">
+    </div>
+  </div>
+</div>
+{{^element.frozen}}
+  {{#js}}
+    require(['mod_assignexternal/grading_actions'], (module) => module.init());
+  {{/js}}
+{{/element.frozen}}

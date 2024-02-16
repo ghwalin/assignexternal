@@ -54,7 +54,7 @@ class grade
     public function load_formdata($formdata): void
     {
         $this->load_data($formdata);
-        $this->assignexternal = $formdata->id;
+        $this->setAssignexternal($formdata->id);
     }
 
     /**
@@ -64,13 +64,13 @@ class grade
      */
     public function load_webservice_data($data) {
         $this->load_data($data);
-        $this->assignexternal = $data->coursemodule;
+        $this->setAssignexternal($data->coursemodule);
     }
 
     /**
      * loads the gradeing data from the database
-     * @param $coursemodule
-     * @param $userid
+     * @param int $coursemodule
+     * @param int $userid
      * @return void
      * @throws \dml_exception
      */

@@ -6,7 +6,9 @@ use cm_info;
 use core\context;
 use mod_assignexternal\data\assign;
 use mod_assignexternal\data\Grade;
+use mod_assignexternal\data\override;
 use mod_assignexternal\form\grader_form;
+use mod_assignexternal\form\override_form;
 use mod_assignexternal\output\view_grader_navigation;
 use mod_assignexternal\output\renderer;
 use moodle_url;
@@ -101,13 +103,14 @@ class grade_control
      * @return void
      * @throws \dml_exception
      * @throws \coding_exception
+     * @throws \moodle_exception
      */
     public function process_feedback(): void
     {
         global $CFG;
-        global $PAGE, $OUTPUT;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/form/graderform.php');
-        $user = $this->read_coursemodule_student($this->userid);
+        $users = $this->read_coursemodule_students([$this->userid]);
+        $user = reset($users);
         $data = new \stdClass();
 
         $assignment = new assign(null,$this->coursemoduleid);
@@ -143,7 +146,7 @@ class grade_control
         $data->gradefinal = 0;
         $mform = new grader_form(null, $data);
 
-// Form processing and displaying is done here.
+        // Form processing and displaying is done here.
         if ($mform->is_cancelled()) {
             error_log('Cancelled');  // TODO reset the form
         } else if ($formdata = $mform->get_data()) {
@@ -186,6 +189,8 @@ class grade_control
             $mform->display();
         }
     }
+
+
 
     /**
      * Inserts or updates the grade for a user in grade_grades
@@ -247,32 +252,95 @@ class grade_control
         $grades = $this->read_grades();
         return count($grades);
     }
+
     /**
-     * reads the data of a user enrolled in this course
-     * @param $userid
-     * @return stdClass
+     * process the override form
+     * @param array $userids
+     * @return void
+     * @throws \dml_exception
+     * @throws \coding_exception
+     * @throws \moodle_exception
      */
-    public function read_coursemodule_student($userid): \stdClass
+    public function process_override(array $userids): void
     {
-        $users = get_enrolled_users(
-            $this->context,
-            'mod/assign:submit',
-            0,
-            'u.id, u.firstname, u.lastname, u.email'
-        );
-        foreach ($users as $user) {
-            if ($user->id == $userid)
-                return $user;
+        global $CFG;
+        global $PAGE, $OUTPUT;
+        require_once($CFG->dirroot . '/mod/assignexternal/classes/form/overrideform.php');
+
+        $data = new \stdClass();
+        $assignment = new assign(null, $this->coursemoduleid);
+        $data->id = $this->coursemoduleid;
+        $data->assignmentid = $assignment->getId();
+        $data->courseid = $this->courseid;
+        $data->allowsubmissionsfromdate = $assignment->getAllowsubmissionsfromdate();
+        $data->duedate = $assignment->getDuedate();
+        $data->cutoffdate = $assignment->getDuedate();
+        $data->users = $this->read_coursemodule_students($userids);
+
+        // Form processing and displaying is done here.
+        $url = new moodle_url('/mod/assignexternal/view.php', array('action' => 'override'));
+        $mform = new override_form($url->out(false), $data);
+        if ($mform->is_cancelled()) {
+            error_log('Cancelled');  // TODO reset the form
+        } else if ($formdata = $mform->get_data()) {
+            require_once($CFG->dirroot . '/mod/assignexternal/classes/data/override.php');
+            error_log(var_export($formdata->uid,true));
+            foreach($formdata->uid as $userid) {
+                $override = new override();
+                $override->setAssignexternal($formdata->id);
+                $override->setUserid($userid);
+                $override->setAllowsubmissionsfromdate($formdata->allowsubmissionsfromdate);
+                $override->setDuedate($formdata->duedate);
+                $override->setCutoffdate($formdata->cutoffdate);
+                $this->override_update($override);
+            }
+            $url = new moodle_url(
+                '/mod/assignexternal/view.php',
+                array(
+                    'id' => $formdata->id,
+                    'action' => 'grading'
+                )
+            );
+            redirect($url);
+
+        } else {
+            $mform->set_data($data);
+            $mform->display();
         }
-        return new \stdClass();
     }
 
     /**
-     * reads all students for the coursemodule
+     * inserts or updates a user override
+     * @param override $override
+     * @return void
+     * @throws \dml_exception
+     */
+    private function override_update(override $override): void
+    {
+        global $DB;
+        if ($record = $DB->get_record(
+            'assignexternal_overrides',
+            array(
+                'assignexternal' => $override->getAssignexternal(),
+                'userid' => $override->getUserid()
+            )
+        )) {
+            $override->setId($record->id);
+            $DB->update_record('assignexternal_overrides', $override->to_stdClass());
+        } else {
+            $DB->insert_record('assignexternal_overrides', $override->to_stdClass());
+        }
+    }
+    /**
+     * reads the students for the coursemodule filtered by userid(s)
+     * @param mixed $filter
      * @return array of students
      */
-    private function read_coursemodule_students(): array
+    public function read_coursemodule_students(mixed $filter = null): array
     {
+        if ($filter != null && !is_array($filter)) {
+            $filter = array($filter);
+        }
         $userlist = array();
         $users = get_enrolled_users(
             $this->context,
@@ -281,7 +349,8 @@ class grade_control
             'u.id, u.firstname, u.lastname, u.email'
         );
         foreach ($users as $user) {
-            $userlist[$user->id] = $user;
+            if ($filter == null || in_array($user->id, $filter))
+                $userlist[$user->id] = $user;
         }
         return $userlist;
     }

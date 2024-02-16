@@ -26,7 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'external assignment';
-
+$string['allowsubmissionsfromdate'] = 'TODO allowsubmissionsfromdate';
+$string['allowsubmissionsfromdate_help'] = 'TODO allowsubmissionsfromdate_help';
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
 $string['assignmentisdue'] = 'Assignment is due';
@@ -35,8 +36,12 @@ $string['changeuser'] = 'Change user';
 
 $string['done'] = 'done';
 $string['duedate'] = 'Due date';
+$string['duedate_help'] = 'TODO duedate_help';
 
+$string['extenddate'] = 'TODO extenddate';
+$string['extenddate_help'] = 'TODO extenddate_help';
 $string['external'] = 'External';
+$string['externalgrade'] = 'External grade';
 $string['externalfeedback'] = 'Feedback from external system';
 $string['externalgrademax'] = 'External grade max.';
 $string['externalgrademax_help'] = 'Maximum grade from external assignment';
@@ -45,17 +50,21 @@ $string['externallink_help'] = 'The link to the assignment in the external syste
 $string['externalname'] = 'External assignment';
 $string['externalname_help'] = 'The name of the assignment in the external system';
 
+$string['feedback'] = 'Feedback';
 $string['finalgrade'] = 'Final grade';
 
 $string['graded'] = 'Graded';
 $string['grading'] = 'Grade';
 $string['gradingoverview'] = 'Grading overview';
+$string['gradingstatus'] = 'Grading status';
+$string['grantextension'] = 'TODO grantextension';
 
 $string['hasgrade'] = 'Student needs any grade to complete the assignment';
 $string['haspassinggrade'] = 'Student needs a passing grade to complete the assignment';
 
 $string['manual'] = 'Manual';
 $string['manualfeedback'] = 'Manual feedback';
+$string['manualgrade'] = 'Manual grade';
 $string['manualgrademax'] = 'Manual grade max.';
 $string['manualgrademax_help'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'External assignment';
@@ -66,12 +75,15 @@ $string['passingpercentage_help'] = 'What percentage of the maximum grade (exter
 $string['pending'] = 'pending';
 
 $string['seefeedback'] = 'See feedback';
+$string['selectedusers'] = 'TODO selectedusers';
 $string['submissionsdue'] = 'Due:';
 $string['submissionsopen'] = 'Opens:';
 $string['submissionsopened'] = 'Opened:';
+$string['submissionstatus'] = 'Submission status';
 
 $string['timeremaining'] = 'Time left';
 $string['timeremainingcolon'] = 'Time remaining: {$a}';
+$string['totalgrade'] = 'Total grade';
 /*
 
 $string['completiongradesgroup'] = 'TODO completion grades group';

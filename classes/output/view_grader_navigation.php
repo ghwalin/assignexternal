@@ -44,6 +44,7 @@ class view_grader_navigation implements renderable, templatable
      * Export this data, so it can be used as the context for a mustache template.
      * @param renderer_base $output
      * @return stdClass
+     * @throws \coding_exception
      */
     public function export_for_template(renderer_base $output): \stdClass
     {
@@ -51,7 +52,8 @@ class view_grader_navigation implements renderable, templatable
         require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
 
         $grade_control = new grade_control($this->coursemoduleid, $this->context);
-        $user = $grade_control->read_coursemodule_student($this->userid);
+        $users = $grade_control->read_coursemodule_students($this->userid);
+        $user = reset($users);
 
         $data = new \stdClass();
         $data->grades = $grade_control->list_grades();

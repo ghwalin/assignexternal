@@ -65,18 +65,28 @@
   <h3>{{#str}}feedback, assignexternal{{/str}}</h3>
   <h4>{{#str}}grading, assignexternal{{/str}}</h4>
   <table class="generaltable table-bordered">
+    <thead>
+    <tr>
+      <th>{{#str}}foobar, assignexternal{{/str}}</th>
+      <th>{{#str}}pointsachieved, assignexternal{{/str}}</th>
+      <th>{{#str}}maximum, assignexternal{{/str}}</th>
+    </tr>
+    </thead>
     <tbody>
     <tr>
-      <td class="cell c0">{{#str}}totalgrade, assignexternal{{/str}}:</td>
-      <td class="cell c1 lastcol">{{totalgrade}} / {{totalgrademax}}</td>
-    </tr>
-    <tr>
       <td class="cell c0">{{#str}}externalgrade, assignexternal{{/str}}:</td>
-      <td class="cell c1 lastcol">{{externalgrade}} / {{externalgrademax}}</td>
+      <td class="cell c1">{{externalgrade}}</td>
+      <td class="cell c2 lastcol">{{externalgrademax}}</td>
     </tr>
     <tr>
       <td class="cell c0">{{#str}}manualgrade, assignexternal{{/str}}: </td>
-      <td class="cell c1 lastcol" style="">{{manualgrade}} / {{manualgrademax}}</td>
+      <td class="cell c1" style="">{{manualgrade}}</td>
+      <td class="cell c2 lastcol" style="">{{manualgrademax}}</td>
+    </tr>
+    <tr>
+      <td class="cell c0">{{#str}}totalgrade, assignexternal{{/str}}:</td>
+      <td class="cell c1">{{totalgrade}}</td>
+      <td class="cell c2 lastcol">{{totalgrademax}}</td>
     </tr>
     </tbody>
   </table>
