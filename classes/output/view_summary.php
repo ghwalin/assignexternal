@@ -44,7 +44,8 @@ class view_summary  implements renderable, templatable
         global $CFG;
 
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
-        $assignment = new assign(null, $this->coursemoduleid);
+        $assignment = new assign();
+        $assignment->load_db($this->coursemoduleid);
 
         require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
         $grade_control = new grade_control($this->coursemoduleid, $this->context);

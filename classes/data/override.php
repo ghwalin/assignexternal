@@ -3,8 +3,6 @@
 namespace mod_assignexternal\data;
 
 
-use DateTime;
-
 /**
  * represents the override for one user
  *
@@ -43,7 +41,8 @@ class override
      * casts the object to a stdClass
      * @return \stdClass
      */
-    public function to_stdClass() {
+    public function to_stdClass(): \stdClass
+    {
         $result = new \stdClass();
         foreach ($this as $property => $value) {
             if ($value != null) {
@@ -53,6 +52,26 @@ class override
         return $result;
     }
 
+    /**
+     * loads the override from the database
+     * @param int $coursemodule
+     * @param int $userid
+     * @return void
+     * @throws \dml_exception
+     */
+    public function load_db(int $coursemodule, int $userid): void
+    {
+        global $DB;
+        error_log("assignexternal=$coursemodule / userid=$userid");
+        $data = $DB->get_record(
+            'assignexternal_overrides',
+            ['assignexternal'=>$coursemodule, 'userid'=>$userid]
+        );
+        if (!empty($data)) {
+            error_log(var_export($data, true));
+            $this->load_data($data);
+        }
+    }
     /**
      * initialize the attributes from the formdata
      * @param $formdata
@@ -74,9 +93,15 @@ class override
         $this->setId($data->id);
         $this->setAssignexternal($data->assignexternal);
         $this->setUserid($data->userid);
-        $this->setAllowsubmissionsfromdate($data->allowsubmissionsfromdate);
-        $this->setDuedate($data->duedate);
-        $this->setCutoffdate($data->cutoffdate);
+        if (!empty($data->allowsubmissionsfromdate)) {
+            $this->setAllowsubmissionsfromdate($data->allowsubmissionsfromdate);
+        }
+        if (!empty($data->duedate)) {
+            $this->setDuedate($data->duedate);
+        }
+        if (!empty($data->cutoffdate)) {
+            $this->setCutoffdate($data->cutoffdate);
+        }
     }
 
     /**

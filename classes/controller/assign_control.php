@@ -64,7 +64,8 @@ class assign_control
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
-        $assign = new assign($formdata);
+        $assign = new assign();
+        $assign->load_formdata($formdata);
         $assign->setCoursemodule($coursemoduleid);
         $returnid = $DB->insert_record('assignexternal', $assign->to_stdClass());
         $this->instance = $DB->get_record('assignexternal', array('id'=>$returnid), '*', MUST_EXIST);
@@ -86,7 +87,8 @@ class assign_control
         global $DB;
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
-        $assign = new assign($formdata);
+        $assign = new assign();
+        $assign->load_formdata($formdata);
         $assign->setCoursemodule($coursemoduleid);
         $result = $DB->update_record('assignexternal', $assign->to_stdClass());
         $this->set_instance( $DB->get_record('assignexternal', array('id'=>$assign->getId()), '*', MUST_EXIST));

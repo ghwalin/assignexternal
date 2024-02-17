@@ -57,9 +57,9 @@ function xmldb_assignexternal_upgrade($oldversion) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('assignexternal', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('allowsubmissionsfromdate', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('duedate', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('cutoffdate', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('allowsubmissionsfromdate', XMLDB_TYPE_INTEGER, '10', null, false, null, '0');
+        $table->add_field('duedate', XMLDB_TYPE_INTEGER, '10', null, false, null, '0');
+        $table->add_field('cutoffdate', XMLDB_TYPE_INTEGER, '10', null, false, null, '0');
 
         // Adding keys to table assignexternal_overrides.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);

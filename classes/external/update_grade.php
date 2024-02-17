@@ -9,6 +9,7 @@ use external_function_parameters;
 use external_single_structure;
 use external_value;
 use mod_assign_external;
+use mod_assignexternal\data\assign;
 use mod_assignexternal\data\grade;
 
 /**
@@ -104,18 +105,15 @@ class update_grade extends \external_api
         $external_username = self::customfieldid_username();
         $userid = self::get_user_id($params['user_name'], $external_username);
         if (!empty($userid)) {
-            $data = self::read_grade($userid, $assignment_name);
-            if (!empty($data)) {
-
-                $grade = new grade();
-                $grade->load_webservice_data($data);
-                $grade->setExternalgrade($params['points']);
-                $grade->setExternalfeedback(urldecode($params['feedback']));
-                $grade->setExternallink($params['externallink']);
-                self::update_grade($grade);
-            } else {
+            $assignment = self::read_assignment($assignment_name, $userid);
+            if (empty($assignment)) {
                 echo 'WARNING: no assignment ' . $params['assignment_name'] . ' found';
                 // TODO: Error and status 404
+            } elseif ($assignment->getCutoffdate() < time()) {
+                echo 'WARNING: the assignment is overdue, points/feedback not updated';
+                // TODO: Error and status 404
+            } else {
+                self::update_grade($assignment->getId(), $userid, $params);
             }
         } else {
             echo 'WARNING: no username ' . $params['user_name'] . ' found';
@@ -130,7 +128,7 @@ class update_grade extends \external_api
      * returns the id of the custom field for the external username
      */
 
-    private static function customfieldid_username()
+    private static function customfieldid_username(): int
     {
         global $DB;
 
@@ -143,12 +141,12 @@ class update_grade extends \external_api
 
     /**
      * returns the moodle userid by the external username
-     * @param $user_name string the external username
-     * @param $fieldid  int the id of the custom field for external username
+     * @param string $user_name  the external username
+     * @param int $fieldid  the id of the custom field for external username
      * @return int  the moodle-userid
      * @throws \dml_exception
      */
-    private static function get_user_id($user_name, $fieldid)
+    private static function get_user_id(string $user_name, int $fieldid): ?int
     {
         global $DB;
         $query = 'SELECT userid' .
@@ -167,47 +165,64 @@ class update_grade extends \external_api
     }
 
     /**
+     * reads the assignment data
+     * @param string $assignmentname
+     * @param int $userid
+     * @return assign
+     * @throws \dml_exception
+     */
+    private static function read_assignment(string $assignmentname, int $userid): assign
+    {
+
+        $assignment = new assign();
+        $assignment->load_db_external($assignmentname, $userid);
+        return $assignment;
+    }
+    /**
      * reads the grade using the assignment-name and userid
      *
      * @param int $userid
-     * @param string $assignment_name
+     * @param int $coursemoduleid
      * @return object|null
      * @throws \dml_exception
      */
-    private static function read_grade(int $userid, string $assignment_name): ?object
+    private static function read_grade(int $coursemoduleid, int $userid): ?object
     {
         global $DB;
 
-        $query =
-            'SELECT ue.id  enroleid, ue.userid, en.id, en.courseid,' .
-            '       ap.id  assignmentid, ap.name, ap.course  courseid, ap.coursemodule, ap.externalgrademax, ap.externalname, ' .
-            '       ag.id  gradeid, ag.externalgrade, ag.externalfeedback, ag.manualgrade, ag.manualfeedback, ag.externallink' .
-            '  FROM {user_enrolments} ue' .
-            '  JOIN {enrol} en ON (ue.enrolid = en.id)' .
-            '  JOIN {assignexternal} ap ON (ap.course = en.courseid)' .
-            '  LEFT JOIN {assignexternal_grades} ag ON (ag.assignexternal = ap.coursemodule)' .
-            ' WHERE ue.userid=:userid AND ap.externalname=:assignment_name' .
-            ' ';
-        $data = $DB->get_records_sql(
-            $query,
+        $data = $DB->get_record(
+            'assignexternal_grades',
             [
                 'userid' => $userid,
-                'assignment_name' => $assignment_name
+                'assignexternal' => $coursemoduleid
             ]
         );
-
-        return current($data);
+        if (!$data) {
+            return null;
+        }
+        return $data;
     }
 
     /**
      * updates the grade for a programming assignment
-     * @param grade $grade
+     * @param int $assignmentid
+     * @param int $userid
+     * @param array $params
      * @return void
      * @throws \dml_exception
      */
-    private static function update_grade(grade $grade) {
+    private static function update_grade(int $assignmentid, int $userid, array $params): void
+    {
         global $DB;
-
+        $old = self::read_grade($assignmentid, $userid);
+        $grade = new grade();
+        if (!empty($old)) {
+            $grade->load_webservice_data($old);
+        }
+        $grade->setExternalgrade($params['points']);
+        $feedback = urldecode($params['feedback']);
+        $grade->setExternalfeedback(format_text($feedback, FORMAT_MARKDOWN));
+        $grade->setExternallink($params['externallink']);
         if (empty($grade->getId())) {
             $DB->insert_record('assignexternal_grades', $grade->to_stdClass());
         } else {

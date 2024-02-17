@@ -141,7 +141,7 @@ class grader_form extends moodleform
             'subdirs' => 0,
             'maxbytes' => 0,
             'maxfiles' => 0,
-            'changeformat' => 0,
+            'changeformat' => FORMAT_MARKDOWN,
             'context' => null,
             'noclean' => 0,
             'trusttext' => true,

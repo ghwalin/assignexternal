@@ -26,6 +26,7 @@
 
 
 use mod_assignexternal\controller\assign_control;
+use \mod_assignexternal\data\assign;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -89,8 +90,10 @@ function assignexternal_update_instance(stdClass $data, $form)
  */
 function assignexternal_get_coursemodule_info(\stdClass $coursemodule)
 {
-    global $DB;
-    $assignment = new \mod_assignexternal\data\assign(null, $coursemodule->instance);
+    global $CFG;
+    require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
+    $assignment = new assign();
+    $assignment->load_db($coursemodule->instance);
     $result = new cached_cm_info();
     $result->name = $assignment->getName();
     if ($assignment->getDuedate()) {
@@ -102,15 +105,14 @@ function assignexternal_get_coursemodule_info(\stdClass $coursemodule)
     if ($assignment->getAllowsubmissionsfromdate()) {
         $result->customdata['allowsubmissionsfromdate'] = $assignment->getAllowsubmissionsfromdate();
     }
-    $result->customdata['alwaysshowlink'] = $assignment->getAlwaysshowlink();
+    $result->customdata['alwaysshowlink'] = $assignment->isAlwaysshowlink();
 
     $result->customdata['externallink'] = $assignment->getExternallink();
 
     if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
-        $result->customdata['customcompletionrules']['hasgrade'] = $assignment->getHasgrade();
-        $result->customdata['customcompletionrules']['haspassinggrade'] = $assignment->getHaspassinggrade();
+        $result->customdata['customcompletionrules']['hasgrade'] = $assignment->isHasgrade();
+        $result->customdata['customcompletionrules']['haspassinggrade'] = $assignment->isHaspassinggrade();
     }
-
 
     return $result;
 }
@@ -119,10 +121,10 @@ function assignexternal_get_coursemodule_info(\stdClass $coursemodule)
  * customize module display for the current user on course listing
  *
  * @param cm_info $coursemodule
- * @return cached_cm_info
+ * @return void
  * @throws dml_exception
  */
-function assignexternal_cm_info_view(cm_info $coursemodule)
+function assignexternal_cm_info_view(cm_info $coursemodule): void
 {
     $externallink = '<a href="' . $coursemodule->customdata['externallink'] .
         '" target="_blank">' . get_string('externallink', 'assignexternal') . '</a>';

@@ -18,18 +18,18 @@ use templatable;
  */
 class view_student implements renderable, templatable
 {
-    private $coursemoduleid = null;
+    private int|null $coursemoduleid;
     /** @var context the context of the course module for this assign instance
      *               (or just the course if we are creating a new one)
      */
-    private $context;
+    private context $context;
 
     /**
      * default constructor
-     * @param $coursemoduleid
-     * @param $context
+     * @param int $coursemoduleid
+     * @param context $context
      */
-    public function __construct($coursemoduleid, $context)
+    public function __construct(int $coursemoduleid, context $context)
     {
         $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;
@@ -46,7 +46,8 @@ class view_student implements renderable, templatable
     {
         global $CFG, $USER;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
-        $assignment = new assign(null, $this->coursemoduleid);
+        $assignment = new assign();
+        $assignment->load_db($this->coursemoduleid, $USER->id);
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
         $grade = new grade();
         $grade->load_db($this->coursemoduleid, $USER->id);
@@ -70,7 +71,7 @@ class view_student implements renderable, templatable
         $data->totalgrade = $data->externalgrade + $data->manualgrade;
         $data->totalgrademax = $data->externalgrademax + $data->manualgrademax;
 
-        $data->externalfeedback = $grade->getExternalfeedback();
+        $data->externalfeedback = format_text($grade->getExternalfeedback(), FORMAT_MARKDOWN);
         $data->manualfeedback = $grade->getManualfeedback();
         return $data;
     }

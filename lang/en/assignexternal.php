@@ -33,6 +33,7 @@ $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will on
 $string['assignmentisdue'] = 'Assignment is due';
 
 $string['changeuser'] = 'Change user';
+$string['cutoffdate_help'] = 'TODO cutoffdate_help';
 
 $string['done'] = 'done';
 $string['duedate'] = 'Due date';

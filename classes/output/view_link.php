@@ -21,11 +21,13 @@ class view_link implements renderable, templatable
     /**
      * default constructor
      * @param $coursemoduleid
+     * @throws \dml_exception
      */
     public function __construct($coursemoduleid) {
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
-        $assignment = new assign(null, $coursemoduleid);
+        $assignment = new assign();
+        $assignment->load_db($coursemoduleid);
         $this->externallink = $assignment->getExternallink();
     }
 

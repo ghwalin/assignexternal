@@ -56,7 +56,8 @@ class grade_control
         $this->coursemoduleid = $coursemoduleid;
         $this->courseid = $context->get_course_context()->instanceid;
         $this->context = $context;
-        $this->assign = new assign(null,$coursemoduleid);
+        $this->assign = new assign();
+        $this->assign->load_db($coursemoduleid);
         $this->userlist = $this->read_coursemodule_students();
         if ($userid == 0) {
             reset($this->userlist);
@@ -113,7 +114,8 @@ class grade_control
         $user = reset($users);
         $data = new \stdClass();
 
-        $assignment = new assign(null,$this->coursemoduleid);
+        $assignment = new assign();
+        $assignment->load_db($this->coursemoduleid);
         $data->id = $this->coursemoduleid;
         $data->userid = $this->userid;
         $data->assignmentid = $assignment->getId();
@@ -268,7 +270,8 @@ class grade_control
         require_once($CFG->dirroot . '/mod/assignexternal/classes/form/overrideform.php');
 
         $data = new \stdClass();
-        $assignment = new assign(null, $this->coursemoduleid);
+        $assignment = new assign();
+        $assignment->load_db($this->coursemoduleid);
         $data->id = $this->coursemoduleid;
         $data->assignmentid = $assignment->getId();
         $data->courseid = $this->courseid;
@@ -373,9 +376,9 @@ class grade_control
     private function get_status($grade): string
     {
         if (!$grade) {
-            return get_string('pending', 'assignexternal');;
+            return get_string('pending', 'assignexternal');
         } else {
-            return get_string('done', 'assignexternal');;
+            return get_string('done', 'assignexternal');
         }
     }
 
