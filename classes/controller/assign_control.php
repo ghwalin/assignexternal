@@ -31,7 +31,7 @@ class assign_control
      */
     private $cache;
     /** @var string A key used to identify userlists created by this object. */
-    private $useridlistid = null;
+    private $useridlistid;
 
 
     /**

@@ -18,7 +18,8 @@ use stdClass;
  */
 class view_summary  implements renderable, templatable
 {
-    private $coursemoduleid = null;
+    /** @var int $coursemoduleid  the unique identifier for the current coursemodule */
+    private int $coursemoduleid;
     /** @var context the context of the course module for this assign instance
      *               (or just the course if we are creating a new one)
      */
@@ -26,9 +27,10 @@ class view_summary  implements renderable, templatable
 
     /**
      * default constructor
-     * @param $coursemoduleid
+     * @param int $coursemoduleid
+     * @param context $context
      */
-    public function __construct($coursemoduleid, $context) {
+    public function __construct(int $coursemoduleid, context $context) {
         $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;
     }

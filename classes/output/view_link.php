@@ -16,14 +16,15 @@ use stdClass;
  */
 class view_link implements renderable, templatable
 {
-    private $externallink = null;
+    /** @var string $externallink  the link to the external assignment */
+    private string $externallink;
 
     /**
      * default constructor
-     * @param $coursemoduleid
+     * @param int $coursemoduleid
      * @throws \dml_exception
      */
-    public function __construct($coursemoduleid) {
+    public function __construct(int $coursemoduleid) {
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/assign.php');
         $assignment = new assign();

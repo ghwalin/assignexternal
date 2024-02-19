@@ -58,16 +58,6 @@ class grade
     }
 
     /**
-     * load data from a data-object
-     * @param $data
-     * @return void
-     */
-    public function load_webservice_data($data) {
-        $this->load_data($data);
-        $this->setAssignexternal($data->coursemodule);
-    }
-
-    /**
      * loads the gradeing data from the database
      * @param int $coursemodule
      * @param int $userid

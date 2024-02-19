@@ -17,23 +17,21 @@ use templatable;
  */
 class view_grader_navigation implements renderable, templatable
 {
-    /** @var int @var the id of the coursemodule
-     *
-     */
-    private $coursemoduleid = null;
+    /** @var int @var the id of the coursemodule */
+    private int $coursemoduleid;
     /** @var context the context of the course module for this assign instance
      *               (or just the course if we are creating a new one)
      */
-    private $context;
+    private context $context;
 
     /** @var int the userid of the currently selected user  */
-    private $userid = 0;
+    private int $userid;
     /**
      * default constructor
      * @param $coursemoduleid
      * @param $context
      */
-    public function __construct($coursemoduleid, $context, $userid)
+    public function __construct(int $coursemoduleid, context $context, int $userid)
     {
         $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;

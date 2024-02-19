@@ -16,21 +16,19 @@ use stdClass;
  */
 class view_grading  implements renderable, templatable
 {
-    /** @var int @var the id of the coursemodule
-     *
-     */
-    private $coursemoduleid = null;
+    /** @var int @var the id of the coursemodule */
+    private int $coursemoduleid;
     /** @var context the context of the course module for this assign instance
      *               (or just the course if we are creating a new one)
      */
-    private $context;
+    private context $context;
 
     /**
      * default constructor
      * @param $coursemoduleid
      * @param $context
      */
-    public function __construct($coursemoduleid, $context) {
+    public function __construct(int $coursemoduleid, context $context) {
         $this->coursemoduleid = $coursemoduleid;
         $this->context = $context;
     }

@@ -36,8 +36,8 @@ $assignment = $DB->get_record('assignexternal', ['id' => $coursemodule->instance
 $PAGE->set_url('/mod/assignexternal/reports.php',
     array('courseid' => $courseid, 'assignmentid' => $assignmentid));
 
-require_login($course, true, $cm);
+require_login($course, true, $coursemodule);
 $coursecontext = context_course::instance($courseid);
-$modulecontext = context_module::instance($cm->id);
+$modulecontext = context_module::instance($coursemodule->id);
 
 require_capability('mod/assignment:view', $modulecontext);

@@ -67,7 +67,12 @@ class update_grade extends \external_api
      */
     public static function execute_returns()
     {
-        return new external_single_structure(array());
+        return
+        new external_single_structure([
+            'type' => new external_value(PARAM_TEXT, 'info, warning, error'),
+            'name' => new external_value(PARAM_TEXT, 'the name of this warning'),
+            'message' => new external_value(PARAM_TEXT, 'warning message')
+        ]);
     }
 
     /**
@@ -106,22 +111,38 @@ class update_grade extends \external_api
         $userid = self::get_user_id($params['user_name'], $external_username);
         if (!empty($userid)) {
             $assignment = self::read_assignment($assignment_name, $userid);
-            if (empty($assignment)) {
+            if (empty($assignment->getId())) {
                 echo 'WARNING: no assignment ' . $params['assignment_name'] . ' found';
+                return self::generate_warning(
+                    'error',
+                    'no_assignment',
+                    'No assignment with name "'. $params['assignment_name']. '" found. Contact your teacher.'
+                );
                 // TODO: Error and status 404
             } elseif ($assignment->getCutoffdate() < time()) {
                 echo 'WARNING: the assignment is overdue, points/feedback not updated';
-                // TODO: Error and status 404
+                return self::generate_warning(
+                    'info',
+                    'overdue',
+                    'The assignment is overdue, points/feedback not updated'
+                );
             } else {
                 self::update_grade($assignment->getId(), $userid, $params);
             }
         } else {
             echo 'WARNING: no username ' . $params['user_name'] . ' found';
-            // TODO: Error and status 404
+            return self::generate_warning(
+                'error',
+                'no_user',
+                'No user found with username "' . $params['user_name'] . '" Update your Moodle profile.'
+            );
         }
 
-
-        return array();
+        return self::generate_warning(
+            'info',
+            'success',
+            'Update successful'
+        );
     }
 
     /**
@@ -214,11 +235,10 @@ class update_grade extends \external_api
     private static function update_grade(int $assignmentid, int $userid, array $params): void
     {
         global $DB;
-        $old = self::read_grade($assignmentid, $userid);
         $grade = new grade();
-        if (!empty($old)) {
-            $grade->load_webservice_data($old);
-        }
+        $grade->load_db($assignmentid, $userid);
+        $grade->setAssignexternal($assignmentid);
+        $grade->setUserid($userid);
         $grade->setExternalgrade($params['points']);
         $feedback = urldecode($params['feedback']);
         $grade->setExternalfeedback(format_text($feedback, FORMAT_MARKDOWN));
@@ -228,5 +248,14 @@ class update_grade extends \external_api
         } else {
             $DB->update_record('assignexternal_grades', $grade->to_stdClass());
         }
+    }
+
+    private static function generate_warning(string $type, string $name, string $message): array
+    {
+        return[
+            'type' => $type,
+            'name' => $name,
+            'message' => $message
+        ];
     }
 }

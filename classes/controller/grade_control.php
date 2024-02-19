@@ -38,7 +38,7 @@ class grade_control
     private assign $assign;
 
     /** @var string A key used to identify userlists created by this object. */
-    private $userlist = null;
+    private $userlist;
 
     /** @var string The key to identify the user */
     private $userid;

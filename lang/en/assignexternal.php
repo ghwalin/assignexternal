@@ -70,10 +70,12 @@ $string['manualgrademax'] = 'Manual grade max.';
 $string['manualgrademax_help'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'External assignment';
 $string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
+$string['modulenameplural'] = 'External assignments';
 
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
 $string['pending'] = 'pending';
+$string['pluginname'] = 'External Assignment';
 
 $string['seefeedback'] = 'See feedback';
 $string['selectedusers'] = 'TODO selectedusers';
