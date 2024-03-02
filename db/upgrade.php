@@ -19,7 +19,7 @@
  *
  * @package     mod_assignexternal
  * @category    upgrade
- * @copyright   2023 Marcel Suter <marcel@ghwalin.ch>
+ * @copyright   2024 Marcel Suter <marcel@ghwalin.ch>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -45,10 +45,6 @@ function xmldb_assignexternal_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        $field = new xmldb_field('hasgrade', XMLDB_TYPE_INTEGER, 2, null, true, false, 0, 'haspassinggrade');
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
 
         // Define table assignexternal_overrides to be created.
         $table = new xmldb_table('assignexternal_overrides');
@@ -67,7 +63,6 @@ function xmldb_assignexternal_upgrade($oldversion) {
 
         // Adding indexes to table assignexternal_overrides.
         $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
-        //$table->add_index('ix_assignexternal', XMLDB_INDEX_NOTUNIQUE, ['assignexternal']);
 
         // Conditionally launch create table for assignexternal_overrides.
         if (!$dbman->table_exists($table)) {

@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'external assignment';
+
 $string['allowsubmissionsfromdate'] = 'TODO allowsubmissionsfromdate';
 $string['allowsubmissionsfromdate_help'] = 'TODO allowsubmissionsfromdate_help';
 $string['alwaysshowlink'] = 'Always show link';
@@ -54,54 +55,47 @@ $string['externalname_help'] = 'The name of the assignment in the external syste
 $string['feedback'] = 'Feedback';
 $string['finalgrade'] = 'Final grade';
 
+$string['grade'] = 'Grade';
 $string['graded'] = 'Graded';
-$string['grading'] = 'Grade';
+$string['grading'] = 'Grading';
 $string['gradingoverview'] = 'Grading overview';
 $string['gradingstatus'] = 'Grading status';
-$string['grantextension'] = 'TODO grantextension';
+$string['grantextension'] = 'Grant extension';
 
-$string['hasgrade'] = 'Student needs any grade to complete the assignment';
 $string['haspassinggrade'] = 'Student needs a passing grade to complete the assignment';
 
+$string['mandatory'] = 'Mandatory';
 $string['manual'] = 'Manual';
 $string['manualfeedback'] = 'Manual feedback';
 $string['manualgrade'] = 'Manual grade';
 $string['manualgrademax'] = 'Manual grade max.';
 $string['manualgrademax_help'] = 'Maximum grade from manual grading';
 $string['modulename'] = 'External assignment';
-$string['modulename_help'] = 'The programming assignment activity module enables a teacher to set tasks in an external system (i.e. GitHub Classroom';
+$string['modulename_help'] = 'The external assignment activity module lets you give your students an assignment in an external system (e.g. GitHub Classroom).\nIt includes a webservice to update the student\'s grading from the external assessment';
 $string['modulenameplural'] = 'External assignments';
+
+$string['nextuser'] = 'Next user';
+
+$string['override'] = 'Override';
 
 $string['passingpercentage'] = 'Percentage to pass';
 $string['passingpercentage_help'] = 'What percentage of the maximum grade (external + manual) must be achieved to pass';
 $string['pending'] = 'pending';
+$string['pluginadministration'] = 'External Assignment';
 $string['pluginname'] = 'External Assignment';
+$string['previoususer'] = 'Previous user';
 
+$string['scores'] = 'Scores';
+$string['scorereached'] = 'Score reached';
+$string['scoremaximum'] = 'Maximum score';
 $string['seefeedback'] = 'See feedback';
 $string['selectedusers'] = 'TODO selectedusers';
 $string['submissionsdue'] = 'Due:';
 $string['submissionsopen'] = 'Opens:';
 $string['submissionsopened'] = 'Opened:';
 $string['submissionstatus'] = 'Submission status';
+$string['studentlink'] = 'Link to your assignment';
 
 $string['timeremaining'] = 'Time left';
 $string['timeremainingcolon'] = 'Time remaining: {$a}';
 $string['totalgrade'] = 'Total grade';
-/*
-
-$string['completiongradesgroup'] = 'TODO completion grades group';
-$string['completiongradesgroup_help'] = 'TODO completion grades group help';
-
-$string['nextuser'] = "Next user";
-
-$string['pluginadministration'] = 'WHATEVER';
-$string['previoususer'] = 'Previous user';
-
-
-
-
-
-
-
-
-*/

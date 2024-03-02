@@ -1,12 +1,27 @@
 <?php
-
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace mod_assignexternal\output;
+
 use core\context;
 use mod_assignexternal\controller\grade_control;
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
+
 /**
  * Renderer for view_grading
  *
@@ -14,8 +29,7 @@ use stdClass;
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class view_grading  implements renderable, templatable
-{
+class view_grading implements renderable, templatable {
     /** @var int @var the id of the coursemodule */
     private int $coursemoduleid;
     /** @var context the context of the course module for this assign instance
@@ -38,12 +52,12 @@ class view_grading  implements renderable, templatable
      * @param renderer_base $output
      * @return stdClass
      */
-    public function export_for_template(renderer_base $output): \stdClass {
+    public function export_for_template(renderer_base $output): stdClass {
         global $CFG;
         require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
         $data = new stdClass();
-        $grade_control = new grade_control($this->coursemoduleid, $this->context);
-        $data->grades = $grade_control->list_grades();
+        $gradecontrol = new grade_control($this->coursemoduleid, $this->context);
+        $data->grades = $gradecontrol->list_grades();
         return $data;
     }
 }

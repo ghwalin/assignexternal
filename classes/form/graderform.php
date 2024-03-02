@@ -1,10 +1,26 @@
 <?php
-
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace mod_assignexternal\form;
 
+defined('MOODLE_INTERNAL') || die();
+use coding_exception;
 use moodleform;
 
 require_once("$CFG->libdir/formslib.php");
+
 /**
  * definition and validation of the grading form
  *
@@ -12,16 +28,14 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class grader_form extends moodleform
-{
+class grader_form extends moodleform {
 
     /**
      * definition of the grader form
      * @return void
-     * @throws \coding_exception
+     * @throws coding_exception
      */
-    public function definition()
-    {
+    public function definition() {
 
         $mform = $this->_form;
         $mform->addElement(
@@ -62,7 +76,6 @@ class grader_form extends moodleform
         );
         $mform->setType('externalfeedback', PARAM_RAW);
 
-
         $mform->addElement('header', 'manual', get_string('manualfeedback', 'assignexternal'));
         $mform->setExpanded('manual');
 
@@ -75,7 +88,7 @@ class grader_form extends moodleform
         $mform->setDefault('manualgrade', 0);
         $mform->addRule(
             'manualgrade',
-            get_string('mandatory'),
+            get_string('mandatory', 'assignexternal'),
             'numeric',
             '',
             'client'
@@ -84,7 +97,7 @@ class grader_form extends moodleform
         $mform->addElement('editor', 'manualfeedback', get_string('feedback'));
         $mform->setType('manualfeedback', PARAM_RAW);
 
-        // --- for development only ---
+        // --- For development only ---
         $mform->addElement('header', 'development', 'Infos');
         $mform->addElement('static', 'courseidx', 'CourseId', $this->_customdata->courseid);
         $mform->addElement('static', 'idx', 'CourseModuleId', $this->_customdata->id);
@@ -92,7 +105,7 @@ class grader_form extends moodleform
         $mform->addElement('static', 'useridx', 'UserId', $this->_customdata->userid);
         $mform->addElement('static', 'gradeidx', 'GradeId', $this->_customdata->gradeid);
         $mform->addElement('static', 'graderx', 'Grader', $this->_customdata->gradeid);
-        // --- for development only ---
+        // --- For development only ---
 
         $mform->addElement('hidden', 'id', $this->_customdata->id);
         $mform->setType('id', PARAM_INT);
@@ -109,13 +122,30 @@ class grader_form extends moodleform
         $mform->addElement('hidden', 'externallink', $this->_customdata->externallink);
         $mform->setType('externallink', PARAM_ALPHA);
 
-        $buttonarray = array();
+        $buttonarray = [];
         $buttonarray[] =& $mform->createElement('submit', 'submitbutton', get_string('savechanges'));
         $buttonarray[] =& $mform->createElement('submit', 'cancel', get_string('cancel'));
-        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
         $mform->closeHeaderBefore('buttonar');
 
         $this->set_data($this->_customdata);
+    }
+
+    /**
+     * returns an array of options for the editor
+     * @return array  options for the editor
+     */
+    private static function editor_options(): array {
+        return [
+            'subdirs' => 0,
+            'maxbytes' => 0,
+            'maxfiles' => 0,
+            'changeformat' => FORMAT_MARKDOWN,
+            'context' => null,
+            'noclean' => 0,
+            'trusttext' => true,
+            'enable_filemanagement' => false,
+        ];
     }
 
     /**
@@ -124,27 +154,9 @@ class grader_form extends moodleform
      * @param $files
      * @return array  error messages
      */
-    public function validation($data, $files): array
-    {
-        $errors = parent::validation($data, $files);  // TODO validate grade external/manual
-        error_log(var_export($errors, true));
+    public function validation($data, $files): array {
+        $errors = parent::validation($data, $files);  // TODO validate grade external/manual.
+        debugging(var_export($errors, true));
         return $errors;
-    }
-
-    /**
-     * returns an array of options for the editor
-     * @return array  options for the editor
-     */
-    private static function editor_options(): array
-    {
-        return array(
-            'subdirs' => 0,
-            'maxbytes' => 0,
-            'maxfiles' => 0,
-            'changeformat' => FORMAT_MARKDOWN,
-            'context' => null,
-            'noclean' => 0,
-            'trusttext' => true,
-            'enable_filemanagement' => false);
     }
 }

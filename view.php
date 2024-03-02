@@ -40,22 +40,31 @@ require_login($course, true, $coursemodule);
 $context = context_module::instance($coursemodule->id);
 require_capability('mod/assign:view', $context);
 
-$urlparams = array(
+$urlparams = [
     'id' => $coursemoduleid,
     'action' => optional_param('action', '', PARAM_ALPHA),
     'userid' => optional_param('userid', null, PARAM_INT),
-    'userids' => optional_param_array('uid', array(), PARAM_INT)
+    'userids' => optional_param_array('uid', [], PARAM_INT)
+];
+
+
+$url = new moodle_url(
+    '/mod/assign/view.php',
+    [
+        'id' => $urlparams['id'],
+        'action' => $urlparams['action'],
+        'userid' => $urlparams['userid'],
+    ]
 );
-
-
+$PAGE->set_url($url);
 
 if ($urlparams['action'] == '') {
     show_details($context, $coursemoduleid);
-} elseif ($urlparams['action'] == 'grading') {
+} else if ($urlparams['action'] == 'grading') {
     show_grading($context, $coursemoduleid);
-} elseif ($urlparams['action'] == 'grader') {
+} else if ($urlparams['action'] == 'grader') {
     show_grader($context, $coursemoduleid, $urlparams['userid']);
-} elseif ($urlparams['action'] == 'override') {
+} else if ($urlparams['action'] == 'override') {
     show_override($context, $coursemoduleid, $urlparams['userids']);
 }
 
@@ -75,8 +84,11 @@ function show_details($context, $coursemoduleid): void
     global $CFG;
     global $USER;
 
-    $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
-    $PAGE->set_title(get_string('modulename', 'assignexternal'));
+    $context = context_module::instance($coursemoduleid);
+    $courseshortname = $context->get_course_context()->get_context_name(false, true);
+    $assignmentname = $context->get_context_name(false, true);
+    $title = $courseshortname . ': ' . $assignmentname;
+    $PAGE->set_title($title);
     $PAGE->set_heading('TODO My modules page heading');
     $PAGE->set_pagelayout('standard');
 
@@ -93,7 +105,7 @@ function show_details($context, $coursemoduleid): void
         require_once($CFG->dirroot . '/mod/assignexternal/classes/data/grade.php');
         $gradedata = $DB->get_record(
             'assignexternal_grades',
-            array('assignexternal' => $coursemoduleid, 'userid' => $USER->id),
+            ['assignexternal' => $coursemoduleid, 'userid' => $USER->id],
             '*'
         );
         $grade = new grade();
@@ -119,8 +131,11 @@ function show_grading($context, $coursemoduleid): void
     global $PAGE;
     require_capability('mod/assign:reviewgrades', $context);
 
-    $PAGE->set_url('/mod/assignexternal/view.php', array('id' => $coursemoduleid));
-    $PAGE->set_title(get_string('modulename', 'assignexternal'));
+    $context = context_module::instance($coursemoduleid);
+    $courseshortname = $context->get_course_context()->get_context_name(false, true);
+    $assignmentname = $context->get_context_name(false, true);
+    $title = $courseshortname . ': ' . $assignmentname . ' - ' . get_string('grading', 'assignexternal');
+    $PAGE->set_title($title);
     $PAGE->set_heading('TODO My modules page heading');
     $PAGE->set_pagelayout('base');
     $PAGE->add_body_class('assignexternal-grading');
@@ -134,7 +149,7 @@ function show_grading($context, $coursemoduleid): void
 }
 
 /**
- * shows the grades and feedbacks
+ * shows the grades for all students
  * @param $context
  * @param $coursemoduleid
  * @param $userid
@@ -151,16 +166,12 @@ function show_grader($context, $coursemoduleid, $userid): void
     require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
 
     require_capability('mod/assign:reviewgrades', $context);
-    $PAGE->set_url(
-        '/mod/assignexternal/view.php',
-        array(
-            'id' => $coursemoduleid,
-            'action' => 'grader',
-            'userid' => $userid
-        )
-    );
 
-    $PAGE->set_title(get_string('externalname', 'assignexternal'));
+    $context = context_module::instance($coursemoduleid);
+    $courseshortname = $context->get_course_context()->get_context_name(false, true);
+    $assignmentname = $context->get_context_name(false, true);
+    $title = $courseshortname . ': ' . $assignmentname . ' - ' . get_string('grade', 'assignexternal');
+    $PAGE->set_title($title);
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('base');
     $PAGE->add_body_class('assignexternal-grading');
@@ -193,14 +204,11 @@ function show_override($context, int $coursemoduleid, array $userids): void
 
     require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
     require_capability('mod/assign:reviewgrades', $context);
-    $PAGE->set_url(
-        '/mod/assignexternal/view.php',
-        array(
-            'id' => $coursemoduleid,
-            'action' => 'override'
-        )
-    );
-    $PAGE->set_title(get_string('externalname', 'assignexternal'));
+    $context = context_module::instance($coursemoduleid);
+    $courseshortname = $context->get_course_context()->get_context_name(false, true);
+    $assignmentname = $context->get_context_name(false, true);
+    $title = $courseshortname . ': ' . $assignmentname . ' - ' . get_string('override', 'assignexternal');
+    $PAGE->set_title($title);
     $PAGE->set_heading('My modules page heading');
     $PAGE->set_pagelayout('base');
     $PAGE->add_body_class('assignexternal-grading');

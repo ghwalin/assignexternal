@@ -49,9 +49,6 @@
       <th class="header c4" scope="col" colspan="3">
         {{#str}} assessment, core {{/str}}
       </th>
-      <th class="header c5" scope="col" rowspan="2">
-        {{#str}} feedback, core {{/str}}
-      </th>
       <th class="header c6" scope="col" rowspan="2">
         {{#str}} finalgrade, mod_assignexternal {{/str}}
       </th>
@@ -75,21 +72,22 @@
         <td>
           <input type="checkbox" name="selectbox" data-userid="{{userid}}"/>
         </td>
-        <td><a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}
-          ">{{ firstname }} {{ lastname }}</a></td>
+        <td>
+          <a href="{{ config.wwwroot }}/user/view.php?id={{ userid }}&course={{ courseid }}">
+            {{ firstname }} {{ lastname }}
+          </a>
+        </td>
         <td>{{ status }}</td>
         <td>{{ externalgrade }}</td>
         <td>
           {{ manualgrade }}
         </td>
         <td>
-          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}
-          &userid={{ userid }}"
+          <a href="{{ config.wwwroot }}/mod/assignexternal/view.php?action=grader&id={{ coursemoduleid }}&userid={{ userid }}"
           class="btn btn-primary">
-          {{#str}} grading, mod_assignexternal {{/str}}
+            {{#str}} grade, mod_assignexternal {{/str}}
           </a>
         </td>
-        <td>{{ feedback }} </td>
         <td>{{ gradefinal }} </td>
       </tr>
     {{/grades}}

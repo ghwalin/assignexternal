@@ -1,10 +1,26 @@
 <?php
-
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace mod_assignexternal\form;
 
+defined('MOODLE_INTERNAL') || die();
+use coding_exception;
 use moodleform;
 
 require_once("$CFG->libdir/formslib.php");
+
 /**
  * definition and validation of the grading form
  *
@@ -12,16 +28,14 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2023 Marcel Suter <marcel@ghwalin.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class override_form extends moodleform
-{
+class override_form extends moodleform {
 
     /**
      * definition of the grader form
      * @return void
-     * @throws \coding_exception
+     * @throws coding_exception
      */
-    public function definition()
-    {
+    public function definition() {
         $mform = $this->_form;
         $mform->addElement(
             'header',
@@ -38,8 +52,13 @@ class override_form extends moodleform
             $count++;
         }
 
-        $options = array('optional' => true);
-        $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'assignexternal'), $options);
+        $options = ['optional' => true];
+        $mform->addElement(
+            'date_time_selector',
+            'allowsubmissionsfromdate',
+            get_string('allowsubmissionsfromdate', 'assignexternal'),
+            $options
+        );
         $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assignexternal');
 
         $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'assignexternal'), $options);
@@ -61,10 +80,9 @@ class override_form extends moodleform
      * @param $files
      * @return array  error messages
      */
-    public function validation($data, $files): array
-    {
-        $errors = parent::validation($data, $files);  // TODO validate dates
-        error_log(var_export($errors, true));
+    public function validation($data, $files): array {
+        $errors = parent::validation($data, $files);  // TODO validate dates.
+        debugging(var_export($errors, true));
         return $errors;
     }
 }

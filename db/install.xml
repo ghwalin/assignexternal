@@ -24,7 +24,6 @@
                 <FIELD NAME="manualgrademax" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade for this assignment."/>
                 <FIELD NAME="passingpercentage" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="60" SEQUENCE="false" COMMENT="What percentage of the maximum grade must be achieved to pass."/>
                 <FIELD NAME="haspassinggrade" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If enabled, student must achieve a passing grade to complete the assignment"/>
-                <FIELD NAME="hasgrade" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If enabled, student must recieve a grade to complete the assignment"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment instance."/>

@@ -31,10 +31,8 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  *
  * @package   mod_assign
  */
-class mod_assignexternal_mod_form extends moodleform_mod
-{
-    function definition()
-    {
+class mod_assignexternal_mod_form extends moodleform_mod {
+    public function definition() {
         $mform =& $this->_form;
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -63,8 +61,9 @@ class mod_assignexternal_mod_form extends moodleform_mod
         $mform->addElement('header', 'availability', get_string('availability', 'assign'));
         $mform->setExpanded('availability', true);
 
-        $options = array('optional' => true);
-        $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'assign'), $options);
+        $options = ['optional' => true];
+        $mform->addElement('date_time_selector', 'allowsubmissionsfromdate',
+            get_string('allowsubmissionsfromdate', 'assign'), $options);
         $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assign');
 
         $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'assign'), $options);
@@ -100,10 +99,10 @@ class mod_assignexternal_mod_form extends moodleform_mod
      * Add elements for setting the custom completion rules.
      *
      * @return array List of added element names, or names of wrapping group elements.
+     * @throws coding_exception
      * @category completion
      */
-    public function add_completion_rules(): array
-    {
+    public function add_completion_rules(): array {
         $mform = $this->_form;
         $group = [
             $mform->createElement(
@@ -111,13 +110,6 @@ class mod_assignexternal_mod_form extends moodleform_mod
                 $this->get_suffixed_name('haspassinggrade'),
                 ' ',
                 get_string('haspassinggrade', 'assignexternal'),
-                0
-            ),
-            $mform->createElement(
-                'checkbox',
-                $this->get_suffixed_name('hasgrade'),
-                ' ',
-                get_string('hasgrade', 'assignexternal'),
                 0
             ),
 
@@ -143,8 +135,7 @@ class mod_assignexternal_mod_form extends moodleform_mod
      * @param string $fieldname
      * @return string
      */
-    protected function get_suffixed_name(string $fieldname): string
-    {
+    protected function get_suffixed_name(string $fieldname): string {
         return $fieldname . $this->get_suffix();
     }
 
@@ -153,9 +144,7 @@ class mod_assignexternal_mod_form extends moodleform_mod
      * @param $data
      * @return bool
      */
-    public function completion_rule_enabled($data)
-    {
-        return (!empty($data[$this->get_suffixed_name('hasgrade')]) ||
-            !empty($data[$this->get_suffixed_name('haspassinggrade')]));
+    public function completion_rule_enabled($data) {
+        return (!empty($data[$this->get_suffixed_name('haspassinggrade')]));
     }
 }

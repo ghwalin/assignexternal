@@ -20,12 +20,12 @@ class overridetest extends \basic_testcase
      */
     public function testDefaultConstructor()
     {
-        $this->assertNull($this->override->getId());
-        $this->assertNull($this->override->getAssignexternal());
-        $this->assertNull($this->override->getUserid());
-        $this->assertNull($this->override->getAllowsubmissionsfromdate());
-        $this->assertNull($this->override->getDuedate());
-        $this->assertNull($this->override->getCutoffdate());
+        $this->assertNull($this->override->get_id());
+        $this->assertNull($this->override->get_assignexternal());
+        $this->assertNull($this->override->get_userid());
+        $this->assertNull($this->override->get_allowsubmissionsfromdate());
+        $this->assertNull($this->override->get_duedate());
+        $this->assertNull($this->override->get_cutoffdate());
     }
 
     /**
@@ -33,19 +33,19 @@ class overridetest extends \basic_testcase
      */
     public function testSettersAndGetters()
     {
-        $this->override->setId(1);
-        $this->override->setAssignexternal(2);
-        $this->override->setUserid(3);
-        $this->override->setAllowsubmissionsfromdate(1613673600); // February 18, 2021 00:00:00
-        $this->override->setDuedate(1613760000); // February 19, 2021 00:00:00
-        $this->override->setCutoffdate(1613846400); // February 20, 2021 00:00:00
+        $this->override->set_id(1);
+        $this->override->set_assignexternal(2);
+        $this->override->set_userid(3);
+        $this->override->set_allowsubmissionsfromdate(1613673600); // February 18, 2021 00:00:00
+        $this->override->set_duedate(1613760000); // February 19, 2021 00:00:00
+        $this->override->set_cutoffdate(1613846400); // February 20, 2021 00:00:00
 
-        $this->assertEquals(1, $this->override->getId());
-        $this->assertEquals(2, $this->override->getAssignexternal());
-        $this->assertEquals(3, $this->override->getUserid());
-        $this->assertEquals(1613673600, $this->override->getAllowsubmissionsfromdate());
-        $this->assertEquals(1613760000, $this->override->getDuedate());
-        $this->assertEquals(1613846400, $this->override->getCutoffdate());
+        $this->assertEquals(1, $this->override->get_id());
+        $this->assertEquals(2, $this->override->get_assignexternal());
+        $this->assertEquals(3, $this->override->get_userid());
+        $this->assertEquals(1613673600, $this->override->get_allowsubmissionsfromdate());
+        $this->assertEquals(1613760000, $this->override->get_duedate());
+        $this->assertEquals(1613846400, $this->override->get_cutoffdate());
     }
 
     /**
@@ -53,12 +53,12 @@ class overridetest extends \basic_testcase
      */
     public function testToStdClass()
     {
-        $this->override->setId(1);
-        $this->override->setAssignexternal(2);
-        $this->override->setUserid(3);
-        $this->override->setAllowsubmissionsfromdate(1613673600); // February 18, 2021 00:00:00
-        $this->override->setDuedate(1613760000); // February 19, 2021 00:00:00
-        $this->override->setCutoffdate(1613846400); // February 20, 2021 00:00:00
+        $this->override->set_id(1);
+        $this->override->set_assignexternal(2);
+        $this->override->set_userid(3);
+        $this->override->set_allowsubmissionsfromdate(1613673600); // February 18, 2021 00:00:00
+        $this->override->set_duedate(1613760000); // February 19, 2021 00:00:00
+        $this->override->set_cutoffdate(1613846400); // February 20, 2021 00:00:00
 
         $expectedResult = (object) [
             'id' => 1,
@@ -71,4 +71,33 @@ class overridetest extends \basic_testcase
 
         $this->assertEquals($expectedResult, $this->override->to_stdClass());
     }
+
+    public function testLoad_formdata()
+    {
+        $formdata = new \stdClass();
+        $formdata->id = 9;
+        $formdata->assignexternal = 9;
+        $formdata->userid = 2;
+        $formdata->allowsubmissionsfromdate = 1613673600;
+        $formdata->duedate = 1613760000;
+        $formdata->cutoffdate =  1613846400;
+        $override = new override();
+        $override->load_formdata($formdata);
+
+        $expected = new override();
+        $expected->set_id(9);
+        $expected->set_assignexternal(9);
+        $expected->set_userid(2);
+        $expected->set_allowsubmissionsfromdate(1613673600); // February 18, 2021 00:00:00
+        $expected->set_duedate(1613760000); // February 19, 2021 00:00:00
+        $expected->set_cutoffdate(1613846400); // February 20, 2021 00:00:00
+
+        $this->assertEquals($expected, $override);
+    }
+
+    public function testLoad_db()
+    {
+        $this->assertTrue(true); // TODO PHPUnit
+    }
+
 }
