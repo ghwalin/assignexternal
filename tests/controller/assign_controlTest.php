@@ -9,14 +9,24 @@ use PHPUnit\Framework\TestCase;
  */
 class assign_controlTest extends TestCase
 {
+    private $context;
+    private $coursemodule;
+    private $course;
 
     public function test__construct()
     {
-        $this->assertTrue(true); // TODO PHPUnit
+        $assigncontrol = new assign_control($this->context, $this->coursemodule, $this->course);
+        $this->assertNotNull($assigncontrol->get_context());
+        $this->assertNotNull($assigncontrol->get_coursemodule());
+        $this->assertNotNull($assigncontrol->get_course());
     }
 
     public function testAdd_instance()
     {
+        $formdata = new \stdClass();
+        $formdata->course = $this->course->id;
+        $formdata->name = 'unittest add';
+
         $this->assertTrue(true); // TODO PHPUnit
     }
 
@@ -44,5 +54,17 @@ class assign_controlTest extends TestCase
         $this->assertTrue(true); // TODO PHPUnit
     }
 
-
+    public function setUp(): void
+    {
+        $this->context = null; // TODO
+        $this->coursemodule = null; // TODO
+        $this->course = null; // TODO
+    }
+    public function tearDown(): void
+    {
+        $this->context = null;
+        $this->coursemodule = null;
+        $this->course = $this->getDataGenerator()->create_course();
+        $this->coursemodule = $this->getDataGenerator()->create_module('assignexternal', array('course' => $this->course->id));
+    }
 }

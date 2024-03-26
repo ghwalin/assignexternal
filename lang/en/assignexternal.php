@@ -37,7 +37,7 @@ $string['assignmentname'] = 'Assignment name';
 $string['availability'] = 'Availability';
 
 $string['changeuser'] = 'Change user';
-$string['cutoffdatecolon'] = 'Cut-off date: {$a}';
+$string['cutoffdate'] = 'Cut-off date';
 $string['cutoffdate_help'] = 'If set, submissions will not be accepted after this date without an extension. If not set, submissions will always be accepted.';
 $string['cutoffdatevalidation'] = 'Cut-off date cannot be earlier than the due date.';
 $string['cutoffdatefromdatevalidation'] = 'Cut-off date cannot be earlier than the allow submissions from date.';
