@@ -27,18 +27,27 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'external assignment';
 
-$string['allowsubmissionsfromdate'] = 'TODO allowsubmissionsfromdate';
-$string['allowsubmissionsfromdate_help'] = 'TODO allowsubmissionsfromdate_help';
+$string['allowsubmissionsfromdate'] = 'Allow submissions from';
+$string['allowsubmissionsfromdate_help'] = 'If enabled, students will not be able to submit before this date. If disabled, students will be able to start submitting right away.';
+$string['alwaysshowdescription'] = 'Always show description';
 $string['alwaysshowlink'] = 'Always show link';
 $string['alwaysshowlink_help'] = 'If disabled, the assignment link above will only become visible to students on the "Allow submissions from" date.';
 $string['assignmentisdue'] = 'Assignment is due';
+$string['assignmentname'] = 'Assignment name';
+$string['availability'] = 'Availability';
 
 $string['changeuser'] = 'Change user';
-$string['cutoffdate_help'] = 'TODO cutoffdate_help';
+$string['cutoffdatecolon'] = 'Cut-off date: {$a}';
+$string['cutoffdate_help'] = 'If set, submissions will not be accepted after this date without an extension. If not set, submissions will always be accepted.';
+$string['cutoffdatevalidation'] = 'Cut-off date cannot be earlier than the due date.';
+$string['cutoffdatefromdatevalidation'] = 'Cut-off date cannot be earlier than the allow submissions from date.';
 
 $string['done'] = 'done';
+$string['description'] = 'Description';
 $string['duedate'] = 'Due date';
 $string['duedate_help'] = 'TODO duedate_help';
+$string['duedateaftersubmissionvalidation'] = 'Due date must be after the allow submissions from date.';
+$string['duedatevalidation'] = 'Due date cannot be earlier than the allow submissions from date.';
 
 $string['extenddate'] = 'TODO extenddate';
 $string['extenddate_help'] = 'TODO extenddate_help';

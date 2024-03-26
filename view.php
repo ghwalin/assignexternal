@@ -84,7 +84,6 @@ function show_details($context, $coursemoduleid): void
     global $CFG;
     global $USER;
 
-    $context = context_module::instance($coursemoduleid);
     $courseshortname = $context->get_course_context()->get_context_name(false, true);
     $assignmentname = $context->get_context_name(false, true);
     $title = $courseshortname . ': ' . $assignmentname;
@@ -131,7 +130,6 @@ function show_grading($context, $coursemoduleid): void
     global $PAGE;
     require_capability('mod/assign:reviewgrades', $context);
 
-    $context = context_module::instance($coursemoduleid);
     $courseshortname = $context->get_course_context()->get_context_name(false, true);
     $assignmentname = $context->get_context_name(false, true);
     $title = $courseshortname . ': ' . $assignmentname . ' - ' . get_string('grading', 'assignexternal');
@@ -157,6 +155,7 @@ function show_grading($context, $coursemoduleid): void
  * @throws coding_exception
  * @throws required_capability_exception
  * @throws dml_exception
+ * @throws moodle_exception
  */
 function show_grader($context, $coursemoduleid, $userid): void
 {
@@ -167,7 +166,6 @@ function show_grader($context, $coursemoduleid, $userid): void
 
     require_capability('mod/assign:reviewgrades', $context);
 
-    $context = context_module::instance($coursemoduleid);
     $courseshortname = $context->get_course_context()->get_context_name(false, true);
     $assignmentname = $context->get_context_name(false, true);
     $title = $courseshortname . ': ' . $assignmentname . ' - ' . get_string('grade', 'assignexternal');
@@ -196,6 +194,7 @@ function show_grader($context, $coursemoduleid, $userid): void
  * @throws coding_exception
  * @throws required_capability_exception
  * @throws dml_exception
+ * @throws moodle_exception
  */
 function show_override($context, int $coursemoduleid, array $userids): void
 {
@@ -204,7 +203,6 @@ function show_override($context, int $coursemoduleid, array $userids): void
 
     require_once($CFG->dirroot . '/mod/assignexternal/classes/controller/grade_control.php');
     require_capability('mod/assign:reviewgrades', $context);
-    $context = context_module::instance($coursemoduleid);
     $courseshortname = $context->get_course_context()->get_context_name(false, true);
     $assignmentname = $context->get_context_name(false, true);
     $title = $courseshortname . ': ' . $assignmentname . ' - ' . get_string('override', 'assignexternal');

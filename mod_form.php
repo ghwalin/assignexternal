@@ -36,7 +36,7 @@ class mod_assignexternal_mod_form extends moodleform_mod {
         $mform =& $this->_form;
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-        $mform->addElement('text', 'name', get_string('assignmentname', 'assign'), ['size' => '64']);
+        $mform->addElement('text', 'name', get_string('assignmentname', 'assignexternal'), ['size' => '64']);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
@@ -52,25 +52,25 @@ class mod_assignexternal_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'alwaysshowlink', get_string('alwaysshowlink', 'assignexternal'));
         $mform->addHelpButton('alwaysshowlink', 'alwaysshowlink', 'assignexternal');
 
-        $this->standard_intro_elements(get_string('description', 'assign'));
+        $this->standard_intro_elements(get_string('description', 'assignexternal'));
 
-        $mform->addElement('checkbox', 'alwaysshowdescription', get_string('alwaysshowdescription', 'assign'));
-        $mform->addHelpButton('alwaysshowdescription', 'alwaysshowdescription', 'assign');
+        $mform->addElement('checkbox', 'alwaysshowdescription', get_string('alwaysshowdescription', 'assignexternal'));
+        $mform->addHelpButton('alwaysshowdescription', 'alwaysshowdescription', 'assignexternal');
         $mform->disabledIf('alwaysshowdescription', 'allowsubmissionsfromdate[enabled]', 'notchecked');
 
-        $mform->addElement('header', 'availability', get_string('availability', 'assign'));
+        $mform->addElement('header', 'availability', get_string('availability', 'assignexternal'));
         $mform->setExpanded('availability', true);
 
         $options = ['optional' => true];
         $mform->addElement('date_time_selector', 'allowsubmissionsfromdate',
-            get_string('allowsubmissionsfromdate', 'assign'), $options);
-        $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assign');
+            get_string('allowsubmissionsfromdate', 'assignexternal'), $options);
+        $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assignexternal');
 
-        $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'assign'), $options);
-        $mform->addHelpButton('duedate', 'duedate', 'assign');
+        $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'assignexternal'), $options);
+        $mform->addHelpButton('duedate', 'duedate', 'assignexternal');
 
-        $mform->addElement('date_time_selector', 'cutoffdate', get_string('cutoffdate', 'assign'), $options);
-        $mform->addHelpButton('cutoffdate', 'cutoffdate', 'assign');
+        $mform->addElement('date_time_selector', 'cutoffdate', get_string('cutoffdate', 'assignexternal'), $options);
+        $mform->addHelpButton('cutoffdate', 'cutoffdate', 'assignexternal');
 
         $mform->addElement('header', 'grading', get_string('grading', 'assignexternal'));
         $mform->setExpanded('grading', true);
@@ -95,6 +95,26 @@ class mod_assignexternal_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        if (!empty($data['allowsubmissionsfromdate']) && !empty($data['duedate'])) {
+            if ($data['duedate'] <= $data['allowsubmissionsfromdate']) {
+                $errors['duedate'] = get_string('duedateaftersubmissionvalidation', 'assignexternal');
+            }
+        }
+        if (!empty($data['cutoffdate']) && !empty($data['duedate'])) {
+            if ($data['cutoffdate'] < $data['duedate'] ) {
+                $errors['cutoffdate'] = get_string('cutoffdatevalidation', 'assignexternal');
+            }
+        }
+        if (!empty($data['allowsubmissionsfromdate']) && !empty($data['cutoffdate'])) {
+            if ($data['cutoffdate'] < $data['allowsubmissionsfromdate']) {
+                $errors['cutoffdate'] = get_string('cutoffdatefromdatevalidation', 'assignexternal');
+            }
+        }
+
+        return $errors;
+    }
     /**
      * Add elements for setting the custom completion rules.
      *
