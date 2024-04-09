@@ -94,13 +94,13 @@ class update_grade extends external_api {
                     'No assignment with name "' . $params['assignment_name'] . '" found. Contact your teacher.'
                 );
                 // TODO: Error and status 404.
-            } else if ($assignment->get_cutoffdate() < time()) {
+           /* } else if ($assignment->get_cutoffdate() < time()) {    FIXME
                 echo 'WARNING: the assignment is overdue, points/feedback not updated';
                 return self::generate_warning(
                     'info',
                     'overdue',
                     'The assignment is overdue, points/feedback not updated'
-                );
+                ); */
             } else {
                 self::update_grades($assignment->get_id(), $userid, $params);
             }
