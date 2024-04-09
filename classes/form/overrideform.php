@@ -43,7 +43,7 @@ class override_form extends moodleform {
             get_string('grantextension', 'assignexternal')
         );
         $mform->setExpanded('extension');
-        $mform->addElement('static', 'selectedusers', get_string('selectedusers'), '');
+        $mform->addElement('static', 'selectedusers', get_string('selectedusers', 'assignexternal'), '');
         $count = 0;
 
         foreach ($this->_customdata->users as $userid => $user) {
@@ -75,14 +75,57 @@ class override_form extends moodleform {
     }
 
     /**
-     * validates the formdata
+     * validates the formdata for the override
      * @param $data
      * @param $files
      * @return array  error messages
      */
     public function validation($data, $files): array {
-        $errors = parent::validation($data, $files);  // TODO validate dates.
-        debugging(var_export($errors, true));
+        $errors = parent::validation($data, $files);
+        // Ensure that the dates make sense.
+        if (!empty($data['allowsubmissionsfromdate']) && !empty($data['cutoffdate'])) {
+            if ($data['cutoffdate'] < $data['allowsubmissionsfromdate']) {
+                $errors['cutoffdate'] = get_string('cutoffdatefromdatevalidation', 'assign');
+            }
+        }
+
+        if (!empty($data['allowsubmissionsfromdate']) && !empty($data['duedate'])) {
+            if ($data['duedate'] <= $data['allowsubmissionsfromdate']) {
+                $errors['duedate'] = get_string('duedateaftersubmissionvalidation', 'assign');
+            }
+        }
+
+        if (!empty($data['cutoffdate']) && !empty($data['duedate'])) {
+            if ($data['cutoffdate'] < $data['duedate'] ) {
+                $errors['cutoffdate'] = get_string('cutoffdatevalidation', 'assign');
+            }
+        }
+
+        // Ensure that override duedate/allowsubmissionsfromdate are before extension date if exist.
+        if (!empty($assigninstance->extensionduedate) && !empty($data['duedate'])) {
+            if ($assigninstance->extensionduedate < $data['duedate']) {
+                $errors['duedate'] = get_string('extensionnotafterduedate', 'assign');
+            }
+        }
+        if (!empty($assigninstance->extensionduedate) && !empty($data['allowsubmissionsfromdate'])) {
+            if ($assigninstance->extensionduedate < $data['allowsubmissionsfromdate']) {
+                $errors['allowsubmissionsfromdate'] = get_string('extensionnotafterfromdate', 'assign');
+            }
+        }
+
+        // Ensure that at least one assign setting was changed.
+        $changed = false;
+        $keys = array('duedate', 'cutoffdate', 'allowsubmissionsfromdate');
+        foreach ($keys as $key) {
+            if ($data[$key] != $assigninstance->{$key}) {
+                $changed = true;
+                break;
+            }
+        }
+
+        if (!$changed) {
+            $errors['allowsubmissionsfromdate'] = get_string('nooverridedata', 'assign');
+        }
         return $errors;
     }
 }
