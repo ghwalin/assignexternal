@@ -102,7 +102,7 @@ class update_grade extends external_api {
                     'The assignment is overdue, points/feedback not updated'
                 ); */
             } else {
-                self::update_grades($assignment->get_id(), $userid, $params);
+                self::update_grades($assignment->get_coursemodule(), $userid, $params);
             }
         } else {
             echo 'WARNING: no username ' . $params['user_name'] . ' found';
@@ -231,6 +231,8 @@ class update_grade extends external_api {
      * @throws dml_exception
      */
     private static function update_grades(int $assignmentid, int $userid, array $params): void {
+        echo "assignmentid=$assignmentid / userid=$userid";
+        echo var_export($params, true);
         global $DB;
         $grade = new grade();
         $grade->load_db($assignmentid, $userid);
